@@ -25,15 +25,15 @@ const Detail = () => {
 
   const product = useSelector((state) => state.product.dataEdit);
 
-  const [option, setOption] = useState(product?.colorSizes[0]);
-  const [size, setSize] = useState(product?.colorSizes[0].sizes[0]);
+  const [option, setOption] = useState(product?.option[0]);
+  const [size, setSize] = useState(product?.option[0].sizes[0]);
 
   const [count, setCount] = useState(
-    product?.colorSizes[0].sizes[0].quantity > 0 ? 1 : 0
+    product?.option[0].sizes[0].quantity > 0 ? 1 : 0
   );
   const [addCart, setAddCart] = useState({
     product: product,
-    color: option?.colors.color_name,
+    color: option?.color_name,
     size: size?.size_name,
     count: count,
     quantity: size?.quantity,
@@ -41,12 +41,12 @@ const Detail = () => {
   });
 
   useEffect(() => {
-    setOption(product?.colorSizes[0]);
-    setSize(product?.colorSizes[0].sizes[0]);
-    setCount(product?.colorSizes[0].sizes[0].quantity > 0 ? 1 : 0);
+    setOption(product?.option[0]);
+    setSize(product?.option[0].sizes[0]);
+    setCount(product?.option[0].sizes[0].quantity > 0 ? 1 : 0);
     setAddCart({
       product: product,
-      color: option?.colors,
+      color: option,
       size: size,
       count: count,
       quantity: size?.quantity,
@@ -57,7 +57,7 @@ const Detail = () => {
   useEffect(() => {
     setAddCart({
       product: product,
-      color: option?.colors,
+      color: option,
       size: size,
       count: count,
       quantity: size?.quantity,
@@ -137,25 +137,25 @@ const Detail = () => {
             </div>
             <div className="flex items-center gap-2 mb-2">
               <span>Màu sắc:</span>
-              <span>{option?.colors.color_name}</span>
+              <span>{option?.color_name}</span>
             </div>
             <div className="flex items-center gap-[10px] mb-[10px]">
-              {product?.colorSizes?.map((size) => (
+              {product?.option?.map((op) => (
                 <div
-                  key={size?.color_size_id}
+                  key={op.color_size_id}
                   onClick={() => {
-                    setOption(size);
-                    setSize(size.sizes[0]);
-                    setCount(size.sizes[0].quantity > 0 ? 1 : 0);
+                    setOption(op);
+                    setSize(op.sizes[0]);
+                    setCount(op.sizes[0].quantity > 0 ? 1 : 0);
                   }}
                   className={`flex justify-center items-center w-8 h-8 border ${
-                    option?.colors.color_name === size?.colors.color_name
+                    option?.color_name === op.color_name
                       ? "border-red-600"
                       : "border-black"
                   } rounded-full cursor-pointer`}
                 >
                   <img
-                    src={size?.colors.image}
+                    src={op.image}
                     className="w-7 h-7 rounded-[100%] object-cover"
                   />
                 </div>

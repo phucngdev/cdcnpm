@@ -28,6 +28,7 @@ import EditProduct from "./pages/admin/EditProduct";
 import User from "./pages/admin/User";
 import { useSelector } from "react-redux";
 import Message from "./pages/user/Message";
+import CategoryManagement from "./pages/admin/CategoryManagement";
 
 function App() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function App() {
           <Route path="san-pham/:id" element={<Products />} />
           <Route path="tao-moi-san-pham" element={<CreateProduct />} />
           <Route path="chinh-sua-san-pham/:id" element={<EditProduct />} />
+          <Route path="quan-ly-danh-muc" element={<CategoryManagement />} />
           <Route path="tai-khoan" element={<User />} />
         </Route>
       </Routes>

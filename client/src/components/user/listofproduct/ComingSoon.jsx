@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 const ComingSoon = () => {
   const products = useSelector((state) => state.product.data);
+  console.log(products);
 
   return (
     products && (
@@ -12,10 +13,10 @@ const ComingSoon = () => {
           <h1 className="text-[30px] md:text-[40px] text-[#333] mb-5 px-2 md:px-0">
             Coming soon
           </h1>
-          <ItemProduct
+          {/* <ItemProduct
             product={products?.products[0]}
             key={products?.products?.product_id}
-          />
+          /> */}
         </div>
       </>
     )

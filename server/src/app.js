@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const { productRoutes } = require("./api/v1/routes/product.routes");
+const { categoryRoutes } = require("./api/v1/routes/category.routes");
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(express.json());
 
 // route
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 module.exports = app;

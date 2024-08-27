@@ -3,9 +3,10 @@ import { Input } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
-const InputBottom = () => {
+const InputBottom = ({ setSend }) => {
   const handleSend = (e) => {
     e.preventDefault();
+    setSend(true);
   };
   return (
     <>

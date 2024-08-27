@@ -17,8 +17,9 @@ const ListProduct = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  const categorys = useSelector((state) => state.category.data);
-  console.log(categorys);
+  const categories = useSelector((state) => state.category.data);
+  console.log(categories);
+
   const products = useSelector((state) => state.product.data);
   const [active, setActive] = useState("");
   const [listProduct, setListProduct] = useState([]);
@@ -39,13 +40,22 @@ const ListProduct = () => {
             </h3>
             <Input placeholder="Tìm kiếm" />
           </div>
-          <Button
-            onClick={() => navigate("/admin/tao-moi-san-pham")}
-            type="primary"
-            className="mt-5 md:mt-0 w-full md:w-auto"
-          >
-            Thêm mới sản phẩm
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={() => navigate("/admin/quan-ly-danh-muc")}
+              type="default"
+              className="mt-5 md:mt-0 w-full md:w-auto"
+            >
+              Quản lý danh mục
+            </Button>
+            <Button
+              onClick={() => navigate("/admin/tao-moi-san-pham")}
+              type="primary"
+              className="mt-5 md:mt-0 w-full md:w-auto"
+            >
+              Thêm mới sản phẩm
+            </Button>
+          </div>
         </div>
         <div className="flex items-center gap-8 text-black my-4">
           <button
@@ -58,7 +68,7 @@ const ListProduct = () => {
           >
             Tất cả sản phẩm
           </button>
-          {categorys?.map((cate) => (
+          {categories?.map((cate) => (
             <button
               key={cate.category_id}
               onClick={() => {
