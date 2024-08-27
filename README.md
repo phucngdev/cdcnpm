@@ -21,6 +21,7 @@ npm i
 
 chạy xampp
 tạo 1 csdl mới trên phpmyadmin để tên teelab7
+vào folder server lấy sql trong file entity.sql
 vào file .env của server kiểm tra xem có trùng với DB_DATABASE không, trùng thì ok
 
 chạy dự án
@@ -33,4 +34,8 @@ bật terminal của folder server:
 
 npm start
 
-chạy postman test api ok thì đã kết nối thành công
+chạy postman test api
+
+link test api: http://localhost:3000/api/v1/category
+
+test ra mảng rỗng là ok
