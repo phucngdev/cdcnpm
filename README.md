@@ -1,9 +1,17 @@
 # cài nodejs, npm, git
 
 kiểm tra phiên bản
+
 bật terminal
 
 node -v
+sử dụng phiên bản v20.9.0
+
+npm -v
+phiên bản 10.1.0
+
+git --version
+git version 2.33.0
 
 # clone dự án về máy
 
