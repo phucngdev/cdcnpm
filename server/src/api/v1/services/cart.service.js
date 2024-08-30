@@ -11,6 +11,23 @@ module.exports.addToCartService = async (id, body) => {
       return { status: 404, message: "User not found" };
     }
 
+    const [[item]] = await pool.execute(
+      "SELECT * FROM cartItems WHERE product_id = ? AND color_size_id = ?",
+      [body.product_id, body.color_size_id]
+    );
+
+    if (item) {
+      const updatedQuantity = item.quantity + body.quantity;
+      await pool.execute(
+        "UPDATE cartItems SET quantity = ? WHERE cart_item_id = ?",
+        [updatedQuantity, item.cart_item_id]
+      );
+      return {
+        status: 201,
+        message: "Update quantity in cart successfully",
+      };
+    }
+
     const cartItemId = uuidv4();
     await pool.execute(
       "INSERT INTO cartItems (cart_item_id, cart_id, product_id, color_size_id, quantity) VALUES (?, ?, ?, ?, ?)",

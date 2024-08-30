@@ -5,6 +5,7 @@ module.exports.addToCart = async (req, res) => {
   try {
     const token = await req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
+    console.log(decoded);
     const result = await cartService.addToCartService(
       decoded.user_id,
       req.body
