@@ -1,15 +1,17 @@
-cài nodejs, npm, git
+# cài nodejs, npm, git
 
 kiểm tra phiên bản
 bật terminal
 
 node -v
 
-clone dự án về máy
+# clone dự án về máy
 
 git clone https://github.com/phucngdev/cdcnpm.git
 
-mở vscode 
+# tải các package
+
+mở vscode
 
 bật terminal của folder client:
 
@@ -19,12 +21,13 @@ bật terminal của folder server:
 
 npm i
 
-chạy xampp
-tạo 1 csdl mới trên phpmyadmin để tên teelab7
-vào folder server lấy sql trong file entity.sql
-vào file .env của server kiểm tra xem có trùng với DB_DATABASE không, trùng thì ok
+# chạy xampp
 
-chạy dự án
+tạo 1 csdl mới trên phpmyadmin để tên trùng với DB_DATABASE trong .env
+
+vào folder server lấy sql trong file entity.sql
+
+# chạy dự án
 
 bật terminal của folder client:
 
@@ -34,7 +37,7 @@ bật terminal của folder server:
 
 npm start
 
-chạy postman test api
+# chạy postman test api
 
 link test api: http://localhost:3000/api/v1/category
 
