@@ -5,13 +5,16 @@ kiểm tra phiên bản
 bật terminal
 
 node -v
-sử dụng phiên bản v20.9.0
+
+nodejs: sử dụng phiên bản v20.9.0
 
 npm -v
-phiên bản 10.1.0
+
+npm: phiên bản 10.1.0
 
 git --version
-git version 2.33.0
+
+git: version 2.33.0
 
 # clone dự án về máy
 
