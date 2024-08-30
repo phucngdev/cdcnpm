@@ -5,7 +5,7 @@ import { message } from "antd";
 export const login = createAsyncThunk("login", async (data) => {
   try {
     const response = await BaseUrl.post(`auth/login`, data);
-    return response;
+    return response.data;
   } catch (error) {
     message.error("Lỗi đăng nhập");
   }

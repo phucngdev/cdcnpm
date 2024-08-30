@@ -6,7 +6,7 @@ import { useCookie } from "../../hooks/useCookie";
 import MessageButton from "../../components/user/message/MessageButton";
 
 const PublicRouter = () => {
-  const user = useCookie("AT");
+  const user = useCookie("accessToken");
 
   return (
     <>

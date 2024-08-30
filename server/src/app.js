@@ -4,6 +4,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const { productRoutes } = require("./api/v1/routes/product.routes");
 const { categoryRoutes } = require("./api/v1/routes/category.routes");
+const { authRoutes } = require("./api/v1/routes/auth.routes");
+const { cartRoutes } = require("./api/v1/routes/cart.routes");
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(morgan("common"));
 app.use(express.json());
 
 // route
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/category", categoryRoutes);
 

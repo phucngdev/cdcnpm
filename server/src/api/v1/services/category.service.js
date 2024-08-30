@@ -22,7 +22,7 @@ module.exports.createCategoryService = async (body) => {
     );
     return { status: 201, message: "Category created successfully" };
   } catch (error) {
-    return { status: 500, message: "Server error" };
+    return { status: 500, message: error.message };
   }
 };
 
@@ -37,7 +37,7 @@ module.exports.getAllCategoryService = async () => {
     `);
     return result;
   } catch (error) {
-    return { status: 500, message: "Server error" };
+    return { status: 500, message: error.message };
   }
 };
 
@@ -55,7 +55,7 @@ module.exports.deleteCategoryService = async (id) => {
     await pool.execute("DELETE FROM categories WHERE category_id = ?", [id]);
     return { status: 200, message: "Category deleted successfully" };
   } catch (error) {
-    return { status: 500, message: "Server error" };
+    return { status: 500, message: error.message };
   }
 };
 
@@ -84,6 +84,6 @@ module.exports.updateCategoryService = async (id, body) => {
     );
     return { status: 200, message: "Category updated successfully" };
   } catch (error) {
-    return { status: 500, message: "Server error" };
+    return { status: 500, message: error.message };
   }
 };

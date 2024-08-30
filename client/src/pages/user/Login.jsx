@@ -44,7 +44,8 @@ const Login = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      email: Yup.string().email("Email không hợp lệ")
+      email: Yup.string()
+        .email("Email không hợp lệ")
         .required("Email không được để trống"),
       password: Yup.string().required("Mật khẩu không được để trống"),
     }),
@@ -56,16 +57,17 @@ const Login = () => {
       try {
         setPending(true);
         const response = await dispatch(login(dataUser));
+        console.log(response);
+
         if (response.payload.status === 200) {
           Cookies.set(
-            "token",
-            JSON.stringify(`Bearer ${response.payload?.data?.AT}`),
+            "accessToken",
+            JSON.stringify(`Bearer ${response.payload.accessToken}`),
             {
-              expires: 8 / 24,
+              expires: 10 / 24,
             }
           );
-          const { role } = jwtDecode(response.payload?.data?.AT);
-          role === 1 ? navigate("/") : navigate("/admin");
+          navigate("/");
         } else {
           message.error("Lỗi đăng nhập!");
         }
@@ -78,48 +80,48 @@ const Login = () => {
   });
 
   // đăng nhập bằng google
-  const loginWithGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      const accessToken = tokenResponse.access_token;
-      if (accessToken) {
-        try {
-          const response = await fetch(
-            "https://www.googleapis.com/oauth2/v3/userinfo",
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const userInfo = await response.json();
-          const res = await dispatch(loginGoogle({ email: userInfo.email }));
-          console.log(res);
-          if (res.payload.status === 200) {
-            Cookies.set(
-              "AT",
-              JSON.stringify(`Bearer ${res.payload?.data?.AT}`),
-              {
-                expires: 8 / 24,
-              }
-            );
-            Cookies.set(
-              "RT",
-              JSON.stringify(`Bearer ${res.payload?.data?.RT}`),
-              {
-                expires: 8 / 24,
-              }
-            );
-            const { role } = jwtDecode(res.payload?.data?.AT);
-            role === 1 ? navigate("/") : navigate("/admin");
-          }
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-        }
-      } else {
-        console.log("No access_token found in the response.");
-      }
-    },
-  });
+  // const loginWithGoogle = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     const accessToken = tokenResponse.access_token;
+  //     if (accessToken) {
+  //       try {
+  //         const response = await fetch(
+  //           "https://www.googleapis.com/oauth2/v3/userinfo",
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${accessToken}`,
+  //             },
+  //           }
+  //         );
+  //         const userInfo = await response.json();
+  //         const res = await dispatch(loginGoogle({ email: userInfo.email }));
+  //         console.log(res);
+  //         if (res.payload.status === 200) {
+  //           Cookies.set(
+  //             "AT",
+  //             JSON.stringify(`Bearer ${res.payload?.data?.AT}`),
+  //             {
+  //               expires: 8 / 24,
+  //             }
+  //           );
+  //           Cookies.set(
+  //             "RT",
+  //             JSON.stringify(`Bearer ${res.payload?.data?.RT}`),
+  //             {
+  //               expires: 8 / 24,
+  //             }
+  //           );
+  //           const { role } = jwtDecode(res.payload?.data?.AT);
+  //           role === 1 ? navigate("/") : navigate("/admin");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching user info:", error);
+  //       }
+  //     } else {
+  //       console.log("No access_token found in the response.");
+  //     }
+  //   },
+  // });
 
   return (
     <>
@@ -127,7 +129,7 @@ const Login = () => {
         <title>Đăng nhập - TEELAB</title>
       </Helmet>
       {pending && (
-        <div className="fixed z-50 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <div className="fixed bg-[rgba(255,255,255,0.5)] text-3xl z-50 top-0 left-0 bottom-0 right-0 flex items-center justify-center">
           <LoadingOutlined />
         </div>
       )}
@@ -275,7 +277,7 @@ const Login = () => {
                 <div className="col-span-6">
                   <button
                     type="button"
-                    onClick={() => loginWithGoogle()}
+                    // onClick={() => loginWithGoogle()}
                     className="mt-1 flex items-center justify-center gap-3 w-full rounded-md border border-gray-200 py-2 bg-white text-sm text-gray-700 shadow-sm"
                   >
                     <img src={google} alt="" />

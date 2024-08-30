@@ -8,7 +8,6 @@ import formatPrice from "../../utils/formatPrice";
 import { addToCart } from "../../services/cart.service";
 import { Helmet } from "react-helmet";
 import LastView from "../../components/user/listofproduct/LastView";
-import Cookies from "js-cookie";
 
 const Detail = () => {
   const { id } = useParams();
@@ -25,74 +24,81 @@ const Detail = () => {
 
   const product = useSelector((state) => state.product.dataEdit);
 
-  const [option, setOption] = useState(product?.option[0]);
-  const [size, setSize] = useState(product?.option[0].sizes[0]);
-
-  const [count, setCount] = useState(
-    product?.option[0].sizes[0].quantity > 0 ? 1 : 0
-  );
-  const [addCart, setAddCart] = useState({
-    product: product,
-    color: option?.color_name,
-    size: size?.size_name,
-    count: count,
-    quantity: size?.quantity,
-    color_size_id: option?.color_size_id,
+  const [colorSize, setColorSize] = useState({
+    color_id: null,
+    color_name: null,
   });
+  const [colors, setColors] = useState([]);
+  const [sizes, setSizes] = useState([]);
+  const [quantity, setQuantity] = useState(null);
+
+  const handleColorClick = (color_id) => {
+    const uniqueSizes = product.colorSize
+      .filter((item) => item.color_id === color_id)
+      .map((item) => ({
+        size_id: item.size_id,
+        size_name: item.size_name,
+        quantity: item.quantity,
+      }));
+    setSizes(uniqueSizes);
+    setColorSize({ size_id: uniqueSizes[0].size_id, color_id: color_id });
+    setQuantity(uniqueSizes[0].quantity > 0 ? 1 : 0);
+  };
 
   useEffect(() => {
-    setOption(product?.option[0]);
-    setSize(product?.option[0].sizes[0]);
-    setCount(product?.option[0].sizes[0].quantity > 0 ? 1 : 0);
-    setAddCart({
-      product: product,
-      color: option,
-      size: size,
-      count: count,
-      quantity: size?.quantity,
-      color_size_id: option?.color_size_id,
+    if (!product) return;
+    const uniqueColors = product.colorSize.reduce((acc, item) => {
+      if (!acc.some((color) => color.color_id === item.color_id)) {
+        acc.push({
+          color_id: item.color_id,
+          color_name: item.color_name,
+          image: item.image,
+        });
+      }
+      return acc;
+    }, []);
+
+    handleColorClick(product.colorSize[0].color_id);
+    setQuantity(product.colorSize[0].quantity > 0 ? 1 : 0);
+    setColors(uniqueColors);
+    setColorSize({
+      color_id: product.colorSize[0].color_id,
+      size_id: product.colorSize[0].size_id,
     });
   }, [product]);
 
-  useEffect(() => {
-    setAddCart({
-      product: product,
-      color: option,
-      size: size,
-      count: count,
-      quantity: size?.quantity,
-      color_size_id: option?.color_size_id,
-    });
-  }, [count, size, option, product]);
-
   // điều chỉnh số lượng sản phẩm
-  const handleIncree = (quantity) => {
-    count < quantity
-      ? setCount((prev) => prev + 1)
+  const handleIncree = () => {
+    sizes.find((s) => s.size_id === colorSize.size_id).quantity > quantity
+      ? setQuantity((prev) => prev + 1)
       : message.error("Số lượng trong kho đạt giới hạn");
   };
   const handleDecree = () => {
-    setCount((prev) => (prev > 1 ? prev - 1 : prev));
+    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
   // thêm sản phẩm vào giỏ hàng
-  const handleAddToStore = () => {
+  const handleAddToStore = async () => {
     if (!user) {
       message.error("Vui lòng đăng nhập");
       return;
     }
-    if (addCart.count < 1) {
+    if (quantity === 0) {
       message.error("Sản phẩm hết hàng");
       return;
     }
     message.success("Thêm thành công");
-    const postProduct = {
-      product_id: addCart.product.product_id,
-      size_id: addCart.size.size_id,
-      quantity: addCart.count,
-      color_size_id: addCart.color_size_id,
+    const color_size = product.colorSize.find(
+      (cs) =>
+        cs.color_id === colorSize.color_id && cs.size_id === colorSize.size_id
+    );
+    const data = {
+      color_size_id: color_size.color_size_id,
+      quantity: quantity,
+      product_id: product.product_id,
     };
-    dispatch(addToCart(postProduct));
+    const response = await dispatch(addToCart(data));
+    console.log(response);
   };
 
   return (
@@ -112,7 +118,7 @@ const Detail = () => {
                   <img
                     className="object-cover w-full h-full"
                     src={img}
-                    alt={product?.name}
+                    alt={product?.product_name}
                   />
                 </div>
               ))}
@@ -137,25 +143,28 @@ const Detail = () => {
             </div>
             <div className="flex items-center gap-2 mb-2">
               <span>Màu sắc:</span>
-              <span>{option?.color_name}</span>
+              <span>
+                {
+                  colors.find((c) => c.color_id === colorSize.color_id)
+                    ?.color_name
+                }
+              </span>
             </div>
             <div className="flex items-center gap-[10px] mb-[10px]">
-              {product?.option?.map((op) => (
+              {colors.map((c) => (
                 <div
-                  key={op.color_size_id}
+                  key={c.color_id}
                   onClick={() => {
-                    setOption(op);
-                    setSize(op.sizes[0]);
-                    setCount(op.sizes[0].quantity > 0 ? 1 : 0);
+                    handleColorClick(c.color_id);
                   }}
                   className={`flex justify-center items-center w-8 h-8 border ${
-                    option?.color_name === op.color_name
+                    c.color_id === colorSize.color_id
                       ? "border-red-600"
                       : "border-black"
                   } rounded-full cursor-pointer`}
                 >
                   <img
-                    src={op.image}
+                    src={c.image}
                     className="w-7 h-7 rounded-[100%] object-cover"
                   />
                 </div>
@@ -163,23 +172,24 @@ const Detail = () => {
             </div>
             <div className="flex items-center gap-2 mb-2">
               <span>Kích thước:</span>
-              <span>{size?.size_name}</span>
+              <span>
+                {sizes.find((s) => s.size_id === colorSize.size_id)?.size_name}
+              </span>
             </div>
             <div className="flex items-center gap-[10px] mb-[10px]">
-              {option?.sizes.map((s) => (
+              {sizes.map((s) => (
                 <div
                   key={s.size_id}
                   onClick={() => {
-                    setSize(s);
-                    setCount(s.quantity > 0 ? 1 : 0);
+                    setColorSize({ ...colorSize, size_id: s.size_id });
                   }}
                   className={`flex justify-center items-center w-8 h-8 border ${
-                    size.size_id === s.size_id
+                    s.size_id === colorSize.size_id
                       ? "border-red-600"
                       : "border-black"
                   } rounded-full cursor-pointer`}
                 >
-                  {s?.size_name}
+                  {s.size_name}
                 </div>
               ))}
             </div>
@@ -203,21 +213,24 @@ const Detail = () => {
                   -
                 </button>
                 <span className="w-[90px] h-[35px] border-[1px] border-x-0 border-solid border-[#000] flex justify-center items-center">
-                  {count}
+                  {quantity}
                 </span>
                 <button
                   type="button"
-                  onClick={() => handleIncree(size.quantity)}
+                  onClick={() => handleIncree()}
                   className="w-[30px] h-[35px] border-[1px] border-solid border-[#000] px-3 flex justify-center items-center rounded-e-lg"
                 >
                   +
                 </button>
               </div>
-              <span className={1 > 0 ? "text-black" : "text-[#f81f1f]"}>
-                {1 > 0
-                  ? "Còn hàng"
-                  : "Hết hàng! Vui lòng chọn màu hoặc size khác"}
-              </span>
+              {sizes.find((s) => s.size_id === colorSize.size_id)?.quantity >
+              0 ? (
+                <span className="text-black">Còn hàng</span>
+              ) : (
+                <span className="text-[#f81f1f]">
+                  Hết hàng! Vui lòng chọn màu hoặc size khác
+                </span>
+              )}
             </div>
             <button
               type="button"

@@ -85,7 +85,7 @@ module.exports.getAllService = async () => {
 
 module.exports.getOneService = async (id) => {
   try {
-    const [products] = await pool.execute(
+    const [[product]] = await pool.execute(
       `
       SELECT 
         p.product_id, 
@@ -98,7 +98,9 @@ module.exports.getOneService = async (id) => {
         p.description, 
         p.price, 
         p.status, 
-        c.category_name AS category
+        c.category_id,
+        c.category_name,
+        c.path
       FROM products p
       JOIN categories c ON p.category_id = c.category_id
       WHERE p.product_id = ?
@@ -106,65 +108,45 @@ module.exports.getOneService = async (id) => {
       [id]
     );
 
-    if (products.length === 0) {
+    if (!product) {
       return { status: 404, message: "Product not found" };
     }
 
-    const product = products[0];
-
-    const [colorSizes] = await pool.execute(
-      `
-      SELECT 
-        cs.color_size_id, 
-        co.color_name, 
-        co.image AS color_image, 
-        s.size_name, 
-        s.size_id,
-        s.quantity
+    const [colorSize] = await pool.execute(
+      `SELECT 
+          cs.color_size_id,
+          cs.product_id,
+          cs.color_id,
+          c.color_name,
+          c.image,
+          cs.size_id,
+          s.size_name,
+          s.quantity
       FROM color_size cs
-      JOIN colors co ON cs.color_id = co.color_id
+      JOIN colors c ON cs.color_id = c.color_id
       JOIN sizes s ON cs.size_id = s.size_id
-      WHERE cs.product_id = ?
-    `,
-      [product.product_id]
+      WHERE cs.product_id = ?`,
+      [id]
     );
 
-    const optionsMap = colorSizes.reduce((acc, cs) => {
-      if (!acc[cs.color_name]) {
-        acc[cs.color_name] = {
-          color_size_id: cs.color_size_id,
-          color_name: cs.color_name,
-          image: cs.color_image,
-          sizes: [],
-        };
-      }
-      console.log("Accumulator ", cs);
-
-      acc[cs.color_name].sizes.push({
-        size_id: cs.size_id,
-        size_name: cs.size_name,
-        quantity: cs.quantity,
-      });
-      return acc;
-    }, {});
-
-    const options = Object.values(optionsMap);
-
-    const result = {
+    return {
+      product_id: product.product_id,
       product_name: product.product_name,
-      category: product.category,
       thumbnail: product.thumbnail,
       thumbnail_hover: product.thumbnail_hover,
       images: JSON.parse(product.images),
+      status: product.status,
       discount: product.discount,
       description_image: product.description_image,
       description: product.description,
       price: product.price,
-      status: product.status,
-      option: options,
+      category: {
+        category_id: product.category_id,
+        path: product.path,
+        category_name: product.category_name,
+      },
+      colorSize,
     };
-
-    return result;
   } catch (error) {
     return { status: 500, message: error.message };
   }
@@ -172,33 +154,6 @@ module.exports.getOneService = async (id) => {
 
 module.exports.updateProductService = async (id, body) => {
   try {
-    await pool.execute(
-      `UPDATE products 
-      SET 
-        thumbnail = ?,
-        thumbnail_hover = ?,
-        images = ?,
-        description_image = ?,
-        product_name = ?, 
-        description = ?, 
-        price = ?, 
-        discount = ?,
-        categoryCategoryId = ? 
-      WHERE product_id = ?`,
-      [
-        body.thumbnail,
-        body.thumbnail_hover,
-        body.images,
-        body.description_image,
-        body.product_name,
-        body.description,
-        body.price,
-        body.discount,
-        body.categoryCategoryId,
-        id,
-      ]
-    );
-
     return { status: 200, message: "Product updated successfully" };
   } catch (error) {
     return { status: 500, message: error.message };

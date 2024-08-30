@@ -1,3 +1,23 @@
+CREATE TABLE carts (
+    cart_id CHAR(36) PRIMARY KEY,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE users (
+    user_id CHAR(36) PRIMARY KEY,
+    username  VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('user', 'admin') DEFAULT 'user',
+    status INT DEFAULT 1,
+    avatar VARCHAR(255),
+    cart_id CHAR(36) UNIQUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cart FOREIGN KEY (cart_id) REFERENCES carts(cart_id) ON DELETE CASCADE
+);
+
 CREATE TABLE categories (
     category_id CHAR(36) PRIMARY KEY,
     category_name VARCHAR(255) NOT NULL,
@@ -46,13 +66,40 @@ CREATE TABLE color_size (
     CONSTRAINT fk_size FOREIGN KEY (size_id) REFERENCES sizes(size_id) ON DELETE CASCADE
 );
 
-CREATE TABLE order_details (
-    order_detail_id CHAR(36) PRIMARY KEY,
-    product_id CHAR(36),
-    color_id CHAR(36),
-    size_id CHAR(36),
-    CONSTRAINT fk_order_product FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
-    CONSTRAINT fk_order_color FOREIGN KEY (color_id) REFERENCES colors(color_id) ON DELETE CASCADE,
-    CONSTRAINT fk_order_size FOREIGN KEY (size_id) REFERENCES sizes(size_id) ON DELETE CASCADE
+CREATE TABLE orders (
+    order_id CHAR(36) PRIMARY KEY,
+    user_id CHAR(36),
+    total DECIMAL(10, 2) NOT NULL,
+    status ENUM("0", "1", "2", "3") DEFAULT "0",
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
+CREATE TABLE order_details (
+    order_detail_id CHAR(36) PRIMARY KEY,
+    order_id CHAR(36),
+    product_id CHAR(36),
+    color_size_id CHAR(36),
+    quantity INT DEFAULT 1,
+    price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_order_item FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
+    CONSTRAINT fk_product_item FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    CONSTRAINT fk_color_size_item FOREIGN KEY (color_size_id) REFERENCES color_size(color_size_id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE cartItems (
+    cart_item_id CHAR(36) PRIMARY KEY,
+    cart_id CHAR(36),
+    product_id CHAR(36),
+    color_size_id CHAR(36),
+    quantity INT DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT fk_cart_item FOREIGN KEY (cart_id) REFERENCES carts(cart_id) ON DELETE CASCADE,
+    CONSTRAINT fk_product_cart_id FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
+    CONSTRAINT fk_color_size_cart_item FOREIGN KEY (color_size_id) REFERENCES color_size(color_size_id) ON DELETE CASCADE
+);

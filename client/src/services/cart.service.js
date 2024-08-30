@@ -2,9 +2,11 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { message } from "antd";
 import BaseUrl from "../apis/axios";
 
-export const addToCart = createAsyncThunk("addToCart", async (product) => {
+export const addToCart = createAsyncThunk("addToCart", async (data) => {
   try {
-    const response = await BaseUrl.post(`/cart/add`, product);
+    console.log(data);
+
+    const response = await BaseUrl.post(`/cart/add`, data);
     return response.data;
   } catch (error) {
     message.error("Lỗi khi xử lý! thử lại");
