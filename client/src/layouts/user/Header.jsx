@@ -8,11 +8,11 @@ import HeaderMobile from "../../components/user/header/HeaderMobile";
 import { useDispatch } from "react-redux";
 import { getCart } from "../../services/cart.service";
 
-const Header = ({ user }) => {
+const Header = ({ user, handleLogout }) => {
   return (
     <>
-      <HeaderMobile user={user} />
-      <TopHeader user={user} />
+      <HeaderMobile user={user} handleLogout={handleLogout} />
+      <TopHeader user={user} handleLogout={handleLogout} />
       <MainNavigate />
       <ProductsNavigation />
     </>

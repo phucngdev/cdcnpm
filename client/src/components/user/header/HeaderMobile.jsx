@@ -16,10 +16,9 @@ import SearchListMobile from "./SearchListMobile";
 import SearchEmpty from "./SearchEmpty";
 import DrawerMobile from "./DrawerMobile";
 
-const HeaderMobile = ({ user }) => {
+const HeaderMobile = ({ user, handleLogout }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.data);
-
   const searchProducts = useSelector((state) => state.product.dataSearch);
   const [search, setSearch] = useState("");
 
@@ -104,7 +103,7 @@ const HeaderMobile = ({ user }) => {
                 content={
                   <div className="flex items-center gap-3">
                     <Link to="/gio-hang">
-                      <Badge count={cart?.cartItems?.length}>
+                      <Badge count={cart?.items?.length}>
                         <Avatar
                           shape="square"
                           icon={<ShoppingCartOutlined />}

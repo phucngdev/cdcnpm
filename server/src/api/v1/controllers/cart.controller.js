@@ -5,7 +5,6 @@ module.exports.addToCart = async (req, res) => {
   try {
     const token = await req.header("Authorization").replace("Bearer ", "");
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
-    console.log(decoded);
     const result = await cartService.addToCartService(
       decoded.user_id,
       req.body
@@ -18,7 +17,32 @@ module.exports.addToCart = async (req, res) => {
 
 module.exports.getCartById = async (req, res) => {
   try {
-    const result = await cartService.getCartByIdService(req.params.id);
+    const token = await req.header("Authorization").replace("Bearer ", "");
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
+    const result = await cartService.getCartByIdService(decoded.user_id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports.updateCart = async (req, res) => {
+  try {
+    const result = await cartService.updateCartService(req.params.id, req.body);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports.deleteCartItem = async (req, res) => {
+  try {
+    const token = await req.header("Authorization").replace("Bearer ", "");
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
+    const result = await cartService.deleteCartItemService(
+      decoded.user_id,
+      req.params.id
+    );
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });

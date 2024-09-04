@@ -2,6 +2,7 @@ const pool = require("../../../config/database");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cartService = require("./cart.service");
 
 const generateAccessToken = (user_id, username, email, avatar) => {
   return jwt.sign(
@@ -61,6 +62,8 @@ module.exports.loginService = async (body) => {
       return { status: 401, message: "Invalid email or password" };
     }
 
+    const cart = await cartService.getCartByIdService(result.user_id);
+
     const accessToken = generateAccessToken(
       result.user_id,
       result.username,
@@ -72,6 +75,7 @@ module.exports.loginService = async (body) => {
       status: 200,
       message: "Login successfully",
       accessToken: accessToken,
+      cart: cart,
     };
   } catch (error) {
     return { status: 500, message: error.message };

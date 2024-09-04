@@ -1,32 +1,53 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  deleteFromCart,
+  deleteCartItem,
+  getCart,
   minusCount,
   plusCount,
 } from "../../services/cart.service";
 import CartItem from "../../components/user/cart/CartItem";
 import CartEmpty from "../../components/user/cart/CartEmpty";
 import CartBottom from "../../components/user/cart/CartBottom";
+import { useCookie } from "../../hooks/useCookie";
 
 const Cart = () => {
-  const cart = useSelector((state) => state.cart.data);
-  const navigate = useNavigate();
+  const user = useCookie("accessToken");
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
-  const [productDelete, setProductDelete] = useState(null);
-
-  const showModal = (product) => {
-    setIsOpenModalDelete(true);
-    setProductDelete(product);
+  const fetchCart = async () => {
+    await dispatch(getCart());
   };
 
-  const handleOk = () => {
-    dispatch(deleteFromCart(productDelete));
+  useEffect(() => {
+    if (user) {
+      fetchCart();
+    }
+  }, [user]);
+
+  const cart = useSelector((state) => state.cart.data);
+
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
+  const [cartItemDelete, setCartItemDelete] = useState(null);
+
+  const showModal = (id) => {
+    setIsOpenModalDelete(true);
+    setCartItemDelete(id);
+  };
+
+  const handleOk = async () => {
+    const response = await dispatch(deleteCartItem(cartItemDelete));
+    if (response.payload.status === 200) {
+      message.success("Xoá thành công");
+      dispatch(getCart());
+    } else {
+      message.error("Xoá thất bại");
+    }
     setIsOpenModalDelete(false);
   };
   const handleCancel = () => {
@@ -73,9 +94,9 @@ const Cart = () => {
               Thành tiền
             </div>
           </div>
-          {cart.cartItems?.length > 0 ? (
+          {cart.items?.length > 0 ? (
             <>
-              {cart?.cartItems?.map((product) => (
+              {cart?.items?.map((product) => (
                 <CartItem
                   product={product}
                   key={product.cart_item_id}

@@ -11,12 +11,10 @@ const CartItem = ({ product, showModal, cart_id }) => {
     const data = {
       quantity: status === 1 ? product.quantity + 1 : product.quantity - 1,
     };
-    const response = await dispatch(
-      handleChangeQuantity(data, cart_id, product.cart_item_id)
-    );
+    const response = await dispatch();
+    // handleChangeQuantity(data, cart_id, product.cart_item_id)
     console.log(response);
   };
-  console.log(product);
 
   return (
     <>
@@ -30,11 +28,11 @@ const CartItem = ({ product, showModal, cart_id }) => {
           <div className="flex flex-col items-start">
             <div>{product.product.product_name}</div>
             <div className="flex gap-1 items-center">
-              <div>{product.colorSize.colors.color_name}</div>
+              <div>{product.color_size.color_name}</div>
               <div>/</div>
-              <div>{product.size.size_name}</div>
+              <div>{product.color_size.size_name}</div>
             </div>
-            <Button onClick={() => showModal(product)}>
+            <Button onClick={() => showModal(product.cart_item_id)}>
               <span className="text-[#ff0000]">Xoá</span>
             </Button>
           </div>

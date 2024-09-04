@@ -3,11 +3,12 @@ import Cookies from "js-cookie";
 
 const defaultUrl = import.meta.env.VITE_API_URL;
 const token = Cookies.get("accessToken")?.slice(1, -1);
+
 const BaseUrl = axios.create({
   baseURL: defaultUrl,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `${token}` || " ",
+    Authorization: `Bearer ${token}`,
   },
 });
 

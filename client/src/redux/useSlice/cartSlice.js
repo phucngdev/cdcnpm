@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   addToCart,
-  deleteFromCart,
   getCart,
   minusCount,
   plusCount,
 } from "../../services/cart.service";
+import { login } from "../../services/auth.service";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -25,6 +25,19 @@ const cartSlice = createSlice({
         state.dataEdit = action.payload;
       })
       .addCase(addToCart.rejected, (state, action) => {
+        state.status = "Failed!";
+        state.error = action.error.message;
+      })
+      .addCase(login.pending, (state) => {
+        state.status = "Pending!";
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        state.status = "Successfully!";
+        console.log(action.payload);
+
+        state.data = action.payload.cart;
+      })
+      .addCase(login.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       })

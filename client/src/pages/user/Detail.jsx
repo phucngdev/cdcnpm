@@ -5,7 +5,7 @@ import { getOneProduct } from "../../services/product.service";
 import { Carousel, message } from "antd";
 import { Link } from "react-router-dom";
 import formatPrice from "../../utils/formatPrice";
-import { addToCart } from "../../services/cart.service";
+import { addToCart, getCart } from "../../services/cart.service";
 import { Helmet } from "react-helmet";
 import LastView from "../../components/user/listofproduct/LastView";
 
@@ -87,7 +87,6 @@ const Detail = () => {
       message.error("Sản phẩm hết hàng");
       return;
     }
-    message.success("Thêm thành công");
     const color_size = product.colorSize.find(
       (cs) =>
         cs.color_id === colorSize.color_id && cs.size_id === colorSize.size_id
@@ -98,7 +97,10 @@ const Detail = () => {
       product_id: product.product_id,
     };
     const response = await dispatch(addToCart(data));
-    console.log(response);
+    if (response.payload.status === 201) {
+      message.success("Thêm thành công");
+      await dispatch(getCart());
+    }
   };
 
   return (

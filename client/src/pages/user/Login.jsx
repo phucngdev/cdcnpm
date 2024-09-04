@@ -16,6 +16,7 @@ import {
 import google from "../../../public/google.svg";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { getCart } from "../../services/cart.service";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,12 +58,10 @@ const Login = () => {
       try {
         setPending(true);
         const response = await dispatch(login(dataUser));
-        console.log(response);
-
         if (response.payload.status === 200) {
           Cookies.set(
             "accessToken",
-            JSON.stringify(`Bearer ${response.payload.accessToken}`),
+            JSON.stringify(response.payload.accessToken),
             {
               expires: 10 / 24,
             }
@@ -75,6 +74,7 @@ const Login = () => {
         resetForm();
       } catch (error) {
         message.error("Lỗi đăng nhập!");
+        setPending(false);
       }
     },
   });
