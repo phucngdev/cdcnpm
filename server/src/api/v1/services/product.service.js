@@ -224,3 +224,29 @@ module.exports.createProductService = async (body) => {
     return { status: 500, message: error.message };
   }
 };
+
+module.exports.searchProductService = async (q) => {
+  try {
+    const [products] = await pool.execute(
+      `SELECT 
+        p.product_id, 
+        p.product_name, 
+        p.thumbnail,
+        p.discount, 
+        p.price, 
+        p.status, 
+        c.category_name AS category
+      FROM products p
+      JOIN categories c ON p.category_id = c.category_id
+      WHERE p.product_name LIKE ? OR c.category_name LIKE ?`,
+      [`%${q}%`, `%${q}%`]
+    );
+
+    if (!products.length) {
+      return { status: 404, message: "No products found" };
+    }
+    return products;
+  } catch {
+    return { status: 500, message: "Error searching products" };
+  }
+};

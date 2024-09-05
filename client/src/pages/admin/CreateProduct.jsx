@@ -99,6 +99,11 @@ const CreateProduct = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
+        const checkImage = colorSize.find((o) => !o.image);
+        if (checkImage) {
+          message.warning("Vui lòng chọn ảnh cho tất cả màu");
+          return;
+        }
         const newProduct = {
           product_name: values.name,
           thumbnail: values.thumbnail,
@@ -112,7 +117,6 @@ const CreateProduct = () => {
           category: values.category,
           option: colorSize,
         };
-        console.log(newProduct);
 
         const response = await dispatch(createProduct(newProduct));
         if (response.payload.status === 201) {
@@ -121,6 +125,7 @@ const CreateProduct = () => {
         resetForm();
         setDescription("");
         setImageUrls([]);
+        setColorSize([]);
       } catch (error) {
         message.error("Lỗi");
       }

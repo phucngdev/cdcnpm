@@ -4,7 +4,7 @@ import { message } from "antd";
 
 export const getOneProduct = createAsyncThunk("getOne/product", async (id) => {
   try {
-    const response = await BaseUrl.get(`product/${id}`);
+    const response = await BaseUrl.get(`product/detail/${id}`);
     return response.data;
   } catch (error) {
     message.error("Lỗi server");

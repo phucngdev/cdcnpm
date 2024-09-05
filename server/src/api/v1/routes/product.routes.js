@@ -3,7 +3,7 @@ const productController = require("../controllers/product.controller");
 const middleware = require("../middlewares/verifyToken");
 
 productRoutes.get("/", productController.getAll);
-productRoutes.get("/:id", productController.getOne);
+productRoutes.get("/detail/:id", productController.getOne);
 productRoutes.delete("/delete/:id", productController.deleteOne);
 productRoutes.delete("/delete-all", productController.deleteAll);
 productRoutes.post(
@@ -12,5 +12,6 @@ productRoutes.post(
   productController.createProduct
 );
 productRoutes.put("/update/:id", productController.updateProduct);
+productRoutes.get("/search", productController.searchProduct);
 
 module.exports = { productRoutes };

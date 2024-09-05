@@ -13,6 +13,7 @@ CREATE TABLE users (
     status INT DEFAULT 1,
     avatar VARCHAR(255),
     cart_id CHAR(36) UNIQUE,
+    room_id CHAR(36) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_cart FOREIGN KEY (cart_id) REFERENCES carts(cart_id) ON DELETE CASCADE
@@ -103,3 +104,18 @@ CREATE TABLE cartItems (
     CONSTRAINT fk_product_cart_id FOREIGN KEY (product_id) REFERENCES products(product_id) ON DELETE CASCADE,
     CONSTRAINT fk_color_size_cart_item FOREIGN KEY (color_size_id) REFERENCES color_size(color_size_id) ON DELETE CASCADE
 );
+
+CREATE TABLE room_chat {
+    room_id CHAR(36) PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+}
+
+CREATE TABLE messages {
+    message_id CHAR(36) PRIMARY KEY,
+    room_id CHAR(36) NOT NULL,
+    sender_id CHAR(36) NOT NULL,
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_room FOREIGN KEY (room_id) REFERENCES room_chat(room_id)
+}
