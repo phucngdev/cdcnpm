@@ -29,6 +29,7 @@ import User from "./pages/admin/User";
 import { useSelector } from "react-redux";
 import Message from "./pages/user/Message";
 import CategoryManagement from "./pages/admin/CategoryManagement";
+import OrderHistory from "./pages/user/OrderHistory";
 
 function App() {
   const location = useLocation();
@@ -51,6 +52,7 @@ function App() {
           <Route path="trang-thai-thanh-toan" element={<PayCheck />} />
           <Route path="kiem-tra-don-hang" element={<CheckOrder />} />
           <Route path="kiem-tra-don-hang/:id" element={<CheckOrderDetail />} />
+          <Route path="lich-su-mua-hang/:id" element={<OrderHistory />} />
           <Route path="bang-size" element={<Size />} />
           <Route path="chinh-sach-doi-tra" element={<Service />} />
           <Route path="cham-soc-khac-hang/:id" element={<Message />} />

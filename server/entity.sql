@@ -71,7 +71,16 @@ CREATE TABLE orders (
     order_id CHAR(36) PRIMARY KEY,
     user_id CHAR(36),
     total DECIMAL(10, 2) NOT NULL,
+    transaction ENUM("normal", "zalopay") DEFAULT "normal",
+    payment_status ENUM("0", "1") DEFAULT "0",
     status ENUM("0", "1", "2", "3") DEFAULT "0",
+    address VARCHAR(255) NOT NULL,
+    city VARCHAR(255) NOT NULL,
+    district VARCHAR(255) NOT NULL,
+    ward VARCHAR(255) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    note VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
@@ -92,7 +101,7 @@ CREATE TABLE order_details (
 );
 
 
-CREATE TABLE cartItems (
+CREATE TABLE cart_item (
     cart_item_id CHAR(36) PRIMARY KEY,
     cart_id CHAR(36),
     product_id CHAR(36),
@@ -105,17 +114,17 @@ CREATE TABLE cartItems (
     CONSTRAINT fk_color_size_cart_item FOREIGN KEY (color_size_id) REFERENCES color_size(color_size_id) ON DELETE CASCADE
 );
 
-CREATE TABLE room_chat {
+CREATE TABLE room_chat (
     room_id CHAR(36) PRIMARY KEY,
-    user_id VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-}
+    update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
-CREATE TABLE messages {
+CREATE TABLE messages (
     message_id CHAR(36) PRIMARY KEY,
     room_id CHAR(36) NOT NULL,
     sender_id CHAR(36) NOT NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_room FOREIGN KEY (room_id) REFERENCES room_chat(room_id)
-}
+);

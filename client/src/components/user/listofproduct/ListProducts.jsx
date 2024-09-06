@@ -5,14 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProduct } from "../../../services/product.service";
 
 const ListProducts = ({ category }) => {
-  const dispatch = useDispatch();
-
-  const fetchData = async () => {
-    await dispatch(getAllProduct({ page: 0, limit: 0 }));
-  };
-  useEffect(() => {
-    fetchData();
-  }, [category]);
   const products = useSelector((state) => state.product.data);
   const [listProduct, setListProduct] = useState(() => {
     const list =
@@ -28,9 +20,7 @@ const ListProducts = ({ category }) => {
     setListProduct(
       category === "Tất cả sản phẩm"
         ? products?.products
-        : products?.products?.filter(
-            (p) => p.category.category_name === category.toLowerCase()
-          )
+        : products?.products?.filter((p) => p.category === category)
     );
   }, [products, category]);
 

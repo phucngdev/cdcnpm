@@ -12,14 +12,14 @@ module.exports.addToCartService = async (id, body) => {
     }
 
     const [[item]] = await pool.execute(
-      "SELECT * FROM cartItems WHERE product_id = ? AND color_size_id = ?",
+      "SELECT * FROM cart_item WHERE product_id = ? AND color_size_id = ?",
       [body.product_id, body.color_size_id]
     );
 
     if (item) {
       const updatedQuantity = item.quantity + body.quantity;
       await pool.execute(
-        "UPDATE cartItems SET quantity = ? WHERE cart_item_id = ?",
+        "UPDATE cart_item SET quantity = ? WHERE cart_item_id = ?",
         [updatedQuantity, item.cart_item_id]
       );
       return {
@@ -30,7 +30,7 @@ module.exports.addToCartService = async (id, body) => {
 
     const cartItemId = uuidv4();
     await pool.execute(
-      "INSERT INTO cartItems (cart_item_id, cart_id, product_id, color_size_id, quantity) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO cart_item (cart_item_id, cart_id, product_id, color_size_id, quantity) VALUES (?, ?, ?, ?, ?)",
       [
         cartItemId,
         user.cart_id,
@@ -51,7 +51,7 @@ module.exports.addToCartService = async (id, body) => {
 module.exports.getCartByIdService = async (id) => {
   try {
     const [[user]] = await pool.execute(
-      "SELECT * FROM users WHERE user_id =?",
+      "SELECT * FROM users WHERE user_id = ?",
       [id]
     );
 
@@ -68,7 +68,7 @@ module.exports.getCartByIdService = async (id) => {
             clr.color_name, 
             sz.size_name, sz.quantity AS quantity_size
         FROM carts c
-        JOIN cartItems ci ON c.cart_id = ci.cart_id
+        JOIN cart_item ci ON c.cart_id = ci.cart_id
         JOIN products p ON ci.product_id = p.product_id
         JOIN color_size cs ON ci.color_size_id = cs.color_size_id
         JOIN colors clr ON cs.color_id = clr.color_id
@@ -78,7 +78,7 @@ module.exports.getCartByIdService = async (id) => {
     );
 
     if (cartRows.length === 0) {
-      return { status: 404, message: "Cart not found" };
+      return [];
     }
 
     const cart = {
@@ -104,22 +104,36 @@ module.exports.getCartByIdService = async (id) => {
         updated_at: row.item_updated_at,
       })),
     };
+
     return cart;
   } catch (error) {
     return { status: 500, message: error.message };
   }
 };
 
-module.exports.updateCartService = async (id, data) => {
+module.exports.updateCartService = async (user_id, body) => {
   try {
     const [[user]] = await pool.execute(
       "SELECT * FROM users WHERE user_id = ?",
-      [id]
+      [user_id]
     );
 
     if (!user) {
       return { status: 404, message: "User not found" };
     }
+
+    const [cart_item_check] = await pool.execute(
+      "SELECT * FROM cart_item WHERE cart_id = ? AND cart_item_id = ?",
+      [user.cart_id, body.cart_item_id]
+    );
+    if (!cart_item_check) {
+      return { status: 404, message: "Cart item not found" };
+    }
+
+    await pool.execute(
+      "UPDATE cart_item SET update_at = NOW(), quantity = ?  WHERE cart_item_id = ?",
+      [body.quantity, body.cart_item_id]
+    );
 
     return { status: 200, message: "Cart updated successfully" };
   } catch (error) {
@@ -127,7 +141,7 @@ module.exports.updateCartService = async (id, data) => {
   }
 };
 
-module.exports.deleteCartItemService = async (user_id, id) => {
+module.exports.deletecart_itemervice = async (user_id, id) => {
   try {
     const [[user]] = await pool.execute(
       "SELECT * FROM users WHERE user_id =?",
@@ -137,15 +151,14 @@ module.exports.deleteCartItemService = async (user_id, id) => {
       return { status: 404, message: "User not found" };
     }
     const cart_item = await pool.execute(
-      "SELECT * FROM cartItems WHERE cart_item_id = ?",
+      "SELECT * FROM cart_item WHERE cart_item_id = ?",
       [id]
     );
-    console.log(cart_item);
 
     if (!cart_item) {
       return { status: 404, message: "Cart item not found" };
     }
-    await pool.execute("DELETE FROM cartItems WHERE cart_item_id = ?", [id]);
+    await pool.execute("DELETE FROM cart_item WHERE cart_item_id = ?", [id]);
 
     return { status: 200, message: "Cart item deleted successfully" };
   } catch (error) {

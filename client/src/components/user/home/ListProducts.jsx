@@ -1,33 +1,22 @@
-import React, { useState, useEffect, useMemo, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Empty, Tooltip, message } from "antd";
 import ItemProduct from "../product/ItemProduct";
-import { getAllProduct } from "../../../services/product.service";
 
 const ListProducts = ({ path, category }) => {
-  const dispatch = useDispatch();
-  const fetchData = async () => {
-    await dispatch(getAllProduct());
-  };
-  useEffect(() => {
-    fetchData();
-  }, [path]);
-
   const products = useSelector((state) => state.product.data);
 
   const [listProduct, setListProduct] = useState(() => {
     const list = products?.products
-      ?.filter((p) => p.category.category_name === category.toLowerCase())
+      ?.filter((p) => p.category === category)
       .slice(0, 8);
     return list || [];
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setListProduct(
-      products?.products
-        ?.filter((p) => p.category.category_name === category.toLowerCase())
-        .slice(0, 8)
+      products?.products?.filter((p) => p.category === category).slice(0, 8)
     );
   }, [products, category]);
 

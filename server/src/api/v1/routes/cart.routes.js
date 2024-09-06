@@ -2,8 +2,9 @@ const cartRoutes = require("express").Router();
 const cartController = require("../controllers/cart.controller");
 const verifyToken = require("../middlewares/verifyToken");
 
-cartRoutes.post("/add", verifyToken.verifyToken, cartController.addToCart);
-cartRoutes.get("/", verifyToken.verifyToken, cartController.getCartById);
+cartRoutes.post("/add/:id", verifyToken.verifyToken, cartController.addToCart);
+cartRoutes.get("/:id", verifyToken.verifyToken, cartController.getCartById);
+cartRoutes.put("/update", verifyToken.verifyToken, cartController.updateCart);
 cartRoutes.delete(
   "/:id",
   verifyToken.verifyToken,

@@ -24,7 +24,6 @@ const AddressSelector = ({ parentAddressSelect, setParentAddressSelect }) => {
 
   useEffect(() => {
     if (selectedProvince) {
-      console.log(selectedProvince);
       const selectedProvinceData = provinces.find(
         (province) => province.Id === selectedProvince
       );

@@ -23,18 +23,18 @@ const OptionItem = ({ option, setImageFocus }) => {
     <>
       {option?.map((op, index) => (
         <div
-          key={op?.color_size_id}
+          key={op.image}
           className="w-8 h-8 relative flex items-center justify-center"
           ref={(el) => (optionItemRefs.current[index] = el)}
         >
           <button
             className="w-full h-full absolute z-50 rounded-full border-[1px] border-red-500 cursor-pointer"
-            onClick={() => setImageFocus(op?.colors?.image)}
+            onClick={() => setImageFocus(op?.image)}
           >
             <img
               loading="lazy"
               className="w-full h-full rounded-[100%] object-cover"
-              src={op?.colors?.image}
+              src={op?.image}
               alt=""
             />
           </button>

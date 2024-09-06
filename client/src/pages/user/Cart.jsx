@@ -1,14 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { message, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteCartItem,
-  getCart,
-  minusCount,
-  plusCount,
-} from "../../services/cart.service";
+import { deleteCartItem, getCart } from "../../services/cart.service";
 import CartItem from "../../components/user/cart/CartItem";
 import CartEmpty from "../../components/user/cart/CartEmpty";
 import CartBottom from "../../components/user/cart/CartBottom";
@@ -18,17 +13,17 @@ const Cart = () => {
   const user = useCookie("accessToken");
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const fetchCart = async () => {
-    await dispatch(getCart());
-  };
+  // const fetchCart = async () => {
+  //   await dispatch(getCart(user.user_id));
+  // };
 
-  useEffect(() => {
-    if (user) {
-      fetchCart();
-    }
-  }, [user]);
+  // useLayoutEffect(() => {
+  //   if (user) {
+  //     console.log("cart page");
+  //     fetchCart();
+  //   }
+  // }, []);
 
   const cart = useSelector((state) => state.cart.data);
 
@@ -41,10 +36,12 @@ const Cart = () => {
   };
 
   const handleOk = async () => {
+    console.log("chạy ok");
+
     const response = await dispatch(deleteCartItem(cartItemDelete));
     if (response.payload.status === 200) {
       message.success("Xoá thành công");
-      dispatch(getCart());
+      await dispatch(getCart(user.user_id));
     } else {
       message.error("Xoá thất bại");
     }
@@ -52,15 +49,6 @@ const Cart = () => {
   };
   const handleCancel = () => {
     setIsOpenModalDelete(false);
-  };
-
-  // hàm tăng giảm số lượng sản phẩm
-  const handlePlusCount = (product) => {
-    dispatch(plusCount(product));
-  };
-
-  const handleMinusCount = (product) => {
-    dispatch(minusCount(product));
   };
 
   return (
@@ -94,12 +82,12 @@ const Cart = () => {
               Thành tiền
             </div>
           </div>
-          {cart.items?.length > 0 ? (
+          {cart?.items?.length > 0 ? (
             <>
-              {cart?.items?.map((product) => (
+              {cart?.items?.map((item) => (
                 <CartItem
-                  product={product}
-                  key={product.cart_item_id}
+                  item={item}
+                  key={item.cart_item_id}
                   cart_id={cart.cart_id}
                   showModal={showModal}
                 />

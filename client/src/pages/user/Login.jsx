@@ -16,24 +16,13 @@ import {
 import google from "../../../public/google.svg";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import { getCart } from "../../services/cart.service";
+import Pending from "../../components/user/animation/Pending";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentRef = useRef();
   const [pending, setPending] = useState(false);
-  const [isLogin, setIsLogin] = useState(() => {
-    const checkLogin = Cookies.get("AT") || false;
-    return checkLogin;
-  });
-
-  useEffect(() => {
-    if (isLogin) {
-      const { role } = jwtDecode(isLogin);
-      role === 1 ? navigate("/") : navigate("/admin");
-    }
-  }, []);
 
   useEffect(() => {
     currentRef.current.focus();
@@ -128,11 +117,7 @@ const Login = () => {
       <Helmet>
         <title>Đăng nhập - TEELAB</title>
       </Helmet>
-      {pending && (
-        <div className="fixed bg-[rgba(255,255,255,0.5)] text-3xl z-50 top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-          <LoadingOutlined />
-        </div>
-      )}
+      {pending && <Pending />}
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">

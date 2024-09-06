@@ -8,19 +8,18 @@ import { useDispatch, useSelector } from "react-redux";
 import formatPrice from "../../utils/formatPrice";
 import logo_vnpay from "../../../public/logo-vnpay.svg";
 import logo_zalopay from "../../../public/zalopay.png";
-import { createOrder } from "../../services/order.service";
+import { createOrder, createZalopay } from "../../services/order.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
-import { zalopay } from "../../services/payment.service";
-// import { clearCart } from "../../redux/useSlice/cartSlice";
+import { useCookie } from "../../hooks/useCookie";
 
 const { TextArea } = Input;
 
 const Pay = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const carts = useSelector((state) => state.cart.data);
-  const [cart, setCart] = useState(carts || []);
+  const user = useCookie("accessToken");
+  const cart = useSelector((state) => state.cart.data);
   const [parentAddressSelect, setParentAddressSelect] = useState({
     city: "",
     district: "",
@@ -30,31 +29,36 @@ const Pay = () => {
   const [statusOrder, setStatusOrder] = useState(false);
   const [pending, setPending] = useState(false);
 
-  useEffect(() => {
-    setCart(carts);
-  }, [carts]);
-
   const total_amount = useMemo(() => {
-    return cart.reduce(
+    return cart?.items?.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0
     );
   }, [cart]);
 
   const totalCount = useMemo(() => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+    return cart?.items?.reduce((total, item) => total + item.quantity, 0);
+  }, [cart]);
+
+  const order_items = useMemo(() => {
+    return cart?.items?.map((item) => ({
+      color_size_id: item.color_size.color_size_id,
+      product_id: item.product.product_id,
+      quantity: +item.quantity,
+      price: +item.product.price,
+    }));
   }, [cart]);
 
   const formik = useFormik({
     initialValues: {
-      name: "",
+      username: "",
       phone: "",
       email: "",
       address: "",
       note: "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Tên không được để trống"),
+      username: Yup.string().required("Tên không được để trống"),
       phone: Yup.string()
         .matches(
           /(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/,
@@ -83,65 +87,61 @@ const Pay = () => {
         return;
       }
       setPending(true);
-      const newOrder = {
-        total_amount: total_amount + 20000,
-        note: values.note,
-        status: 0,
-        name: values.name,
-        phone: values.phone,
-        email: values.email,
+      const data = {
+        user_id: user.user_id,
+        total: total_amount + 20000,
+        username: values.username,
+        transaction: payments,
         address: values.address,
         city: parentAddressSelect.city,
         district: parentAddressSelect.district,
         ward: parentAddressSelect.ward,
-        items: cart,
+        phone: values.phone,
+        email: values.email,
+        note: values.note,
+        order_items: order_items,
+        status: 0,
       };
       if (payments === "zalopay") {
         try {
-          const response = await dispatch(zalopay(newOrder));
+          const response = await dispatch(createZalopay(data));
           if (response.payload.order_url) {
-            localStorage.setItem(
-              "app_trans_id",
-              JSON.stringify(response.payload.app_trans_id)
-            );
             window.location.href = response.payload.order_url;
           }
         } catch (error) {
-          console.log(error);
+          message.error(error.message);
         }
-      }
-      if (payments === "normal") {
+      } else if (payments === "normal") {
         try {
-          const response = await dispatch(createOrder(newOrder));
-          console.log(response);
+          const response = await dispatch(createOrder(data));
           if (response.payload.status === 201) {
             setStatusOrder(true);
             // dispatch(clearCart());
           }
         } catch (error) {
-          console.log(error);
+          message.error(error.message);
         }
       }
       setPending(false);
     },
   });
 
-  const listItem = cart?.map((product, index) => (
+  const listItem = cart?.items?.map((item) => (
     <div
-      key={index}
+      key={item.cart_item_id}
       className="border border-gray-500 rounded-lg p-2 flex gap-3 items-center justify-between mb-2"
     >
-      <img src={product.product.thumbnail} alt="" className="w-10 h-10" />
+      <img src={item.product.thumbnail} alt="" className="w-10 h-10" />
       <div className="flex flex-1 justify-between items-center">
         <div className="flex flex-col max-w-[80%]">
-          <b className="text-sm">{product.product.product_name}</b>
+          <b className="text-sm">{item.product.product_name}</b>
           <p className="font-bold text-xs text-[#969696]">
-            {product.color.color_name}/{product.size.size_name}
+            {item.color_size.color_name}/{item.color_size.size_name}
           </p>
         </div>
         <div className="flex flex-col items-center">
-          <p className="text-sm">{formatPrice(product.product.price)}</p>
-          <p className="text-sm">x{product.count}</p>
+          <p className="text-sm">{formatPrice(item.product.price)}</p>
+          <p className="text-sm">x{item.quantity}</p>
         </div>
       </div>
     </div>
@@ -189,15 +189,15 @@ const Pay = () => {
                 <div className="mb-[6px]">
                   <input
                     type="text"
-                    name="name"
-                    value={formik.values.name}
+                    name="username"
+                    value={formik.values.username}
                     onChange={formik.handleChange}
                     className="text-[13px] mt-3 border border-gray-200 w-full h-[38px] px-2"
                     placeholder="Họ và tên"
                   />
-                  {formik.touched.name && formik.errors.name ? (
+                  {formik.touched.username && formik.errors.username ? (
                     <div className="text-red-500 text-sm">
-                      {formik.errors.name}
+                      {formik.errors.username}
                     </div>
                   ) : null}
                 </div>

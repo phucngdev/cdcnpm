@@ -96,10 +96,13 @@ const Detail = () => {
       quantity: quantity,
       product_id: product.product_id,
     };
-    const response = await dispatch(addToCart(data));
+    const response = await dispatch(
+      addToCart({ id: user.user_id, data: data })
+    );
     if (response.payload.status === 201) {
       message.success("Thêm thành công");
-      await dispatch(getCart());
+      await dispatch(getCart(user.user_id));
+      console.log("call cart");
     }
   };
 

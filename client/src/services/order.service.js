@@ -58,3 +58,29 @@ export const updateStatus = createAsyncThunk(
     }
   }
 );
+
+export const createZalopay = createAsyncThunk(
+  "create/order/zalopay",
+  async (data) => {
+    try {
+      const response = await BaseUrl.post(`order/create/zalopay`, data);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);
+
+export const checkPaymentZalopay = createAsyncThunk(
+  "zalopay/check",
+  async (app_trans_id) => {
+    try {
+      const response = await BaseUrl.get(
+        `order/zalopay/check-status/${app_trans_id}`
+      );
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);

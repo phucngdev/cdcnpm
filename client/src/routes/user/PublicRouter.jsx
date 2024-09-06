@@ -1,17 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Header from "../../layouts/user/Header";
 import Footer from "../../layouts/user/Footer";
 import { useCookie } from "../../hooks/useCookie";
 import MessageButton from "../../components/user/message/MessageButton";
-import Cookies from "js-cookie";
-import { message } from "antd";
+import { useDispatch } from "react-redux";
+import { getAllProduct } from "../../services/product.service";
+import { getAllCategory } from "../../services/category.service";
+import { getCart } from "../../services/cart.service";
 
 const PublicRouter = () => {
-  const navigate = useNavigate();
-
   const userDecode = useCookie("accessToken");
   const [user, setUser] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const fetchData = async () => {
+    const promises = [
+      dispatch(getAllProduct({ page: 0, limit: 0 })),
+      dispatch(getAllCategory()),
+    ];
+    if (user) {
+      promises.push(dispatch(getCart(user.user_id)));
+    }
+    await Promise.all(promises);
+  };
 
   useEffect(() => {
     if (userDecode) {
@@ -19,16 +32,13 @@ const PublicRouter = () => {
     }
   }, [userDecode]);
 
-  const handleLogout = () => {
-    Cookies.remove("accessToken");
-    setUser(null);
-    navigate("/");
-    message.success("Đăng xuất thành công");
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
-      <Header user={user} handleLogout={handleLogout} />
+      <Header user={user} />
       <Outlet context={user} />
       <MessageButton user={user} />
       <Footer />

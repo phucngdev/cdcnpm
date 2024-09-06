@@ -1,14 +1,14 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { checkPaymentZalopay } from "../../services/payment.service";
 import { Button, Result } from "antd";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
-// import { clearCart } from "../../redux/useSlice/cartSlice";
+import { checkPaymentZalopay } from "../../services/order.service";
 
 const PayCheck = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const [status, setStatus] = useState(false);
   const [pending, setPending] = useState(true);
   const appTransId = useMemo(() => {
@@ -21,7 +21,6 @@ const PayCheck = () => {
     if (appTransId) {
       const response = await dispatch(checkPaymentZalopay(appTransId));
       setStatus(response.payload);
-      console.log(response);
     }
   };
   useEffect(() => {
@@ -60,8 +59,10 @@ const PayCheck = () => {
             "Mã đơn hàng sẽ được gửi tới email của bạn, Cảm ơn bạn đã tin tưởng và ủng hộ Teelab"
           }
           extra={[
-            <Button type="primary">Tiếp tục mua hàng</Button>,
-            <Button>Buy Again</Button>,
+            <Button type="primary" onClick={() => navigate("/")}>
+              Tiếp tục mua hàng
+            </Button>,
+            // <Button>Buy Again</Button>,
           ]}
         />
       )}

@@ -5,12 +5,12 @@ const SideBar = () => {
   return (
     <>
       <div className="hidden md:flex flex-col w-[30%]">
-        {/* <div className="flex gap-2 px-3 py-2 border border-gray-300 mb-2">
+        <div className="flex gap-2 px-3 py-2 border border-gray-300 mb-2">
           <DeploymentUnitOutlined />
           Filter
-        </div> */}
-        {/* <div className="space-y-2">
-          <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
+        </div>
+        <div className="space-y-2">
+          <div className="rounded border border-gray-300">
             <summary className="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition">
               <span className="text-sm font-medium"> Availability </span>
               <span className="transition group-open:-rotate-180">
@@ -91,8 +91,8 @@ const SideBar = () => {
                 </li>
               </ul>
             </div>
-          </details>
-          <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
+          </div>
+          <div className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-div-marker]:hidden">
             <summary className="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition">
               <span className="text-sm font-medium"> Price </span>
               <span className="transition group-open:-rotate-180">
@@ -154,20 +154,8 @@ const SideBar = () => {
                 </div>
               </div>
             </div>
-          </details>
-        </div> */}
-        <img
-          src="https://scontent.fhan14-2.fna.fbcdn.net/v/t39.30808-6/449964206_1025131665848789_5234384565054640562_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=6WjNoiCFsKQQ7kNvgF4iO5O&_nc_ht=scontent.fhan14-2.fna&oh=00_AYCB1XAsVg6xfKReC9w4YIGeKBXsOXqeCIcWGM7zhSAJxg&oe=6691B725"
-          alt=""
-        />
-        <img
-          src="https://scontent.fhan14-2.fna.fbcdn.net/v/t39.30808-6/438276123_989549559407000_2239771444269997758_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_ohc=ndttfn4wEjcQ7kNvgHiMC4-&_nc_ht=scontent.fhan14-2.fna&oh=00_AYCGz2xD-79CH_4cMptnTwcXhT6UIoOjGC3ZMFoHyvSLUA&oe=6691B69E"
-          alt=""
-        />
-        <img
-          src="https://scontent.fhan14-3.fna.fbcdn.net/v/t39.30808-6/434651852_963345075360782_6066714139648919570_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=QY6o8RsgKh8Q7kNvgGYPZNu&_nc_ht=scontent.fhan14-3.fna&oh=00_AYBnVLi_qqER6fny-FIRX_0Eo96MVPadmNBXDBXTx6vr6Q&oe=6691C637"
-          alt=""
-        />
+          </div>
+        </div>
       </div>
     </>
   );

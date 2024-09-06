@@ -19,9 +19,10 @@ module.exports.verifyEmailWithGoogle = async (req, res, next) => {
     const { result, score } = response.data.data;
 
     if (result !== "deliverable" || score < 80) {
-      return res
-        .status(400)
-        .json({ message: "Invalid or non-existent email address" });
+      return res.status(400).json({
+        status: 400,
+        message: "Invalid or non-existent email address",
+      });
     }
 
     next();
@@ -37,7 +38,9 @@ module.exports.checkEmailExists = async (req, res, next) => {
       email,
     ]);
     if (user) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res
+        .status(400)
+        .json({ status: 400, message: "Email already exists" });
     }
     next();
   } catch (error) {

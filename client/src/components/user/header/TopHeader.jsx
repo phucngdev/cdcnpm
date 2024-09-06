@@ -9,7 +9,7 @@ import SearchList from "./SearchList";
 import CartAndUserMenu from "./CartAndUserMenu";
 import { useDebounce } from "../../../hooks/useDebounce";
 
-const TopHeader = ({ user, handleLogout }) => {
+const TopHeader = ({ user }) => {
   const dispatch = useDispatch();
   const searchProducts = useSelector((state) => state.product.dataSearch);
   const [search, setSearch] = useState("");
@@ -17,10 +17,10 @@ const TopHeader = ({ user, handleLogout }) => {
   const debouncedSearch = useDebounce(search, 300);
 
   useEffect(() => {
-    if (debouncedSearch) {
+    if (search !== "") {
       dispatch(searchProduct(debouncedSearch));
     }
-  }, [debouncedSearch, dispatch]);
+  }, [debouncedSearch]);
 
   return (
     <>
@@ -36,11 +36,7 @@ const TopHeader = ({ user, handleLogout }) => {
               <SearchList searchProducts={searchProducts} />
             )}
           </form>
-          {user ? (
-            <CartAndUserMenu user={user} handleLogout={handleLogout} />
-          ) : (
-            <AuthButtons />
-          )}
+          {user ? <CartAndUserMenu user={user} /> : <AuthButtons />}
         </div>
       </div>
     </>

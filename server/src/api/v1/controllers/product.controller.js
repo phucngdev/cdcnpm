@@ -2,7 +2,8 @@ const productService = require("../services/product.service");
 
 module.exports.getAll = async (req, res) => {
   try {
-    const result = await productService.getAllService();
+    const { page, limit } = req.query;
+    const result = await productService.getAllService(page, limit);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: "Server error" });

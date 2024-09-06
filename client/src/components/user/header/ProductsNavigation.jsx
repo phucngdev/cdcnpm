@@ -4,14 +4,6 @@ import { Link } from "react-router-dom";
 import { getAllCategory } from "../../../services/category.service";
 
 const ProductsNavigation = () => {
-  const dispatch = useDispatch();
-  const fetchData = async () => {
-    await dispatch(getAllCategory());
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const categorys = useSelector((state) => state.category.data);
 
   return (

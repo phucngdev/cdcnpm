@@ -8,15 +8,6 @@ import { Button, Result } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 
 const Home = () => {
-  const dispatch = useDispatch();
-
-  const fetchData = async () => {
-    await dispatch(getAllProduct({ page: 0, limit: 0 }));
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const category = useSelector((state) => state.category.data);
 
   return (
@@ -39,7 +30,7 @@ const Home = () => {
       {category ? (
         category.map((c) => (
           <ListProducts
-            path={`/${c.path}`}
+            path={c.path}
             category={c.category_name}
             key={c.category_id}
           />

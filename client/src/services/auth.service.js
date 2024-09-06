@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import BaseUrl from "../apis/axios";
 import { message } from "antd";
+import Cookies from "js-cookie";
 
 export const login = createAsyncThunk("login", async (data) => {
   try {
@@ -41,3 +42,22 @@ export const registerGoogle = createAsyncThunk(
     }
   }
 );
+
+export const checkRoleAdmin = createAsyncThunk("checkRoleAdmin", async () => {
+  try {
+    const response = await BaseUrl.post(`auth/check-role`);
+    return response.data;
+  } catch (error) {
+    message.error(error.message);
+  }
+});
+
+export const logout = createAsyncThunk("logout", async () => {
+  try {
+    Cookies.remove("accessToken");
+    window.location = "/";
+    message.success("Đăng xuất thành công");
+  } catch (error) {
+    message.error(error.message);
+  }
+});

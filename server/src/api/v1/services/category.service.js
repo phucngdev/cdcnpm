@@ -28,12 +28,12 @@ module.exports.createCategoryService = async (body) => {
 
 module.exports.getAllCategoryService = async () => {
   try {
-    // const [result] = await pool.execute("SELECT * FROM categories");
     const [result] = await pool.execute(`
       SELECT c.*, COUNT(p.product_id) AS product_count
       FROM categories c
       LEFT JOIN products p ON c.category_id = p.category_id
       GROUP BY c.category_id
+      ORDER BY c.created_at DESC
     `);
     return result;
   } catch (error) {

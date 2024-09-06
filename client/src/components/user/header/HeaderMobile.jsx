@@ -15,22 +15,21 @@ import _debounce from "lodash/debounce";
 import SearchListMobile from "./SearchListMobile";
 import SearchEmpty from "./SearchEmpty";
 import DrawerMobile from "./DrawerMobile";
+import { useDebounce } from "../../../hooks/useDebounce";
 
-const HeaderMobile = ({ user, handleLogout }) => {
+const HeaderMobile = ({ user }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.data);
   const searchProducts = useSelector((state) => state.product.dataSearch);
   const [search, setSearch] = useState("");
 
+  const debouncedSearch = useDebounce(search, 300);
+
   useEffect(() => {
-    const debouncedFilter = _debounce(() => {
-      dispatch(searchProduct(search));
-    }, 300);
-    debouncedFilter();
-    return () => {
-      debouncedFilter.cancel();
-    };
-  }, [search]);
+    if (search !== "") {
+      dispatch(searchProduct(debouncedSearch));
+    }
+  }, [debouncedSearch]);
 
   // drawer nav
   const [open, setOpen] = useState(false);

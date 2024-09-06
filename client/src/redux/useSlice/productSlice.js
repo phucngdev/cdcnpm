@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
-  deleteProduct,
   getAllProduct,
   getOneProduct,
   searchProduct,
-  updateProduct,
 } from "../../services/product.service";
 
 const productSlice = createSlice({
@@ -40,17 +38,6 @@ const productSlice = createSlice({
         state.status = "Failed!";
         state.error = action.error.message;
       })
-      .addCase(updateProduct.pending, (state) => {
-        state.status = "Pending!";
-      })
-      .addCase(updateProduct.fulfilled, (state, action) => {
-        state.status = "Successfully!";
-        state.data = action.payload;
-      })
-      .addCase(updateProduct.rejected, (state, action) => {
-        state.status = "Failed!";
-        state.error = action.error.message;
-      })
       .addCase(searchProduct.pending, (state) => {
         state.status = "Pending!";
       })
@@ -59,17 +46,6 @@ const productSlice = createSlice({
         state.dataSearch = action.payload;
       })
       .addCase(searchProduct.rejected, (state, action) => {
-        state.status = "Failed!";
-        state.error = action.error.message;
-      })
-      .addCase(deleteProduct.pending, (state) => {
-        state.status = "Pending!";
-      })
-      .addCase(deleteProduct.fulfilled, (state, action) => {
-        state.status = "Successfully!";
-        state.data = action.payload;
-      })
-      .addCase(deleteProduct.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       });

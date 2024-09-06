@@ -31,13 +31,30 @@ module.exports.registerService = async (body) => {
   try {
     const userId = uuidv4();
     const cartId = uuidv4();
+    const roomId = uuidv4();
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(body.password.trim(), salt);
-    await pool.execute("INSERT INTO carts (cart_id) VALUES (?)", [cartId]);
-    await pool.execute(
-      "INSERT INTO users (user_id, username, email, password, avatar, cart_id) VALUES (?, ?, ?, ?, ?, ?)",
-      [userId, body.username, body.email, hashed, body.avatar, cartId]
-    );
+    const result = await Promise.allSettled([
+      pool.execute("INSERT INTO carts (cart_id) VALUES (?)", [cartId]),
+      pool.execute("INSERT INTO room_chat (room_id) VALUES (?)", [roomId]),
+      pool.execute(
+        "INSERT INTO users (user_id, username, email, password, avatar, cart_id, room_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+          userId,
+          body.username,
+          body.email,
+          hashed,
+          body.avatar || "",
+          cartId,
+          roomId,
+        ]
+      ),
+    ]);
+
+    const check_result = result.find((s) => s.status !== "fulfilled");
+    if (check_result) {
+      return { status: 500, message: "Internal Server Error" };
+    }
 
     return { status: 201, message: "Register successfully" };
   } catch (error) {
@@ -77,6 +94,14 @@ module.exports.loginService = async (body) => {
       accessToken: accessToken,
       cart: cart,
     };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};
+
+module.exports.checkRoleAdminService = async () => {
+  try {
+    return { status: 200, message: "User has admin role" };
   } catch (error) {
     return { status: 500, message: error.message };
   }

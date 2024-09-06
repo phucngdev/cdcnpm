@@ -17,3 +17,12 @@ module.exports.login = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+module.exports.checkRoleAdmin = async (req, res) => {
+  try {
+    const result = await authService.checkRoleAdminService();
+    return res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

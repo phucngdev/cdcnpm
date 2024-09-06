@@ -16,6 +16,7 @@ import {
 import google from "../../../public/google.svg";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import Pending from "../../components/user/animation/Pending";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      user_name: "",
+      username: "",
       email: "",
       password: "",
     },
@@ -51,14 +52,14 @@ const Register = () => {
           "Email không hợp lệ"
         )
         .required("Email không được để trống"),
-      user_name: Yup.string().required("Tên không được để trống"),
+      username: Yup.string().required("Tên không được để trống"),
       password: Yup.string().required("Mật khẩu không được để trống"),
     }),
     onSubmit: async (values, { resetForm }) => {
       const newUser = {
         email: values.email,
         password: values.password,
-        user_name: values.user_name,
+        username: values.username,
       };
       try {
         setPending(true);
@@ -77,62 +78,58 @@ const Register = () => {
     },
   });
 
-  const registerWithGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      const accessToken = tokenResponse.access_token;
-      if (accessToken) {
-        try {
-          setPending(true);
-          const response = await fetch(
-            "https://www.googleapis.com/oauth2/v3/userinfo",
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const userInfo = await response.json();
-          const newUser = {
-            email: userInfo.email,
-            user_name: userInfo.name,
-            avatar: userInfo.picture,
-          };
-          const res = await dispatch(registerGoogle(newUser));
-          if (res.payload.status === 201) {
-            message.success("Đăng ký thành công");
-            Cookies.set(
-              "token",
-              JSON.stringify(`Bearer ${res.payload?.data?.response?.AT}`),
-              {
-                expires: 8 / 24,
-              }
-            );
-            const decoded = jwtDecode(res.payload?.data?.response?.AT);
-            Cookies.set("user", JSON.stringify(decoded), {
-              expires: 8 / 24,
-            });
-            navigate("/");
-          }
-          setPending(false);
-        } catch (error) {
-          console.error("Error fetching user info:", error);
-        }
-      } else {
-        console.log("No access_token found in the response.");
-      }
-    },
-  });
+  // const registerWithGoogle = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     const accessToken = tokenResponse.access_token;
+  //     if (accessToken) {
+  //       try {
+  //         setPending(true);
+  //         const response = await fetch(
+  //           "https://www.googleapis.com/oauth2/v3/userinfo",
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${accessToken}`,
+  //             },
+  //           }
+  //         );
+  //         const userInfo = await response.json();
+  //         const newUser = {
+  //           email: userInfo.email,
+  //           username: userInfo.name,
+  //           avatar: userInfo.picture,
+  //         };
+  //         const res = await dispatch(registerGoogle(newUser));
+  //         if (res.payload.status === 201) {
+  //           message.success("Đăng ký thành công");
+  //           Cookies.set(
+  //             "token",
+  //             JSON.stringify(`Bearer ${res.payload?.data?.response?.AT}`),
+  //             {
+  //               expires: 8 / 24,
+  //             }
+  //           );
+  //           const decoded = jwtDecode(res.payload?.data?.response?.AT);
+  //           Cookies.set("user", JSON.stringify(decoded), {
+  //             expires: 8 / 24,
+  //           });
+  //           navigate("/");
+  //         }
+  //         setPending(false);
+  //       } catch (error) {
+  //         console.error("Error fetching user info:", error);
+  //       }
+  //     } else {
+  //       console.log("No access_token found in the response.");
+  //     }
+  //   },
+  // });
 
   return (
     <>
       <Helmet>
         <title>Đăng ký - TEELAB</title>
       </Helmet>
-      {pending && (
-        <div className="fixed z-50 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          <LoadingOutlined />
-        </div>
-      )}
+      {pending && <Pending />}
       <section className="bg-white">
         <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
           <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
@@ -217,7 +214,7 @@ const Register = () => {
                 </h2>
                 <div className="col-span-6">
                   <label
-                    htmlFor="User_name"
+                    htmlFor="username"
                     className="block text-sm font-medium text-gray-700"
                   >
                     {" "}
@@ -226,17 +223,17 @@ const Register = () => {
 
                   <input
                     ref={currentRef}
-                    type="user_name"
-                    id="User_name"
-                    name="user_name"
-                    value={formik.values.user_name}
+                    type="username"
+                    id="username"
+                    name="username"
+                    value={formik.values.username}
                     onChange={formik.handleChange}
                     placeholder="Họ và tên"
                     className="mt-1 w-full rounded-md border border-gray-200 py-2 px-2 bg-white text-sm text-gray-700 shadow-sm"
                   />
-                  {formik.touched.user_name && formik.errors.user_name ? (
+                  {formik.touched.username && formik.errors.username ? (
                     <div className="text-red-500 text-sm ">
-                      {formik.errors.user_name}
+                      {formik.errors.username}
                     </div>
                   ) : null}
                 </div>
@@ -302,7 +299,7 @@ const Register = () => {
                 <div className="col-span-6">
                   <button
                     type="button"
-                    onClick={() => registerWithGoogle()}
+                    // onClick={() => registerWithGoogle()}
                     className="mt-1 flex items-center justify-center gap-3 w-full rounded-md border border-gray-200 py-2 bg-white text-sm text-gray-700 shadow-sm"
                   >
                     <img src={google} alt="" />
