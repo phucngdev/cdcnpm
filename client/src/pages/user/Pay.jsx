@@ -12,6 +12,7 @@ import { createOrder, createZalopay } from "../../services/order.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import { useCookie } from "../../hooks/useCookie";
+import Pending from "../../components/user/animation/Pending";
 
 const { TextArea } = Input;
 
@@ -152,11 +153,7 @@ const Pay = () => {
       <Helmet>
         <title>Đặt hàng | TEELAB</title>
       </Helmet>
-      {pending && (
-        <div className="fixed z-50 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-          <LoadingOutlined />
-        </div>
-      )}
+      {pending && <Pending />}
       {statusOrder ? (
         <Result
           status="success"

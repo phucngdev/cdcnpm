@@ -4,6 +4,7 @@ import { Button, Result } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { checkPaymentZalopay } from "../../services/order.service";
+import Pending from "../../components/user/animation/Pending";
 
 const PayCheck = () => {
   const dispatch = useDispatch();
@@ -37,13 +38,7 @@ const PayCheck = () => {
 
   return (
     <>
-      {pending && (
-        <div className="h-60 relative">
-          <div className="absolute text-3xl z-50 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-            <LoadingOutlined />
-          </div>
-        </div>
-      )}
+      {pending && <Pending />}
       {status && (
         <Result
           status={

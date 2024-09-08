@@ -5,22 +5,11 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import CartList from "./CartList";
 import CartEmpty from "./CartEmpty";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../../services/cart.service";
 import { logout } from "../../../services/auth.service";
 
 const CartAndUserMenu = ({ user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // const fetchCart = async () => {
-  //   await dispatch(getCart(user.user_id));
-  // };
-
-  // useLayoutEffect(() => {
-  //   if (user) {
-  //     fetchCart();
-  //   }
-  // }, []);
 
   const cart = useSelector((state) => state.cart.data);
 

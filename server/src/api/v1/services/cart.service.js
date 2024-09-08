@@ -78,7 +78,9 @@ module.exports.getCartByIdService = async (id) => {
     );
 
     if (cartRows.length === 0) {
-      return [];
+      return {
+        items: [],
+      };
     }
 
     const cart = {
@@ -107,6 +109,7 @@ module.exports.getCartByIdService = async (id) => {
 
     return cart;
   } catch (error) {
+    console.log(error.message);
     return { status: 500, message: error.message };
   }
 };

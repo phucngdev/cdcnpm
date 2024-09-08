@@ -22,7 +22,7 @@ const CheckOrderDetail = () => {
   }, [id]);
 
   const order = useSelector((state) => state.order.dataEdit);
-  console.log(order);
+
   const listItem = order?.order_details?.map((product, index) => (
     <div key={index} className="grid grid-cols-12 items-center py-[7px]">
       <div className="col-span-9 flex gap-2 items-center">

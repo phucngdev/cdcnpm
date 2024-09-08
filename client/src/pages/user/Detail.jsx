@@ -101,7 +101,7 @@ const Detail = () => {
     );
     if (response.payload.status === 201) {
       message.success("Thêm thành công");
-      await dispatch(getCart(user.user_id));
+      await dispatch(getCart({ id: user.user_id }));
       console.log("call cart");
     }
   };

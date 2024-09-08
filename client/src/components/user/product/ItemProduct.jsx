@@ -60,7 +60,7 @@ const ItemProduct = ({ product }) => {
             onClick={() => navigate(`/chi-tiet/${product?.product_id}`)}
             className="text-base font-normal text-[#333] text-center mb-[10px] group-hover:text-[#dc3545]"
           >
-            Áo Polo Teelab Local Brand Unisex Football
+            {product.product_name}
           </h3>
           <div className="flex items-center justify-center gap-[10px]">
             <span className="text-[#d52220] text-base">

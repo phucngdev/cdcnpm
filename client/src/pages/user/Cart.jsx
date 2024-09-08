@@ -14,17 +14,6 @@ const Cart = () => {
 
   const dispatch = useDispatch();
 
-  // const fetchCart = async () => {
-  //   await dispatch(getCart(user.user_id));
-  // };
-
-  // useLayoutEffect(() => {
-  //   if (user) {
-  //     console.log("cart page");
-  //     fetchCart();
-  //   }
-  // }, []);
-
   const cart = useSelector((state) => state.cart.data);
 
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false);
@@ -36,12 +25,10 @@ const Cart = () => {
   };
 
   const handleOk = async () => {
-    console.log("chạy ok");
-
     const response = await dispatch(deleteCartItem(cartItemDelete));
     if (response.payload.status === 200) {
       message.success("Xoá thành công");
-      await dispatch(getCart(user.user_id));
+      await dispatch(getCart({ id: user.user_id }));
     } else {
       message.error("Xoá thất bại");
     }

@@ -1,5 +1,6 @@
 const pool = require("../../../config/database");
 const { v4: uuidv4 } = require("uuid");
+const emailService = require("./mail.service");
 
 module.exports.getAllService = async (page, limit) => {
   try {
@@ -307,6 +308,16 @@ module.exports.createProductService = async (body) => {
         );
       }
     }
+
+    // gửi email đến user
+    await emailService.sendMailNewProduct({
+      product_id: productId,
+      product_name: body.product_name,
+      price: body.price,
+      description: body.description,
+      thumbnail: body.thumbnail,
+    });
+
     return { status: 201, message: "Product created successfully" };
   } catch (error) {
     return { status: 500, message: error.message };

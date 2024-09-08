@@ -5,8 +5,6 @@ import Cookies from "js-cookie";
 
 export const addToCart = createAsyncThunk("add/cart", async ({ id, data }) => {
   try {
-    console.log(id, data);
-
     const response = await BaseUrl.post(`/cart/add/${id}`, data);
     return response.data;
   } catch (error) {
@@ -14,7 +12,7 @@ export const addToCart = createAsyncThunk("add/cart", async ({ id, data }) => {
   }
 });
 
-export const getCart = createAsyncThunk("get/cart", async (id) => {
+export const getCart = createAsyncThunk("get/cart/:id", async ({ id }) => {
   try {
     const response = await BaseUrl.get(`/cart/${id}`);
     return response.data;

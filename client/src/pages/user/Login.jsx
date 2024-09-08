@@ -56,13 +56,10 @@ const Login = () => {
             }
           );
           navigate("/");
-        } else {
-          message.error("Lỗi đăng nhập!");
         }
         setPending(false);
-        resetForm();
+        // resetForm();
       } catch (error) {
-        message.error("Lỗi đăng nhập!");
         setPending(false);
       }
     },

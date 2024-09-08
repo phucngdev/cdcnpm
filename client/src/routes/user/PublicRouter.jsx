@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../../layouts/user/Header";
 import Footer from "../../layouts/user/Footer";
@@ -8,23 +8,12 @@ import { useDispatch } from "react-redux";
 import { getAllProduct } from "../../services/product.service";
 import { getAllCategory } from "../../services/category.service";
 import { getCart } from "../../services/cart.service";
+import Pending from "../../components/user/animation/Pending";
 
 const PublicRouter = () => {
+  const dispatch = useDispatch();
   const userDecode = useCookie("accessToken");
   const [user, setUser] = useState(null);
-
-  const dispatch = useDispatch();
-
-  const fetchData = async () => {
-    const promises = [
-      dispatch(getAllProduct({ page: 0, limit: 0 })),
-      dispatch(getAllCategory()),
-    ];
-    if (user) {
-      promises.push(dispatch(getCart(user.user_id)));
-    }
-    await Promise.all(promises);
-  };
 
   useEffect(() => {
     if (userDecode) {
@@ -32,9 +21,27 @@ const PublicRouter = () => {
     }
   }, [userDecode]);
 
+  const fetchData = async () => {
+    const promises = [
+      dispatch(getAllProduct({ page: 0, limit: 0 })),
+      dispatch(getAllCategory()),
+    ];
+    await Promise.allSettled(promises);
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchCart = async (user) => {
+    await dispatch(getCart({ id: user.user_id }));
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchCart(user);
+    }
+  }, [user]);
 
   return (
     <>

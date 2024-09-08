@@ -36,8 +36,6 @@ npm i
 
 tạo 1 csdl mới trên phpmyadmin để tên trùng với DB_DATABASE trong .env
 
-vào folder server lấy sql trong file entity.sql
-
 # chạy dự án
 
 bật terminal của folder client:

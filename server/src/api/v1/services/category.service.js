@@ -33,7 +33,7 @@ module.exports.getAllCategoryService = async () => {
       FROM categories c
       LEFT JOIN products p ON c.category_id = p.category_id
       GROUP BY c.category_id
-      ORDER BY c.created_at DESC
+      ORDER BY c.index ASC
     `);
     return result;
   } catch (error) {

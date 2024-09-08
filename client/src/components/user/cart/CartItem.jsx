@@ -16,7 +16,7 @@ const CartItem = ({ item, showModal, cart_id }) => {
     };
     const response = await dispatch(updateCart(data));
     if (response.payload.status === 200) {
-      await dispatch(getCart(user.user_id));
+      await dispatch(getCart({ id: user.user_id }));
     }
   };
 

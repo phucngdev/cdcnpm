@@ -4,11 +4,10 @@ const moment = require("moment");
 const CryptoJS = require("crypto-js");
 const axios = require("axios");
 const qs = require("qs");
+const emailService = require("./mail.service");
 
 module.exports.createOrderService = async (body) => {
   try {
-    console.log("lấy đc data sau callbak", body);
-
     const orderId = uuidv4();
 
     await pool.execute(
@@ -44,7 +43,8 @@ module.exports.createOrderService = async (body) => {
       "INSERT INTO order_details (order_detail_id, order_id, product_id, color_size_id, quantity, price) VALUES ?",
       [orderItems]
     );
-    console.log("thêm đơn hàng mới");
+
+    emailService.sendMailNewOrder(orderId);
 
     return {
       status: 201,

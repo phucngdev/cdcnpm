@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Banner from "../../components/user/home/Banner";
 import ListProducts from "../../components/user/home/ListProducts";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
-import { getAllProduct } from "../../services/product.service";
 import { Button, Result } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 

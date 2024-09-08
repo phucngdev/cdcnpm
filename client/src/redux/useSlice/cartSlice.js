@@ -23,17 +23,6 @@ const cartSlice = createSlice({
         state.status = "Failed!";
         state.error = action.error.message;
       })
-      .addCase(login.pending, (state) => {
-        state.status = "Pending!";
-      })
-      .addCase(login.fulfilled, (state, action) => {
-        state.status = "Successfully!";
-        state.data = action.payload.cart;
-      })
-      .addCase(login.rejected, (state, action) => {
-        state.status = "Failed!";
-        state.error = action.error.message;
-      })
       .addCase(getCart.pending, (state) => {
         state.status = "Pending!";
       })

@@ -8,7 +8,7 @@ export const login = createAsyncThunk("login", async (data) => {
     const response = await BaseUrl.post(`auth/login`, data);
     return response.data;
   } catch (error) {
-    message.error("Lỗi đăng nhập");
+    message.error("Đăng nhập thất bại, vui lòng thử lại");
   }
 });
 
