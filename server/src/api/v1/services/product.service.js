@@ -102,6 +102,7 @@ module.exports.getAllService = async (page, limit) => {
         p.description_image, 
         p.description, 
         p.price, 
+        p.price_max, 
         p.status, 
         c.category_name AS category
       FROM products p
@@ -153,6 +154,7 @@ module.exports.getAllService = async (page, limit) => {
           description_image: product.description_image,
           description: product.description,
           price: product.price,
+          price_max: product.price_max,
           status: product.status,
           option: options,
         };
@@ -186,6 +188,7 @@ module.exports.getOneService = async (id) => {
         p.description_image, 
         p.description, 
         p.price, 
+        p.price_max, 
         p.status, 
         c.category_id,
         c.category_name,
@@ -229,6 +232,7 @@ module.exports.getOneService = async (id) => {
       description_image: product.description_image,
       description: product.description,
       price: product.price,
+      price_max: product.price_max,
       category: {
         category_id: product.category_id,
         path: product.path,
@@ -272,8 +276,8 @@ module.exports.createProductService = async (body) => {
     const productId = uuidv4(); // Tạo ID sản phẩm mới
     await pool.execute(
       `INSERT INTO products (
-        product_id, product_name, thumbnail, thumbnail_hover, images, discount, description_image, description, price, status, category_id
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        product_id, product_name, thumbnail, thumbnail_hover, images, discount, description_image, description, price, price_max, status, category_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         productId,
         body.product_name,
@@ -283,6 +287,7 @@ module.exports.createProductService = async (body) => {
         body.discount,
         body.description_image,
         body.description,
+        body.price * (1 - body.discount / 100),
         body.price,
         body.status,
         body.category,
@@ -300,7 +305,7 @@ module.exports.createProductService = async (body) => {
         const sizeId = uuidv4();
         await pool.execute(
           `INSERT INTO sizes (size_id, size_name, quantity) VALUES (?, ?, ?)`,
-          [sizeId, size.size_name, size.quantity]
+          [sizeId, size.size, size.quantity]
         );
         await pool.execute(
           `INSERT INTO color_size (color_size_id, product_id, color_id, size_id) VALUES (?, ?, ?, ?)`,
@@ -310,7 +315,7 @@ module.exports.createProductService = async (body) => {
     }
 
     // gửi email đến user
-    await emailService.sendMailNewProduct({
+    emailService.sendMailNewProduct({
       product_id: productId,
       product_name: body.product_name,
       price: body.price,

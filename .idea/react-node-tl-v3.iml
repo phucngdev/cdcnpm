@@ -3,6 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
     <content url="file://$APPLICATION_CONFIG_DIR$/extensions/com.intellij.database" />
+    <content url="file://$USER_HOME$/tl" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

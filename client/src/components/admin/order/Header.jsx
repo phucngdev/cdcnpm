@@ -1,0 +1,42 @@
+import { ShopOutlined } from "@ant-design/icons";
+import { Button, Input } from "antd";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getAllOrder } from "../../../services/order.service";
+
+const Header = ({ page }) => {
+  const dispatch = useDispatch();
+
+  const fetchData = async (status) => {
+    await dispatch(
+      getAllOrder({
+        page: page.page,
+        limit: page.limit,
+        status: status,
+      })
+    );
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [page]);
+
+  return (
+    <>
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-2xl font-bold">
+          <ShopOutlined /> Danh sách đơn hàng
+        </h3>
+        <Input className="w-1/5" placeholder="Tìm kiếm" />
+      </div>
+      <div className="flex gap-5 items-center mb-5">
+        <Button onClick={() => fetchData(-1)}>Tất cả đơn hàng</Button>
+        <Button onClick={() => fetchData(0)}>Đơn hàng mới</Button>
+        <Button onClick={() => fetchData(1)}>Đơn hàng đang vận chuyển</Button>
+        <Button onClick={() => fetchData(2)}>Đơn hàng hoàn thành</Button>
+      </div>
+    </>
+  );
+};
+
+export default Header;

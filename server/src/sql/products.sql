@@ -9,6 +9,7 @@ create table products
         check (json_valid(`images`)),
     status            int            default 1                   null,
     price             decimal(10, 2)                             not null,
+    price_max         decimal(10, 2)                             not null,
     discount          decimal(10, 2) default 0.00                null,
     sold              int            default 0                   null,
     description       text                                       null,

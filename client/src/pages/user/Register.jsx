@@ -53,7 +53,10 @@ const Register = () => {
         )
         .required("Email không được để trống"),
       username: Yup.string().required("Tên không được để trống"),
-      password: Yup.string().required("Mật khẩu không được để trống"),
+      password: Yup.string()
+        .max(12, "Mật khẩu tối đa 12 ký tự")
+        .min("8", "Mật khẩu tối thiểu 8 ký tự")
+        .required("Mật khẩu không được để trống"),
     }),
     onSubmit: async (values, { resetForm }) => {
       const newUser = {
@@ -61,20 +64,20 @@ const Register = () => {
         password: values.password,
         username: values.username,
       };
-      try {
-        setPending(true);
-        const response = await dispatch(register(newUser));
-        if (response.payload.status === 201) {
-          message.success("Đăng ký thành công");
-          navigate("/dang-nhap");
-        } else {
-          message.error("Lỗi đăng ký!");
-        }
-        setPending(false);
-        resetForm();
-      } catch (error) {
-        message.error("Lỗi đăng nhập!");
+
+      setPending(true);
+      const response = await dispatch(register(newUser));
+
+      if (response.payload.status === 201) {
+        message.success("Đăng ký thành công");
+        navigate("/dang-nhap");
+      } else if (response.payload.response.status === 400) {
+        message.error("Email đã tồn tại");
+      } else if (response.payload.response.status === 404) {
+        message.error("Email không tồn tại");
       }
+      setPending(false);
+      // resetForm();
     },
   });
 
@@ -277,6 +280,11 @@ const Register = () => {
                     type="password"
                     id="Password"
                     name="password"
+                    count={{
+                      show: true,
+                      max: 12,
+                      min: 8,
+                    }}
                     value={formik.values.password}
                     onChange={formik.handleChange}
                     className="mt-1 w-full rounded-md border border-gray-200 py-2 px-2 bg-white text-sm text-gray-700 shadow-sm"

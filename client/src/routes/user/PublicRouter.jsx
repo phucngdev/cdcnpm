@@ -9,17 +9,18 @@ import { getAllProduct } from "../../services/product.service";
 import { getAllCategory } from "../../services/category.service";
 import { getCart } from "../../services/cart.service";
 import Pending from "../../components/user/animation/Pending";
+import Cookies from "js-cookie";
 
 const PublicRouter = () => {
   const dispatch = useDispatch();
-  const userDecode = useCookie("accessToken");
-  const [user, setUser] = useState(null);
+  const userCookie = useCookie("user_info", false);
+  const [user, setUser] = useState(userCookie || null);
 
   useEffect(() => {
-    if (userDecode) {
-      setUser(userDecode);
+    if (userCookie) {
+      setUser(userCookie);
     }
-  }, [userDecode]);
+  }, [userCookie]);
 
   const fetchData = async () => {
     const promises = [
@@ -45,7 +46,7 @@ const PublicRouter = () => {
 
   return (
     <>
-      <Header user={user} />
+      <Header user={user} setUser={setUser} />
       <Outlet context={user} />
       <MessageButton user={user} />
       <Footer />

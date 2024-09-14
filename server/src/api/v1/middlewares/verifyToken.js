@@ -3,15 +3,17 @@ const pool = require("../../../config/database");
 
 module.exports.verifyTokenHandleAdmin = async (req, res, next) => {
   try {
-    const token = await req.header("Authorization");
+    const token = req.cookies.accessToken;
+
     if (!token) {
       return res.status(401).json({ message: "Token is required" });
     }
-    const tokenBearer = token.replace("Bearer ", "");
-    const decoded = jwt.verify(tokenBearer, process.env.JWT_ACCESS_KEY);
+    const tokenSlice = token.slice(1, -1);
+    const decoded = jwt.verify(tokenSlice, process.env.JWT_ACCESS_KEY);
     if (!decoded) {
       return res.status(500).json({ message: "Access denied" });
     }
+
     const currentTime = Math.floor(Date.now() / 1000);
     const expiresIn = decoded.exp;
     const isExpired = currentTime > expiresIn;
@@ -37,14 +39,14 @@ module.exports.verifyTokenHandleAdmin = async (req, res, next) => {
 
 module.exports.verifyToken = async (req, res, next) => {
   try {
-    const token = await req.header("Authorization");
+    const token = req.cookies.accessToken;
     if (!token) {
       return res
         .status(401)
         .json({ status: 401, message: "Token is required" });
     }
-    const tokenBearer = token.replace("Bearer ", "");
-    const decoded = jwt.verify(tokenBearer, process.env.JWT_ACCESS_KEY);
+    const tokenSlice = token.slice(1, -1);
+    const decoded = jwt.verify(tokenSlice, process.env.JWT_ACCESS_KEY);
     if (!decoded) {
       return res.status(500).json({ status: 500, message: "Access denied" });
     }

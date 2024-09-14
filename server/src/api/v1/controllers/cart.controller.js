@@ -22,12 +22,7 @@ module.exports.getCartById = async (req, res) => {
 
 module.exports.updateCart = async (req, res) => {
   try {
-    const token = await req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
-    const result = await cartService.updateCartService(
-      decoded.user_id,
-      req.body
-    );
+    const result = await cartService.updateCartService(req.body);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -36,12 +31,7 @@ module.exports.updateCart = async (req, res) => {
 
 module.exports.deleteCartItem = async (req, res) => {
   try {
-    const token = await req.header("Authorization").replace("Bearer ", "");
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
-    const result = await cartService.deleteCartItemService(
-      decoded.user_id,
-      req.params.id
-    );
+    const result = await cartService.deleteCartItemService(req.params.id);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });

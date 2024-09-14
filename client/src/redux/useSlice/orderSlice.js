@@ -1,10 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-  createOrder,
-  getAllStatusOrder,
-  getAllOrder,
-  getOneOrder,
-} from "../../services/order.service";
+import { getAllOrder, getOneOrder } from "../../services/order.service";
 
 const orderSlice = createSlice({
   name: "order",
@@ -35,17 +30,6 @@ const orderSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getAllOrder.rejected, (state, action) => {
-        state.status = "Failed!";
-        state.error = action.error.message;
-      })
-      .addCase(getAllStatusOrder.pending, (state) => {
-        state.status = "Pending!";
-      })
-      .addCase(getAllStatusOrder.fulfilled, (state, action) => {
-        state.status = "Successfully!";
-        state.data = action.payload;
-      })
-      .addCase(getAllStatusOrder.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       });

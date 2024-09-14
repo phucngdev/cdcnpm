@@ -19,8 +19,8 @@ module.exports.verifyEmailWithGoogle = async (req, res, next) => {
     const { result, score } = response.data.data;
 
     if (result !== "deliverable" || score < 80) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(404).json({
+        status: 404,
         message: "Invalid or non-existent email address",
       });
     }

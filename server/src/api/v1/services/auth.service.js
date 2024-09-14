@@ -4,13 +4,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cartService = require("./cart.service");
 
-const generateAccessToken = (user_id, username, email, avatar) => {
+const generateAccessToken = (user_id) => {
   return jwt.sign(
     {
       user_id: user_id,
-      username: username,
-      email: email,
-      avatar: avatar,
     },
     process.env.JWT_ACCESS_KEY,
     { expiresIn: "10h" }
@@ -52,6 +49,7 @@ module.exports.registerService = async (body) => {
     ]);
 
     const check_result = result.find((s) => s.status !== "fulfilled");
+
     if (check_result) {
       return { status: 500, message: "Internal Server Error" };
     }
@@ -81,18 +79,27 @@ module.exports.loginService = async (body) => {
 
     const cart = await cartService.getCartByIdService(result.user_id);
 
-    const accessToken = generateAccessToken(
-      result.user_id,
-      result.username,
-      result.email,
-      result.avatar
+    const accessToken = generateAccessToken(result.user_id);
+    const refreshToken = generateRefreshToken(result.user_id);
+    console.log(refreshToken);
+
+    await pool.execute(
+      "INSERT INTO refresh_token (refresh_token_id, token) VALUES (?, ?)",
+      [uuidv4(), refreshToken]
     );
 
     return {
       status: 200,
       message: "Login successfully",
       accessToken: accessToken,
+      refreshToken: refreshToken,
       cart: cart,
+      user_info: {
+        user_id: result.user_id,
+        username: result.username,
+        email: result.email,
+        avatar: result.avatar,
+      },
     };
   } catch (error) {
     return { status: 500, message: error.message };

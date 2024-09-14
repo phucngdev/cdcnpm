@@ -19,7 +19,7 @@
   background-color: #e7eaf5;
 }
 
-/* Xóa các nút tăng giảm trong Chrome, Safari, và Edge */
+/* Xóa các nút tăng giảm trong Chrome, Safari, Edge */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;

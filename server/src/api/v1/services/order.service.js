@@ -9,7 +9,6 @@ const emailService = require("./mail.service");
 module.exports.createOrderService = async (body) => {
   try {
     const orderId = uuidv4();
-
     await pool.execute(
       "INSERT INTO orders (order_id, user_id, transaction, total, payment_status, status, address, city, district, ward, phone, email, note, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
@@ -55,7 +54,7 @@ module.exports.createOrderService = async (body) => {
   }
 };
 
-module.exports.createOrderWithZalopayService = async (body, user_id) => {
+module.exports.createOrderWithZalopayService = async (body) => {
   const items =
     body.order_items.length > 0
       ? body.order_items.map((item) => ({
@@ -83,7 +82,7 @@ module.exports.createOrderWithZalopayService = async (body, user_id) => {
       ward: body.ward,
       address: body.address,
       note: body.note,
-      user_id: user_id,
+      user_id: body.user_id,
     };
 
     const transID = Math.floor(Math.random() * 1000000);
@@ -98,7 +97,7 @@ module.exports.createOrderWithZalopayService = async (body, user_id) => {
       description: `Teelab - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://35ab-1-53-37-95.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
+        "https://4ff1-42-115-185-235.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
     };
 
     const data =
@@ -280,11 +279,112 @@ module.exports.getAllOrderByUserService = async (user_id) => {
   }
 };
 
-module.exports.getOneOrderService = async (user_id, order_id) => {
+module.exports.getAllOrderService = async (page, limit, status) => {
+  try {
+    // Chuyển đổi page và limit thành số nguyên
+    const pageInt = parseInt(page, 10);
+    const limitInt = parseInt(limit, 10);
+    const offset = (pageInt - 1) * limitInt;
+
+    // Lấy tổng số đơn hàng để tính toán số trang
+    const [totalOrders] =
+      status >= 0
+        ? await pool.execute(
+            "SELECT COUNT(*) as count FROM orders WHERE status = ?",
+            [status]
+          )
+        : await pool.execute("SELECT COUNT(*) as count FROM orders");
+    const total = totalOrders[0].count;
+
+    if (total === 0) {
+      return { status: 404, message: "No orders found" };
+    }
+
+    // Lấy danh sách đơn hàng theo page và limit
+    const [orders] =
+      status >= 0
+        ? await pool.query(
+            `SELECT * FROM orders WHERE status = ? LIMIT ${limitInt} OFFSET ${offset}`,
+            [status]
+          )
+        : await pool.query(
+            `SELECT * FROM orders LIMIT ${limitInt} OFFSET ${offset}`
+          );
+
+    if (orders.length === 0) {
+      return { status: 404, message: "No orders found on this page" };
+    }
+
+    // Lấy các order_id từ đơn hàng
+    const orderIds = orders.map((order) => order.order_id);
+    if (orderIds.length === 0) {
+      return { status: 200, orders, orderDetails: [] };
+    }
+
+    // Lấy chi tiết đơn hàng tương ứng
+    const placeholders = orderIds.map(() => "?").join(", ");
+    const [orderDetails] = await pool.execute(
+      `
+      SELECT 
+        od.*, 
+        p.product_name, p.thumbnail,
+        ct.category_name,
+        cs.color_id, cs.size_id, 
+        c.color_name, 
+        s.size_name
+       FROM order_details od
+       JOIN products p ON od.product_id = p.product_id
+       JOIN categories ct ON p.category_id = ct.category_id
+       JOIN color_size cs ON od.color_size_id = cs.color_size_id
+       JOIN colors c ON cs.color_id = c.color_id
+       JOIN sizes s ON cs.size_id = s.size_id
+       WHERE od.order_id IN (${placeholders})`,
+      orderIds
+    );
+
+    // Gộp chi tiết đơn hàng với danh sách đơn hàng
+    const ordersWithDetails = orders.map((order) => ({
+      ...order,
+      details: orderDetails
+        .filter((detail) => detail.order_id === order.order_id)
+        .map((detail) => ({
+          order_detail_id: detail.order_detail_id,
+          order_id: detail.order_id,
+          quantity: detail.quantity,
+          product: {
+            product_id: detail.product_id,
+            product_name: detail.product_name,
+            thumbnail: detail.thumbnail,
+            price: detail.price,
+            category_name: detail.category_name,
+          },
+          color_size: {
+            color_id: detail.color_id,
+            size_id: detail.size_id,
+            color_name: detail.color_name,
+            size_name: detail.size_name,
+          },
+        })),
+    }));
+
+    return {
+      status: 200,
+      orders: ordersWithDetails,
+      total,
+      currentPage: pageInt,
+      totalPages: Math.ceil(total / limitInt),
+    };
+  } catch (e) {
+    console.log(e);
+    return { status: 500, message: "Error retrieving order items" };
+  }
+};
+
+module.exports.getOneOrderService = async (order_id) => {
   try {
     const [[order]] = await pool.execute(
-      "SELECT * FROM orders WHERE user_id =? AND order_id =?",
-      [user_id, order_id]
+      "SELECT * FROM orders WHERE order_id =?",
+      [order_id]
     );
 
     if (!order) {
@@ -295,13 +395,16 @@ module.exports.getOneOrderService = async (user_id, order_id) => {
       `SELECT 
         od.order_detail_id, 
         p.product_name, 
-        cs.color_name, 
-        cs.size_name, 
+        p.thumbnail, 
+        s.size_name,
+        c.color_name,
         od.quantity, 
         od.price 
       FROM order_details od 
       JOIN products p ON od.product_id = p.product_id 
       JOIN color_size cs ON od.color_size_id = cs.color_size_id 
+      JOIN colors c ON cs.color_id = c.color_id
+      JOIN sizes s ON cs.size_id = s.size_id
       WHERE od.order_id = ?`,
       [order_id]
     );

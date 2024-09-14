@@ -3,11 +3,16 @@ import ParameterOverview from "../../components/admin/products/ParameterOverview
 import ListProduct from "../../components/admin/products/list/ListProduct";
 import { useDispatch } from "react-redux";
 import { getAllCategory } from "../../services/category.service";
+import { getAllProduct } from "../../services/product.service";
 
 const Products = () => {
   const dispatch = useDispatch();
   const fetchData = async () => {
-    await dispatch(getAllCategory());
+    const promises = [
+      dispatch(getAllProduct({ page: 0, limit: 0 })),
+      dispatch(getAllCategory()),
+    ];
+    await Promise.allSettled(promises);
   };
   useEffect(() => {
     fetchData();

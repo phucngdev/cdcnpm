@@ -9,26 +9,28 @@ import { getAllCategory } from "../../../../services/category.service";
 const ListProduct = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // call api
-  const fetchData = async () => {
-    await dispatch(getAllProduct({ page: 0, limit: 0 }));
-    await dispatch(getAllCategory());
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+
   const categories = useSelector((state) => state.category.data);
-  console.log(categories);
-
   const products = useSelector((state) => state.product.data);
-  const [active, setActive] = useState("");
-  const [listProduct, setListProduct] = useState([]);
+
+  const [category, setCategory] = useState("Tất cả sản phẩm");
+  const [listProduct, setListProduct] = useState(() => {
+    const list =
+      category === "Tất cả sản phẩm"
+        ? products
+        : products?.products?.filter(
+            (p) => p.category === category.toLowerCase()
+          );
+    return list || [];
+  });
 
   useEffect(() => {
-    if (products) {
-      setListProduct(active === "Tất cả sản phẩm" && products?.products);
-    }
-  }, [products, active]);
+    setListProduct(
+      category === "Tất cả sản phẩm"
+        ? products?.products
+        : products?.products?.filter((p) => p.category === category)
+    );
+  }, [products, category]);
 
   return (
     <>
@@ -60,11 +62,11 @@ const ListProduct = () => {
         <div className="flex items-center gap-8 text-black my-4">
           <button
             className={`${
-              active === "Tất cả sản phẩm"
+              category === "Tất cả sản phẩm"
                 ? "text-blue-600 border-b border-blue-600"
                 : ""
             }`}
-            onClick={() => setActive("Tất cả sản phẩm")}
+            onClick={() => setCategory("Tất cả sản phẩm")}
           >
             Tất cả sản phẩm
           </button>
@@ -72,11 +74,11 @@ const ListProduct = () => {
             <button
               key={cate.category_id}
               onClick={() => {
-                setActive(cate.category_name);
+                setCategory(cate.category_name);
                 setListProduct(cate.products);
               }}
               className={`${
-                active === cate.category_name
+                category === cate.category_name
                   ? "text-blue-600 border-b border-blue-600"
                   : ""
               }`}

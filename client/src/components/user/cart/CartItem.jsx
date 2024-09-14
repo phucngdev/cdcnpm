@@ -8,11 +8,12 @@ import { useCookie } from "../../../hooks/useCookie";
 
 const CartItem = ({ item, showModal, cart_id }) => {
   const dispatch = useDispatch();
-  const user = useCookie("accessToken");
+  const user = useCookie("user_info", false);
   const handleChange = async (status) => {
     const data = {
       quantity: status === 1 ? item.quantity + 1 : item.quantity - 1,
       cart_item_id: item.cart_item_id,
+      cart_id: cart_id,
     };
     const response = await dispatch(updateCart(data));
     if (response.payload.status === 200) {

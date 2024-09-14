@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA-0PJ40mppbkMbqHt9dCCUUXEzOA8Lj5s",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "store-teelab.firebaseapp.com",
   projectId: "store-teelab",
   storageBucket: "store-teelab.appspot.com",

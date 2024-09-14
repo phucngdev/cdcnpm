@@ -67,7 +67,7 @@ const ItemProduct = ({ product }) => {
               {formatPrice(product?.price)}
             </span>
             <span className="text-[#9e9e9e] text-base line-through">
-              399.000 đ
+              {formatPrice(product?.price_max)}
             </span>
           </div>
         </div>

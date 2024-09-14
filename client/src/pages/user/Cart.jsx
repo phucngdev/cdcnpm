@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { message, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,8 +10,7 @@ import CartBottom from "../../components/user/cart/CartBottom";
 import { useCookie } from "../../hooks/useCookie";
 
 const Cart = () => {
-  const user = useCookie("accessToken");
-
+  const user = useOutletContext();
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart.data);

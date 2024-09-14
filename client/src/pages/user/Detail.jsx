@@ -41,8 +41,8 @@ const Detail = () => {
         quantity: item.quantity,
       }));
     setSizes(uniqueSizes);
-    setColorSize({ size_id: uniqueSizes[0].size_id, color_id: color_id });
-    setQuantity(uniqueSizes[0].quantity > 0 ? 1 : 0);
+    setColorSize({ size_id: uniqueSizes[0]?.size_id, color_id: color_id });
+    setQuantity(uniqueSizes[0]?.quantity > 0 ? 1 : 0);
   };
 
   useEffect(() => {
@@ -58,8 +58,8 @@ const Detail = () => {
       return acc;
     }, []);
 
-    handleColorClick(product.colorSize[0].color_id);
-    setQuantity(product.colorSize[0].quantity > 0 ? 1 : 0);
+    handleColorClick(product.colorSize[0]?.color_id);
+    setQuantity(product.colorSize[0]?.quantity > 0 ? 1 : 0);
     setColors(uniqueColors);
     setColorSize({
       color_id: product.colorSize[0].color_id,
@@ -135,10 +135,10 @@ const Detail = () => {
             </h1>
             <div className="flex items-center gap-3">
               <span className="text-[30px] text-[#f81f1f] font-sans ">
-                {formatPrice(product?.price * (1 - product?.discount / 100))}
+                {formatPrice(product?.price)}
               </span>
               <span className="text-[25px] text-[#9a9a9a] font-sans line-through">
-                {formatPrice(product?.price)}
+                {formatPrice(product?.price_max)}
               </span>
               {product?.discount && (
                 <span className="text-sm text-white px-2 bg-[#f81f1f] font-sans ">

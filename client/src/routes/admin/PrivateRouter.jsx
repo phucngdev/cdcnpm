@@ -8,51 +8,39 @@ import { message } from "antd";
 import { useDispatch } from "react-redux";
 import { checkRoleAdmin } from "../../services/auth.service";
 import { LoadingOutlined } from "@ant-design/icons";
+import Pending from "../../components/user/animation/Pending";
 
 const PrivateRouter = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userDecode = useCookie("accessToken");
-  const [user, setUser] = useState(null);
+  const user = useCookie("user_info", false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const checkRole = async () => {
+    setLoading(true);
     const response = await dispatch(checkRoleAdmin());
     console.log(response);
 
-    return response && response.payload.status;
+    if (response.payload.status === 200) {
+      setRole(true);
+      message.success(`Hello`);
+      navigate("/admin");
+    } else if (response.payload.response.status === 403) {
+      message.error("Bạn không có quyền truy cập");
+      navigate("/");
+    } else if (response.payload.response.status === 401) {
+      message.error("Vui lòng đăng nhập");
+      navigate("/dang-nhap");
+    }
+    setLoading(false);
   };
 
-  useLayoutEffect(() => {
-    const fetchRole = async () => {
-      if (userDecode) {
-        const status = await checkRole();
-        console.log(status);
+  useEffect(() => {
+    checkRole();
+  }, []);
 
-        if (status === 200) {
-          setUser(userDecode);
-          setRole(true);
-          message.success(`Hello ${userDecode.username}`);
-          navigate("/admin");
-        } else {
-          message.warning("Bạn không có quyền truy cập");
-          navigate("/");
-        }
-      }
-
-      setLoading(false);
-    };
-
-    fetchRole();
-  }, [userDecode]);
-
-  if (loading)
-    return (
-      <div className="fixed bg-[rgba(255,255,255,0.5)] text-3xl z-50 top-0 left-0 bottom-0 right-0 flex items-center justify-center">
-        <LoadingOutlined />
-      </div>
-    );
+  if (loading) return <Pending />;
 
   return (
     role && (

@@ -6,11 +6,11 @@ import HeaderMobile from "../../components/user/header/HeaderMobile";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../services/cart.service";
 
-const Header = ({ user }) => {
+const Header = ({ user, setUser }) => {
   return (
     <>
-      <HeaderMobile user={user} />
-      <TopHeader user={user} />
+      <HeaderMobile user={user} setUser={setUser} />
+      <TopHeader user={user} setUser={setUser} />
       <MainNavigate />
       <ProductsNavigation />
     </>

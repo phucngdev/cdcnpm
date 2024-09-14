@@ -1,17 +1,19 @@
-import React, { useEffect, useLayoutEffect, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Badge, Avatar, Popover, Button } from "antd";
+import { Badge, Avatar, Popover, Button, message } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import CartList from "./CartList";
 import CartEmpty from "./CartEmpty";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../services/auth.service";
+import Pending from "../animation/Pending";
 
-const CartAndUserMenu = ({ user }) => {
+const CartAndUserMenu = ({ user, setUser }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart.data);
+  const [pending, setPending] = useState(false);
 
   const firstName = useMemo(() => {
     if (user) {
@@ -19,9 +21,20 @@ const CartAndUserMenu = ({ user }) => {
     }
   }, []);
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = async () => {
+    setPending(true);
+    const response = await dispatch(logout());
+    if (response.payload.status === 200) {
+      navigate("/");
+      message.success("Đăng xuất thành công");
+      setUser(null);
+    } else {
+      message.error("Đăng xuất thất bại");
+    }
+    setPending(false);
   };
+
+  if (pending) return <Pending />;
 
   return (
     <>

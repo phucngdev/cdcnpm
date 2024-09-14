@@ -6,9 +6,9 @@ import Cookies from "js-cookie";
 export const login = createAsyncThunk("login", async (data) => {
   try {
     const response = await BaseUrl.post(`auth/login`, data);
-    return response.data;
+    return response;
   } catch (error) {
-    message.error("Đăng nhập thất bại, vui lòng thử lại");
+    return error;
   }
 });
 
@@ -27,7 +27,7 @@ export const register = createAsyncThunk("register", async (data) => {
     const response = await BaseUrl.post(`auth/register`, data);
     return response;
   } catch (error) {
-    message.error("Lỗi đăng nhập");
+    return error;
   }
 });
 
@@ -48,15 +48,16 @@ export const checkRoleAdmin = createAsyncThunk("checkRoleAdmin", async () => {
     const response = await BaseUrl.post(`auth/check-role`);
     return response.data;
   } catch (error) {
-    message.error(error.message);
+    console.log(error);
+
+    return error;
   }
 });
 
 export const logout = createAsyncThunk("logout", async () => {
   try {
-    Cookies.remove("accessToken");
-    window.location = "/";
-    message.success("Đăng xuất thành công");
+    const response = await BaseUrl.post(`auth/logout`);
+    return response.data;
   } catch (error) {
     message.error(error.message);
   }

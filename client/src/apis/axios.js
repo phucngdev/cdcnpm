@@ -1,15 +1,18 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const defaultUrl = import.meta.env.VITE_API_URL;
-const token = Cookies.get("accessToken")?.slice(1, -1);
+axios.defaults.withCredentials = true;
 
 const BaseUrl = axios.create({
-  baseURL: defaultUrl,
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
   },
 });
+
+// BaseUrl.interceptors.request.use((config) => {
+
+//   return config;
+// });
 
 export default BaseUrl;

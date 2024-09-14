@@ -5,29 +5,17 @@ import { message } from "antd";
 export const createOrder = createAsyncThunk("create/order", async (data) => {
   try {
     const response = await BaseUrl.post(`order/create`, data);
-    console.log("response", response);
     return response;
   } catch (error) {
     message.error("Lỗi server");
   }
 });
 
-export const getOneOrder = createAsyncThunk("getOne/order", async (id) => {
-  try {
-    console.log(id);
-    const response = await BaseUrl.get(`order/${id}`);
-    console.log(response);
-    return response.data;
-  } catch (error) {
-    message.error("Lỗi server");
-  }
-});
-
-export const getAllOrder = createAsyncThunk(
-  "getAll/order",
-  async ({ page, limit }) => {
+export const getOneOrder = createAsyncThunk(
+  "getOne/order/admin",
+  async (id) => {
     try {
-      const response = await BaseUrl.get(`order?page=${page}&limit=${limit}`);
+      const response = await BaseUrl.get(`order/admin/${id}`);
       return response.data;
     } catch (error) {
       message.error("Lỗi server");
@@ -35,14 +23,16 @@ export const getAllOrder = createAsyncThunk(
   }
 );
 
-export const getAllStatusOrder = createAsyncThunk(
-  "getAllNew/order",
-  async (status) => {
+export const getAllOrder = createAsyncThunk(
+  "getAll/order/admin",
+  async ({ page, limit, status }) => {
     try {
-      const response = await BaseUrl.get(`order/new?status=${status}`);
+      const response = await BaseUrl.get(
+        `order/admin?page=${page}&limit=${limit}&status=${status}`
+      );
       return response.data;
     } catch (error) {
-      message.error("Lỗi server");
+      return error;
     }
   }
 );
@@ -66,7 +56,7 @@ export const createZalopay = createAsyncThunk(
       const response = await BaseUrl.post(`order/create/zalopay`, data);
       return response.data;
     } catch (error) {
-      message.error("Lỗi server");
+      return error;
     }
   }
 );
@@ -80,7 +70,7 @@ export const checkPaymentZalopay = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      message.error("Lỗi server");
+      return error;
     }
   }
 );

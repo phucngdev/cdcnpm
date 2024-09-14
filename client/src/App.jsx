@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect } from "react";
 import "./App.css";
 import { Route, Routes, useLocation } from "react-router-dom";
 import PublicRouter from "./routes/user/PublicRouter";
@@ -70,7 +68,7 @@ function App() {
         </Route>
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
-        <Route path="/admin" element={<PrivateRouter />}>
+        <Route path="/admin/" element={<PrivateRouter />}>
           <Route index element={<Dashboard />} />
           <Route path="*" element={<NotFoundAdmin />} />
           <Route path="don-hang" element={<Orders />} />

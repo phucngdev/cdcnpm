@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { message } from "antd";
 import BaseUrl from "../apis/axios";
-import Cookies from "js-cookie";
 
 export const addToCart = createAsyncThunk("add/cart", async ({ id, data }) => {
   try {

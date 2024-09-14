@@ -12,8 +12,7 @@ module.exports.getAll = async (req, res) => {
 
 module.exports.getOne = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await productService.getOneService(id);
+    const result = await productService.getOneService(req.params.id);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: "Server error" });
@@ -52,8 +51,10 @@ module.exports.createProduct = async (req, res) => {
 
 module.exports.updateProduct = async (req, res) => {
   try {
-    const { id } = req.params;
-    const result = await productService.updateProductService(id, req.body);
+    const result = await productService.updateProductService(
+      req.params.id,
+      req.body
+    );
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: "Server error" });
@@ -62,8 +63,7 @@ module.exports.updateProduct = async (req, res) => {
 
 module.exports.searchProduct = async (req, res) => {
   try {
-    const { q } = req.query;
-    const result = await productService.searchProductService(q);
+    const result = await productService.searchProductService(req.query.q);
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: "Server error" });

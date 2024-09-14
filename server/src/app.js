@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const { productRoutes } = require("./api/v1/routes/product.routes");
 const { categoryRoutes } = require("./api/v1/routes/category.routes");
 const { authRoutes } = require("./api/v1/routes/auth.routes");
@@ -12,9 +13,15 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(morgan("common"));
 app.use(express.json());
+app.use(cookieParser());
 
 // route
 app.use("/api/v1/auth", authRoutes);

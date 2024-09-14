@@ -17,5 +17,6 @@ authRoutes.post(
   verifyToken.verifyTokenHandleAdmin,
   authController.checkRoleAdmin
 );
+authRoutes.post("/logout", verifyToken.verifyToken, authController.logout);
 
 module.exports = { authRoutes };

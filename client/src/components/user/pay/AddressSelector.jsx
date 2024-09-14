@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
+import { message } from "antd";
 
 const AddressSelector = ({ parentAddressSelect, setParentAddressSelect }) => {
   const [provinces, setProvinces] = useState([]);
@@ -10,14 +11,30 @@ const AddressSelector = ({ parentAddressSelect, setParentAddressSelect }) => {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedCommune, setSelectedCommune] = useState("");
 
-  const addressApi = () => {
-    axios
-      .get(
+  // const addressApi = () => {
+  //   axios
+  //     .get(
+  //       "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+  //     )
+  //     .then((response) => setProvinces(response.data))
+  //     .catch((err) => console.log(err));
+  // };
+  const addressApi = async () => {
+    try {
+      const response = await fetch(
         "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-      )
-      .then((response) => setProvinces(response.data))
-      .catch((err) => console.log(err));
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setProvinces(data);
+    } catch (error) {
+      message.error(error.message);
+      console.log(error);
+    }
   };
+
   useEffect(() => {
     addressApi();
   }, []);

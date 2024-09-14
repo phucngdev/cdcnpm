@@ -1,6 +1,10 @@
-import { Button, message } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import React, { useMemo } from "react";
-import { EditOutlined, StopOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  QuestionCircleOutlined,
+  StopOutlined,
+} from "@ant-design/icons";
 import formatPrice from "../../../../../utils/formatPrice";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
@@ -13,11 +17,11 @@ import {
 const ItemProduct = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const quantity = useMemo(() => {
-    return product.colorSizes.reduce((total, colorSize) => {
+    return product.option.reduce((total, s) => {
       return (
-        total +
-        colorSize.sizes.reduce((subTotal, size) => subTotal + size.quantity, 0)
+        total + s.sizes.reduce((subTotal, size) => subTotal + size.quantity, 0)
       );
     }, 0);
   }, [product]);
@@ -63,12 +67,21 @@ const ItemProduct = ({ product }) => {
             >
               <EditOutlined />
             </Button>
-            <Button
-              onClick={() => handleDelete(product.product_id)}
-              className="bg-red-600 text-white flex items-center justify-center"
+            <Popconfirm
+              title="Xoá sản phẩm"
+              description="Bạn chắc chắn muốn xoá sản phẩm?"
+              placement="left"
+              onConfirm={() => handleDelete(product.product_id)}
+              okType="danger"
+              icon={<QuestionCircleOutlined className="text-red-600" />}
             >
-              <StopOutlined />
-            </Button>
+              <Button
+                danger
+                className=" text-white flex items-center justify-center"
+              >
+                <StopOutlined />
+              </Button>
+            </Popconfirm>
           </div>
         </div>
       </div>

@@ -114,21 +114,13 @@ module.exports.getCartByIdService = async (id) => {
   }
 };
 
-module.exports.updateCartService = async (user_id, body) => {
+module.exports.updateCartService = async (body) => {
   try {
-    const [[user]] = await pool.execute(
-      "SELECT * FROM users WHERE user_id = ?",
-      [user_id]
-    );
-
-    if (!user) {
-      return { status: 404, message: "User not found" };
-    }
-
     const [cart_item_check] = await pool.execute(
       "SELECT * FROM cart_item WHERE cart_id = ? AND cart_item_id = ?",
-      [user.cart_id, body.cart_item_id]
+      [body.cart_id, body.cart_item_id]
     );
+
     if (!cart_item_check) {
       return { status: 404, message: "Cart item not found" };
     }
@@ -144,15 +136,8 @@ module.exports.updateCartService = async (user_id, body) => {
   }
 };
 
-module.exports.deletecart_itemervice = async (user_id, id) => {
+module.exports.deleteCartItemService = async (id) => {
   try {
-    const [[user]] = await pool.execute(
-      "SELECT * FROM users WHERE user_id =?",
-      [user_id]
-    );
-    if (!user) {
-      return { status: 404, message: "User not found" };
-    }
     const cart_item = await pool.execute(
       "SELECT * FROM cart_item WHERE cart_item_id = ?",
       [id]

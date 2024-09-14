@@ -44,24 +44,15 @@ const Login = () => {
         email: values.email,
         password: values.password,
       };
-      try {
-        setPending(true);
-        const response = await dispatch(login(dataUser));
-        if (response.payload.status === 200) {
-          Cookies.set(
-            "accessToken",
-            JSON.stringify(response.payload.accessToken),
-            {
-              expires: 10 / 24,
-            }
-          );
-          navigate("/");
-        }
-        setPending(false);
-        // resetForm();
-      } catch (error) {
-        setPending(false);
+      setPending(true);
+      const response = await dispatch(login(dataUser));
+      if (response.payload.status === 200) {
+        navigate("/");
+      } else if (response.payload.response.status === 401) {
+        message.error("Tài khoản hoặc mật khẩu không đúng");
       }
+      setPending(false);
+      // resetForm();
     },
   });
 

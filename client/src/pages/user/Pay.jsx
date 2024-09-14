@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import AddressSelector from "../../components/user/pay/AddressSelector";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Await, Link, useNavigate } from "react-router-dom";
+import { Await, Link, useNavigate, useOutletContext } from "react-router-dom";
 import { Button, Input, Result, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import formatPrice from "../../utils/formatPrice";
@@ -19,7 +19,7 @@ const { TextArea } = Input;
 const Pay = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useCookie("accessToken");
+  const user = useOutletContext();
   const cart = useSelector((state) => state.cart.data);
   const [parentAddressSelect, setParentAddressSelect] = useState({
     city: "",
