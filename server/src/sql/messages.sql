@@ -1,11 +1,11 @@
 create table messages
 (
-    message_id char(36)                              not null
+    message_id char(36)                            not null
         primary key,
-    room_id    char(36)                              not null,
-    sender_id  char(36)                              not null,
-    content    text                                  not null,
-    created_at timestamp default current_timestamp() not null,
+    room_id    char(36)                            not null,
+    sender_id  char(36)                            not null,
+    content    text                                not null,
+    created_at timestamp default CURRENT_TIMESTAMP not null,
     constraint fk_room
         foreign key (room_id) references room_chat (room_id)
 );

@@ -1,6 +1,24 @@
 create table refresh_token
 (
-    refresh_token_id char(36) not null primary key,
-    token            char(36) not null unique,
+    refresh_token_id char(36)     not null
+        primary key,
+    token            varchar(255) not null,
+    constraint token
+        unique (token)
 );
 
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('5f80fc12-06aa-4bb4-afdb-eb602dd9bc88', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MDY5MzY1LCJleHAiOjE3NTc2MDUzNjV9.5P8E4lqE-mD2bm1Clx37z54dwlcrbUS4ohFuOvbObjE');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('7a9c1691-75bc-4ea0-8c60-252827c5ecd9', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MjkzNzYxLCJleHAiOjE3NTc4Mjk3NjF9.bLOg_BxtAzOjyqpooCdkSHkXU_swsUY7C80HhM8vJTA');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('e709044b-5df5-49c4-9328-965e4677c2c0', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MjQ0MDI4LCJleHAiOjE3NTc3ODAwMjh9.k6zRC2DAC0_Gp3O837uo4kIqrZwpycKtXeszgTkmrSc');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('5f8e1adb-3208-4676-bc10-dfc88b649977', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MjQzNjc1LCJleHAiOjE3NTc3Nzk2NzV9.YwAih6CTFb3QVd0xaKj9l7JS50YH0THmdV391v_UDSk');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('e45d949b-cd41-4f46-81ee-c2ef19240585', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MTM0MzM5LCJleHAiOjE3NTc2NzAzMzl9.NTL6CZ-V7BBa2wZxrR0qMz51zWptLpo2xZaWhHp2YJM');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('a64e874b-3383-47a4-85a9-550838859129', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MTMxMzQyLCJleHAiOjE3NTc2NjczNDJ9.aVh8p9cwlRUlTUbThwzICPyUsCB5aUQY80Vd8MYqO88');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('1a134d88-e480-4258-82f6-e2de1d2dbc9f', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2MTUwNDgyLCJleHAiOjE3NTc2ODY0ODJ9.b0EWaXroXCLmdG9-RYDV9XdDjaH_UaaFu1_dff4u37Q');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('b46f14d7-287b-4e96-88cd-08504b48c07f', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NDkzOTU4LCJleHAiOjE3NTgwMjk5NTh9.YJ9ks-XGElJup1XdcT1oBG5rT7s4u6L2al-lTv5HZo0');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('486c5dbd-f122-4644-80cd-a4b3afd8e884', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NjUyMzI2LCJleHAiOjE3NTgxODgzMjZ9.vvP8_OozBomemTaC0A-cwD0e-gFsytxMz72B4CJGcrQ');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('819dbb6a-ef81-45a1-9542-33bf43decdf8', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NjUyNDMwLCJleHAiOjE3NTgxODg0MzB9.5BvNQgbXXMLv-exa49up2KHOaVMKMg_H3Ky6Jb6aX08');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('b85d0847-9e44-4358-b0d4-0b9072c162fa', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NTQ0NjYwLCJleHAiOjE3NTgwODA2NjB9.LijDqQHw2lGorCdCm9TWE89q92YJ0K3amwaM5EHbEP0');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('f910163f-5b73-4ade-b164-aa9b345affea', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NTQ1MjE3LCJleHAiOjE3NTgwODEyMTd9.CDb5uQINe7JPXOGyQsLsaYZzyGx0_4CWKxRnNdwIiJU');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('745be317-33b4-45dd-a56f-54a60babf2fd', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiOTBlMGJmMWUtMGEwYi00NWM1LTk4MTItZjc1NDY4ZWNjOTk4IiwiaWF0IjoxNzI2NzM1OTkzLCJleHAiOjE3NTgyNzE5OTN9.HAq8h6ybPl8gW2S0O5jLB5FHOAkkjCumo02BTBeciJY');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('e2c6a44f-4a35-4746-a2d6-94246d86dba8', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZTI2MWI0ZWMtNDllMC00Mzc2LTkzYzgtNGMzZDM2M2I2Y2Q5IiwiaWF0IjoxNzI2MTMyNTkyLCJleHAiOjE3NTc2Njg1OTJ9.CiA8_loOodkdz6e4hsu7tKqaExJ39RggsXWCZkd6lxw');
+INSERT INTO teelabfull.refresh_token (refresh_token_id, token) VALUES ('12557b3c-9f99-4644-84a5-fa13981c9c63', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZTI2MWI0ZWMtNDllMC00Mzc2LTkzYzgtNGMzZDM2M2I2Y2Q5IiwiaWF0IjoxNzI2NTQ2MzIxLCJleHAiOjE3NTgwODIzMjF9.K6_Kpu3J1LRWMGuJRDoyNPBN8wsy63gocBeGejL2JQ4');
