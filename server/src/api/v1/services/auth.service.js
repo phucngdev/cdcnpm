@@ -113,3 +113,42 @@ module.exports.checkRoleAdminService = async () => {
     return { status: 500, message: error.message };
   }
 };
+
+module.exports.refreshTokenService = async (refreshtoken) => {
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_KEY);
+
+    // const [[refreshToken]] = await pool.execute(
+    //   "SELECT * FROM refresh_token WHERE token = ?",
+    //   [refreshtoken]
+    // );
+    // const [[result]] = await pool.execute(
+    //   "SELECT * FROM users WHERE user_id = ?",
+    //   [decoded.user_id]
+    // );
+    const [refreshToken, result] = await Promise.all([
+      pool.execute("SELECT * FROM refresh_token WHERE token = ?", [
+        refreshtoken,
+      ]),
+      pool.execute("SELECT * FROM users WHERE user_id = ?", [decoded.user_id]),
+    ]);
+    console.log(refreshToken, result);
+    return;
+
+    const accessToken = generateAccessToken(decoded.user_id);
+
+    return {
+      status: 200,
+      message: "Refresh token successfully",
+      accessToken: accessToken,
+      user_info: {
+        user_id: result.user_id,
+        username: result.username,
+        email: result.email,
+        avatar: result.avatar,
+      },
+    };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};

@@ -12,7 +12,7 @@ const OrderItem = ({ od }) => {
       <div
         key={od.order_id}
         onClick={() => navigate(`/admin/don-hang/${od.order_id}`)}
-        className="bg-white rounded-lg shadow-lg p-6"
+        className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl cursor-pointer"
       >
         <div className="flex justify-between items-center">
           <div>

@@ -71,9 +71,11 @@ module.exports.updateCategoryService = async (id, body) => {
     }
     // kiểm tra xem category_name và path có chưa
     const [checkValue2] = await pool.execute(
-      "SELECT * FROM categories WHERE category_name = ? OR path = ? AND category_id != ?",
+      "SELECT * FROM categories WHERE (category_name = ? OR path = ?) AND category_id != ?",
       [body.category_name, body.path, id]
     );
+    console.log(checkValue2, id);
+
     if (checkValue2.length > 0) {
       return { status: 400, message: "Category name or path already exists" };
     }

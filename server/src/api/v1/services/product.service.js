@@ -245,6 +245,93 @@ module.exports.getOneService = async (id) => {
   }
 };
 
+module.exports.getOneForUpdateService = async (id) => {
+  try {
+    const [products] = await pool.execute(
+      `
+      SELECT 
+        p.product_id, 
+        p.product_name, 
+        p.thumbnail, 
+        p.thumbnail_hover, 
+        p.images, 
+        p.discount, 
+        p.description_image, 
+        p.description, 
+        p.price, 
+        p.status, 
+        c.category_name,
+        c.category_id
+      FROM products p
+      JOIN categories c ON p.category_id = c.category_id
+      WHERE p.product_id = ?
+    `,
+      [id]
+    );
+
+    if (products.length === 0) {
+      return { status: 404, message: "Product not found" };
+    }
+
+    const product = products[0];
+
+    const [colorSizes] = await pool.execute(
+      `
+      SELECT 
+        cs.color_size_id, 
+        cl.color_name, 
+        cl.image, 
+        s.size_name, 
+        s.size_id,
+        s.quantity
+      FROM color_size cs
+      JOIN colors cl ON cs.color_id = cl.color_id
+      JOIN sizes s ON cs.size_id = s.size_id
+      WHERE cs.product_id = ?
+    `,
+      [product.product_id]
+    );
+
+    const optionsMap = colorSizes.reduce((acc, cs) => {
+      if (!acc[cs.color_name]) {
+        acc[cs.color_name] = {
+          color_size_id: cs.color_size_id,
+          color_name: cs.color_name,
+          image: cs.image,
+          sizes: [],
+        };
+      }
+
+      acc[cs.color_name].sizes.push({
+        size_id: cs.size_id,
+        size_name: cs.size_name,
+        quantity: cs.quantity,
+      });
+      return acc;
+    }, {});
+
+    const options = Object.values(optionsMap);
+
+    const result = {
+      product_name: product.product_name,
+      category: product.category,
+      thumbnail: product.thumbnail,
+      thumbnail_hover: product.thumbnail_hover,
+      images: JSON.parse(product.images),
+      discount: product.discount,
+      description_image: product.description_image,
+      description: product.description,
+      price: product.price,
+      status: product.status,
+      option: options,
+    };
+
+    return result;
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};
+
 module.exports.updateProductService = async (id, body) => {
   try {
     return { status: 200, message: "Product updated successfully" };

@@ -8,12 +8,12 @@ const ListImage = ({ formik, getUploadProps, loading, imageUrls }) => {
       <div className="border p-4 border-gray-200 rounded-[20px] mt-4">
         <h3 className="text-xl font-normal mb-2">Danh sách ảnh sản phẩm</h3>
         <div className="overflow-scroll gap-1 p-3 flex flex-wrap items-center justify-around border border-gray-200 rounded-[20px]">
-          {imageUrls.map((imageUrl, index) => (
+          {imageUrls.map((url, index) => (
             <Image
               key={index}
               width={100}
               height={100}
-              src={imageUrl}
+              src={url}
               alt={`Image ${index + 1}`}
             />
           ))}

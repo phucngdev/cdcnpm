@@ -16,20 +16,30 @@ import {
 import { Badge, Modal } from "antd";
 import Cookies from "js-cookie";
 import { logout } from "../../services/auth.service";
+import { useDispatch } from "react-redux";
+import Pending from "../../components/user/animation/Pending";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isModalOpen, setIsModalLogoutOpen] = useState(false);
+  const [pending, setPending] = useState(false);
   const showModal = () => {
     setIsModalLogoutOpen(true);
   };
-  const handleOk = () => {
-    logout();
+  const handleOk = async () => {
+    setPending(true);
+    await dispatch(logout());
     setIsModalLogoutOpen(false);
+    navigate("/dang-nhap");
+    setPending(false);
   };
   const handleCancel = () => {
     setIsModalLogoutOpen(false);
   };
+
+  if (pending) return <Pending />;
+
   return (
     <>
       <Modal
@@ -51,7 +61,7 @@ const Sidebar = () => {
               <ul className="space-y-2 pb-2">
                 <li>
                   <NavLink
-                    to="/admin"
+                    to="/dashboard"
                     className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                   >
                     <AppstoreOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -60,7 +70,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/admin/bao-cao"
+                    to="/bao-cao"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <PieChartOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -74,7 +84,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/admin/don-hang"
+                    to="/don-hang"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <ShoppingCartOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -85,7 +95,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/admin/san-pham"
+                    to="/san-pham"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <ShoppingOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -96,7 +106,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/admin/tai-khoan"
+                    to="/tai-khoan"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <UsergroupAddOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -110,7 +120,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/admin/nhan-su"
+                    to="/nhan-su"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <UsergroupAddOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -124,7 +134,7 @@ const Sidebar = () => {
                 </li>
                 {/* <li>
                   <NavLink
-                    to="/admin/code"
+                    to="/code"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <SecurityScanOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -139,7 +149,7 @@ const Sidebar = () => {
               </ul>
               <div className="space-y-2 pt-2">
                 <NavLink
-                  to="/admin/chat"
+                  to="/chat"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
                 >
                   <MailOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -152,7 +162,7 @@ const Sidebar = () => {
                   </span>
                 </NavLink>
                 <NavLink
-                  to="/admin/email"
+                  to="/email"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
                 >
                   <MailOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -165,14 +175,14 @@ const Sidebar = () => {
                   </span>
                 </NavLink>
                 <NavLink
-                  to="/admin/comment"
+                  to="/comment"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
                 >
                   <MessageOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
                   <span className="ml-3">Đánh giá</span>
                 </NavLink>
                 <NavLink
-                  to="/admin/ho-tro"
+                  to="/ho-tro"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
                 >
                   <QuestionCircleOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />

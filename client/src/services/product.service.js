@@ -11,6 +11,18 @@ export const getOneProduct = createAsyncThunk("getOne/product", async (id) => {
   }
 });
 
+export const getOneProductForUpdate = createAsyncThunk(
+  "getOne/product/update",
+  async (id) => {
+    try {
+      const response = await BaseUrl.get(`product/detail/admin/${id}`);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);
+
 export const getAllProduct = createAsyncThunk(
   "getAll/product",
   async ({ page, limit }) => {

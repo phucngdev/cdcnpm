@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import {
   getAllProduct,
   getOneProduct,
+  getOneProductForUpdate,
   searchProduct,
 } from "../../services/product.service";
 
@@ -24,6 +25,17 @@ const productSlice = createSlice({
         state.dataEdit = action.payload;
       })
       .addCase(getOneProduct.rejected, (state, action) => {
+        state.status = "Failed!";
+        state.error = action.error.message;
+      })
+      .addCase(getOneProductForUpdate.pending, (state) => {
+        state.status = "Pending!";
+      })
+      .addCase(getOneProductForUpdate.fulfilled, (state, action) => {
+        state.status = "Successfully!";
+        state.dataEdit = action.payload;
+      })
+      .addCase(getOneProductForUpdate.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       })

@@ -62,3 +62,12 @@ export const logout = createAsyncThunk("logout", async () => {
     message.error(error.message);
   }
 });
+
+export const refreshToken = createAsyncThunk("refreshToken", async () => {
+  try {
+    const response = await BaseUrl.post(`auth/refreshToken`);
+    return response.data;
+  } catch (error) {
+    message.error(error.message);
+  }
+});

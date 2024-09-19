@@ -10,8 +10,14 @@ const BaseUrl = axios.create({
   },
 });
 
-// BaseUrl.interceptors.request.use((config) => {
+// BaseUrl.interceptors.request.use(async (config) => {
+//   const accessToken = Cookies.get("accessToken");
+//   const refreshToken = Cookies.get("refreshToken");
+//   console.log(accessToken, refreshToken);
 
+//   if (!accessToken && refreshToken) {
+//     await refreshToken();
+//   }
 //   return config;
 // });
 

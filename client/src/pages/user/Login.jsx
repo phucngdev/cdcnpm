@@ -1,28 +1,32 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useLayoutEffect } from "react";
 import signin from "../../../public/signin.jpg";
-import { Button, Form, Input, message } from "antd";
+import { Input, message } from "antd";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../../../public/logo.png";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { login, loginGoogle } from "../../services/auth.service";
-import Cookies from "js-cookie";
-import {
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-  LoadingOutlined,
-} from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { login } from "../../services/auth.service";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import google from "../../../public/google.svg";
-import { useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import Pending from "../../components/user/animation/Pending";
+import { useCookie } from "../../hooks/useCookie";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentRef = useRef();
   const [pending, setPending] = useState(false);
+
+  const checkLogin = useCookie("user_info", false);
+  useLayoutEffect(() => {
+    if (checkLogin) {
+      message.warning("Bạn đã đăng nhập");
+      navigate("/");
+      return;
+    }
+  }, [checkLogin]);
 
   useEffect(() => {
     currentRef.current.focus();
@@ -116,7 +120,7 @@ const Login = () => {
             />
 
             <div className="hidden lg:relative lg:block lg:p-12">
-              <a className="block text-white" href="#">
+              <Link className="block text-white" to="/">
                 <span className="sr-only">Home</span>
                 <svg
                   className="h-8 sm:h-10"
@@ -129,7 +133,7 @@ const Login = () => {
                     fill="currentColor"
                   />
                 </svg>
-              </a>
+              </Link>
 
               <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
                 Welcome to TEELAB 🦑
@@ -147,9 +151,9 @@ const Login = () => {
           <main className="flex items-center justify-center px-8 py-8 sm:px-12 lg:col-span-7 lg:px-16 lg:py-12 xl:col-span-6">
             <div className="max-w-xl lg:max-w-3xl">
               <div className="relative -mt-16 block lg:hidden">
-                <a
+                <Link
                   className="inline-flex size-16 items-center justify-center rounded-full bg-white text-blue-600 sm:size-20"
-                  href="#"
+                  to="/"
                 >
                   <span className="sr-only">Home</span>
                   <svg
@@ -163,7 +167,7 @@ const Login = () => {
                       fill="currentColor"
                     />
                   </svg>
-                </a>
+                </Link>
 
                 <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
                   Welcome to TEELAB 🦑

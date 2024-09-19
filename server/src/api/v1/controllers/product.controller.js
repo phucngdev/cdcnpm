@@ -19,6 +19,15 @@ module.exports.getOne = async (req, res) => {
   }
 };
 
+module.exports.getOneForUpdate = async (req, res) => {
+  try {
+    const result = await productService.getOneForUpdateService(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports.deleteOne = async (req, res) => {
   try {
     const { id } = req.params;

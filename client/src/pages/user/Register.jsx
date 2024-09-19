@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useLayoutEffect } from "react";
 import signup from "../../../public/signup.jpg";
 import { Input, message } from "antd";
 import { Helmet } from "react-helmet";
@@ -17,23 +17,21 @@ import google from "../../../public/google.svg";
 import { useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import Pending from "../../components/user/animation/Pending";
+import { useCookie } from "../../hooks/useCookie";
 
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentRef = useRef();
   const [pending, setPending] = useState(false);
-  const [isLogin, setIsLogin] = useState(() => {
-    const checkLogin = Cookies.get("AT") || false;
-    return checkLogin;
-  });
-
-  useEffect(() => {
-    if (isLogin) {
-      const { role } = jwtDecode(isLogin);
-      role === 1 ? navigate("/") : navigate("/admin");
+  const checkLogin = useCookie("user_info", false);
+  useLayoutEffect(() => {
+    if (checkLogin) {
+      message.warning("Bạn đã đăng nhập");
+      navigate("/");
+      return;
     }
-  }, []);
+  }, [checkLogin]);
 
   useEffect(() => {
     currentRef.current.focus();
@@ -67,6 +65,7 @@ const Register = () => {
 
       setPending(true);
       const response = await dispatch(register(newUser));
+      console.log(response);
 
       if (response.payload.status === 201) {
         message.success("Đăng ký thành công");

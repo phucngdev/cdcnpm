@@ -44,14 +44,14 @@ const ListProduct = () => {
           </div>
           <div className="flex items-center gap-3">
             <Button
-              onClick={() => navigate("/admin/quan-ly-danh-muc")}
+              onClick={() => navigate("/quan-ly-danh-muc")}
               type="default"
               className="mt-5 md:mt-0 w-full md:w-auto"
             >
               Quản lý danh mục
             </Button>
             <Button
-              onClick={() => navigate("/admin/tao-moi-san-pham")}
+              onClick={() => navigate("/tao-moi-san-pham")}
               type="primary"
               className="mt-5 md:mt-0 w-full md:w-auto"
             >

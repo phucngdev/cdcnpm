@@ -1,7 +1,7 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Editor from "../../components/admin/create_product/editor/Editor";
-import { LoadingOutlined, PlusOutlined, ShopOutlined } from "@ant-design/icons";
-import { Flex, message, Upload, Button, Input, Select, Image } from "antd";
+import { ShopOutlined } from "@ant-design/icons";
+import { message, Button, Input } from "antd";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,8 +9,8 @@ import { getAllCategory } from "../../services/category.service";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase/firebase.config";
 import {
-  createProduct,
   getOneProduct,
+  getOneProductForUpdate,
   updateProduct,
 } from "../../services/product.service";
 import { useParams } from "react-router-dom";
@@ -29,10 +29,20 @@ import ColorSelected from "../../components/admin/create_product/ColorSelected";
 const EditProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
-    await dispatch(getOneProduct(id));
-    await dispatch(getAllCategory());
+    try {
+      setLoading(true);
+      await Promise.allSettled([
+        dispatch(getAllCategory()),
+        dispatch(getOneProductForUpdate(id)),
+      ]);
+    } catch (error) {
+      message.error("Error loading data");
+    } finally {
+      setLoading(false);
+    }
   };
   useEffect(() => {
     fetchData();
@@ -40,7 +50,6 @@ const EditProduct = () => {
   const listImageRef = ref(storage, "products/");
   const categorys = useSelector((state) => state.category.data);
   const product = useSelector((state) => state.product.dataEdit);
-  const [loading, setLoading] = useState(false);
   const [colors, setColors] = useState([
     // color fix sẵn
     { color_name: "Đỏ", sizes: [], image: "" },
@@ -67,22 +76,20 @@ const EditProduct = () => {
     }));
   }, [categorys]);
 
-  const initialValues = useMemo(() => {
-    const values = product && {
-      product_name: product.product_name,
-      price: product.price_max,
-      discount: product.discount,
-      thumbnail: product.thumbnail,
-      thumbnail_hover: product.thumbnail_hover,
-      description_image: product.description_image,
-      category: product.category.category_name,
-      status: product.status,
-    };
-    return values;
-  }, [product]);
-
   const formik = useFormik({
-    initialValues,
+    initialValues: {
+      name: "",
+      price: null,
+      discount: null,
+      thumbnail: "",
+      thumbnail_hover: "",
+      images: [],
+      description_image: "",
+      category: "",
+      status: false,
+      option: [],
+      author: "",
+    },
     validationSchema: Yup.object({
       product_name: Yup.string().required("Tên sản phẩm không được để trống"),
       category: Yup.string().required("Danh mục sản phẩm không được để trống"),
@@ -116,7 +123,6 @@ const EditProduct = () => {
         const response = await dispatch(
           updateProduct({ id: id, data: editProduct })
         );
-        console.log(response);
         if (response.payload.status === 200) {
           message.success("Lưu sản phẩm thành công");
         }
@@ -129,7 +135,24 @@ const EditProduct = () => {
     },
   });
 
-  //
+  useEffect(() => {
+    if (product) {
+      // setColors(product.option);
+      setImageUrls(product.images);
+      setDescription(product.description);
+      formik.setValues({
+        product_name: product.product_name,
+        price: product.price_max,
+        discount: product.discount,
+        thumbnail: product.thumbnail,
+        thumbnail_hover: product.thumbnail_hover,
+        description_image: product.description_image,
+        category: product.category.category_name,
+        status: product.status,
+      });
+      // setColorSize(product.option);
+    }
+  }, [product]);
 
   const handleCustomRequest = async ({
     file,
@@ -270,9 +293,10 @@ const EditProduct = () => {
   const handleCancel = () => {
     setShowInput(false);
   };
-  console.log(initialValues);
+  console.log(product);
+  console.log(colorSize);
 
-  if (!product || !initialValues) return <Pending />;
+  if (loading || !formik.values) return <Pending />;
 
   return (
     <>

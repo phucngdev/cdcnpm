@@ -68,8 +68,8 @@ function App() {
         </Route>
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
-        <Route path="/admin/" element={<PrivateRouter />}>
-          <Route index element={<Dashboard />} />
+        <Route path="/" element={<PrivateRouter />}>
+          <Route index path="dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFoundAdmin />} />
           <Route path="don-hang" element={<Orders />} />
           <Route path="don-hang/:id" element={<OrderDetail />} />

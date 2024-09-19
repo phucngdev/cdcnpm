@@ -61,7 +61,7 @@ const ItemProduct = ({ product }) => {
           <div className="flex-1 flex justify-center items-center gap-3">
             <Button
               onClick={() =>
-                navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
+                navigate(`/chinh-sua-san-pham/${product.product_id}`)
               }
               className="flex items-center justify-center"
             >

@@ -37,6 +37,8 @@ const UpdateCategory = ({
   };
 
   const handleOk = async () => {
+    console.log(updateCategory);
+
     if (!updateCategory.category_name || !updateCategory.path) {
       message.warning("Vui lòng nhập đủ thông tin");
       return;

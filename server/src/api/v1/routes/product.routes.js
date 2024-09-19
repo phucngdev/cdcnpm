@@ -4,6 +4,7 @@ const middleware = require("../middlewares/verifyToken");
 
 productRoutes.get("/", productController.getAll);
 productRoutes.get("/detail/:id", productController.getOne);
+productRoutes.get("/detail/admin/:id", productController.getOneForUpdate);
 productRoutes.delete("/delete/:id", productController.deleteOne);
 productRoutes.delete("/delete-all", productController.deleteAll);
 productRoutes.post(

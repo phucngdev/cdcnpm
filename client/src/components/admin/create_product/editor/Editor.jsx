@@ -232,6 +232,7 @@ const Editor = ({ setDescription, description }) => {
         "CaseChange",
       ],
     }).then((instance) => {
+      instance.setData(description || "");
       // Lưu tham chiếu của editor
       editorInstance = instance;
       // Gán giá trị hiện tại của editor vào state
@@ -250,7 +251,7 @@ const Editor = ({ setDescription, description }) => {
         editorInstance.destroy();
       }
     };
-  }, []);
+  }, [description]);
 
   return (
     <>

@@ -15,17 +15,16 @@ const PrivateRouter = () => {
   const dispatch = useDispatch();
   const user = useCookie("user_info", false);
   const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [pending, setPending] = useState(true);
 
   const checkRole = async () => {
-    setLoading(true);
+    setPending(true);
     const response = await dispatch(checkRoleAdmin());
-    console.log(response);
 
     if (response.payload.status === 200) {
       setRole(true);
       message.success(`Hello`);
-      navigate("/admin");
+      navigate("/dashboard");
     } else if (response.payload.response.status === 403) {
       message.error("Bạn không có quyền truy cập");
       navigate("/");
@@ -33,14 +32,14 @@ const PrivateRouter = () => {
       message.error("Vui lòng đăng nhập");
       navigate("/dang-nhap");
     }
-    setLoading(false);
+    setPending(false);
   };
 
   useEffect(() => {
     checkRole();
   }, []);
 
-  if (loading) return <Pending />;
+  if (pending) return <Pending />;
 
   return (
     role && (
