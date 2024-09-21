@@ -24,7 +24,7 @@ const PrivateRouter = () => {
     if (response.payload.status === 200) {
       setRole(true);
       message.success(`Hello`);
-      navigate("/dashboard");
+      navigate("/admin/dashboard");
     } else if (response.payload.response.status === 403) {
       message.error("Bạn không có quyền truy cập");
       navigate("/");

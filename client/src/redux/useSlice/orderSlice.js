@@ -5,7 +5,11 @@ const orderSlice = createSlice({
   name: "order",
   initialState: {
     data: [],
-    dataEdit: null,
+    dataEdit: {
+      status: null,
+      order: {},
+      order_items: [],
+    },
     status: "idle",
     error: null,
   },

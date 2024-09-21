@@ -43,6 +43,14 @@ module.exports.createOrderService = async (body) => {
       [orderItems]
     );
 
+    // sau khi tạo đơn hàng thì update lại số lượng sản phẩm
+    // body.order_items.map(async (item) => {
+    //   await pool.execute(
+    //     "UPDATE products SET quantity = quantity - ? WHERE product_id = ? AND color_size_id = ?",
+    //     [item.quantity, item.product_id, item.color_size_id]
+    //   );
+    // });
+
     emailService.sendMailNewOrder(orderId);
 
     return {
@@ -304,11 +312,11 @@ module.exports.getAllOrderService = async (page, limit, status) => {
     const [orders] =
       status >= 0
         ? await pool.query(
-            `SELECT * FROM orders WHERE status = ? LIMIT ${limitInt} OFFSET ${offset}`,
+            `SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offset}`,
             [status]
           )
         : await pool.query(
-            `SELECT * FROM orders LIMIT ${limitInt} OFFSET ${offset}`
+            `SELECT * FROM orders ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offset}`
           );
 
     if (orders.length === 0) {

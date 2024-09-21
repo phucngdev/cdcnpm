@@ -39,6 +39,8 @@ module.exports.addToCartService = async (id, body) => {
         body.quantity,
       ]
     );
+    console.log("chưaq có");
+
     return {
       status: 201,
       message: "Add to cart successfully",

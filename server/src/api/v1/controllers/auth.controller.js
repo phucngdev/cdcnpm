@@ -16,8 +16,7 @@ module.exports.login = async (req, res) => {
       res
         .cookie("accessToken", JSON.stringify(result.accessToken), {
           httpOnly: true,
-          // expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
-          expires: new Date(Date.now() + 6 * 1000),
+          expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
           secure: false,
         })
         .cookie("refreshToken", JSON.stringify(result.refreshToken), {
@@ -66,8 +65,7 @@ module.exports.refreshToken = async (req, res) => {
       res
         .cookie("accessToken", JSON.stringify(result.accessToken), {
           httpOnly: true,
-          // expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
-          expires: new Date(Date.now() + 6 * 1000),
+          expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
           secure: false,
         })
         .cookie("user_info", JSON.stringify(result.user_info), {

@@ -15,12 +15,6 @@ const CartAndUserMenu = ({ user, setUser }) => {
   const cart = useSelector((state) => state.cart.data);
   const [pending, setPending] = useState(false);
 
-  const firstName = useMemo(() => {
-    if (user) {
-      return user.username[0];
-    }
-  }, []);
-
   const handleLogout = async () => {
     setPending(true);
     const response = await dispatch(logout());
@@ -81,7 +75,7 @@ const CartAndUserMenu = ({ user, setUser }) => {
             />
           ) : (
             <Avatar className="w-full h-full bg-[#fde3cf] text-[#f56a00] text-lg cursor-pointer rounded-full object-cover">
-              {firstName}
+              {user.username[0]}
             </Avatar>
           )}
         </Popover>

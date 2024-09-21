@@ -61,7 +61,7 @@ const Sidebar = () => {
               <ul className="space-y-2 pb-2">
                 <li>
                   <NavLink
-                    to="/dashboard"
+                    to="/admin/dashboard"
                     className="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                   >
                     <AppstoreOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -70,7 +70,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/bao-cao"
+                    to="/admin/bao-cao"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <PieChartOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -84,7 +84,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/don-hang"
+                    to="/admin/don-hang"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <ShoppingCartOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -95,7 +95,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/san-pham"
+                    to="/admin/san-pham"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <ShoppingOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -106,7 +106,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/tai-khoan"
+                    to="/admin/tai-khoan"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <UsergroupAddOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -120,7 +120,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <NavLink
-                    to="/nhan-su"
+                    to="/admin/nhan-su"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <UsergroupAddOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -134,7 +134,7 @@ const Sidebar = () => {
                 </li>
                 {/* <li>
                   <NavLink
-                    to="/code"
+                    to="/admin/code"
                     className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
                   >
                     <SecurityScanOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -149,7 +149,7 @@ const Sidebar = () => {
               </ul>
               <div className="space-y-2 pt-2">
                 <NavLink
-                  to="/chat"
+                  to="/admin/chat"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
                 >
                   <MailOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -162,7 +162,7 @@ const Sidebar = () => {
                   </span>
                 </NavLink>
                 <NavLink
-                  to="/email"
+                  to="/admin/email"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group"
                 >
                   <MailOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
@@ -175,14 +175,14 @@ const Sidebar = () => {
                   </span>
                 </NavLink>
                 <NavLink
-                  to="/comment"
+                  to="/admin/comment"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
                 >
                   <MessageOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />
                   <span className="ml-3">Đánh giá</span>
                 </NavLink>
                 <NavLink
-                  to="/ho-tro"
+                  to="/admin/ho-tro"
                   className="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2"
                 >
                   <QuestionCircleOutlined className="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75" />

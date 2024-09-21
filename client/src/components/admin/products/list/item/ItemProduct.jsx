@@ -1,5 +1,5 @@
 import { Button, message, Popconfirm } from "antd";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   EditOutlined,
   QuestionCircleOutlined,
@@ -13,10 +13,12 @@ import {
   deleteProduct,
   getAllProduct,
 } from "../../../../../services/product.service";
+import Pending from "../../../../user/animation/Pending";
 
 const ItemProduct = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [pending, setPending] = useState(false);
 
   const quantity = useMemo(() => {
     return product.option.reduce((total, s) => {
@@ -28,16 +30,22 @@ const ItemProduct = ({ product }) => {
 
   const handleDelete = async (id) => {
     try {
+      setPending(true);
       const response = await dispatch(deleteProduct(id));
-      console.log(response);
       if (response.payload.status === 200) {
         message.success("Xoá thành công");
         await dispatch(getAllProduct());
       }
+      setPending(false);
     } catch (error) {
+      setPending(false);
       console.error(error);
+      message.error(error.message);
     }
   };
+
+  if (pending) return <Pending />;
+
   return (
     <>
       <div className="flex flex-col max-h-[100dvh] overflow-scroll">
@@ -61,7 +69,7 @@ const ItemProduct = ({ product }) => {
           <div className="flex-1 flex justify-center items-center gap-3">
             <Button
               onClick={() =>
-                navigate(`/chinh-sua-san-pham/${product.product_id}`)
+                navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
               }
               className="flex items-center justify-center"
             >

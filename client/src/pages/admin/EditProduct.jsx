@@ -293,8 +293,6 @@ const EditProduct = () => {
   const handleCancel = () => {
     setShowInput(false);
   };
-  console.log(product);
-  console.log(colorSize);
 
   if (loading || !formik.values) return <Pending />;
 

@@ -10,23 +10,20 @@ import {
   UnlockOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsers } from "../../services/user.service";
+import { getAllUsers, updateStatusUser } from "../../services/user.service";
 import Overview from "../../components/admin/account/Overview";
 
 export default function User() {
   const dispatch = useDispatch();
 
-  // handle function to block user
   const handleChangeStatusUser = async (id, status) => {
     try {
-      let statusUpdate = null;
-      if (status == 1) {
-        statusUpdate = 0;
-      } else {
-        statusUpdate = 1;
-      }
-      const response = await BaseUrl.put(`user/${id}/status/${statusUpdate}`);
-      if (response.status == 200) {
+      console.log(status);
+
+      const response = await dispatch(
+        updateStatusUser({ id: id, status: status == 1 ? 0 : 1 })
+      );
+      if (response.payload.status == 200) {
         message.success("Thay đổi trạng thái người dùng thành công");
         fetchUsersData();
       }
@@ -38,7 +35,7 @@ export default function User() {
   const handleDeleteUser = async (id) => {
     try {
       const response = await BaseUrl.delete(`user/${id}`);
-      if (response.status == 200) {
+      if (response.payload.status == 200) {
         message.success("Xóa người dùng thành công");
         fetchUsersData();
       }
@@ -55,8 +52,8 @@ export default function User() {
     },
     {
       title: "Tên người dùng",
-      dataIndex: "user_name",
-      key: "user_name",
+      dataIndex: "username",
+      key: "username",
     },
     {
       title: "Email",
@@ -110,6 +107,7 @@ export default function User() {
   }, []);
 
   const users = useSelector((state) => state.user.data);
+
   return (
     <>
       <div className="flex flex-col gap-4">

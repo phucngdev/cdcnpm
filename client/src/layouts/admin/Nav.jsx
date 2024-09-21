@@ -80,15 +80,17 @@ const Nav = ({ user }) => {
                 <span className="text-base font-normal text-gray-500 mr-5">
                   {user?.username} - TeelabStudio
                 </span>
-                <div className="-mb-1">
-                  <Avatar
-                    style={{
-                      backgroundColor: "#ff0000",
-                      verticalAlign: "middle",
-                    }}
-                    size="large"
-                    src={user?.avatar}
-                  ></Avatar>
+                <div className="w-10 h-10">
+                  {user.avatar ? (
+                    <Avatar
+                      src={user.avatar}
+                      className="w-full h-full rounded-full object-cover cursor-pointer"
+                    />
+                  ) : (
+                    <Avatar className="w-full h-full bg-[#fde3cf] text-[#f56a00] text-lg cursor-pointer rounded-full object-cover">
+                      {user.username[0]}
+                    </Avatar>
+                  )}
                 </div>
               </div>
             </div>

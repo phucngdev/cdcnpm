@@ -68,9 +68,8 @@ function App() {
         </Route>
         <Route path="/dang-nhap" element={<Login />} />
         <Route path="/dang-ky" element={<Register />} />
-        <Route path="/" element={<PrivateRouter />}>
+        <Route path="/admin/" element={<PrivateRouter />}>
           <Route index path="dashboard" element={<Dashboard />} />
-          <Route path="*" element={<NotFoundAdmin />} />
           <Route path="don-hang" element={<Orders />} />
           <Route path="don-hang/:id" element={<OrderDetail />} />
           <Route path="san-pham" element={<Products />} />
@@ -79,6 +78,7 @@ function App() {
           <Route path="chinh-sua-san-pham/:id" element={<EditProduct />} />
           <Route path="quan-ly-danh-muc" element={<CategoryManagement />} />
           <Route path="tai-khoan" element={<User />} />
+          <Route path="*" element={<NotFoundAdmin />} />
         </Route>
       </Routes>
     </>

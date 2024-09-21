@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import ParameterOverview from "../../components/admin/products/ParameterOverview";
 import ListProduct from "../../components/admin/products/list/ListProduct";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getAllCategory } from "../../services/category.service";
 import { getAllProduct } from "../../services/product.service";
+import Overview from "../../components/admin/products/Overview";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -18,9 +18,14 @@ const Products = () => {
     fetchData();
   }, []);
 
+  const products = useSelector((state) => state.product.data);
+
   return (
     <>
-      <ParameterOverview />
+      <Overview
+        totalProduct={products.products?.length}
+        totalActive={products.products?.filter((p) => p.status === 1).length}
+      />
       <ListProduct />
     </>
   );

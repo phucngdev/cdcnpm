@@ -6,7 +6,8 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #171717;
+  /* background: #171717; */
+  background: #dadada;
   border-radius: 1em;
 }
 

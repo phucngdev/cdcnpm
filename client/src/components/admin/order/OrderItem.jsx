@@ -23,6 +23,8 @@ const OrderItem = ({ od }) => {
             {od.status === "0"
               ? "Mới"
               : od.status === "1"
+              ? "Chuẩn bị"
+              : od.status === "2"
               ? "Vận chuyển"
               : "Hoàn thành"}
           </button>
@@ -44,7 +46,7 @@ const OrderItem = ({ od }) => {
           </p>
           <span className="text-blue-600">{formatPrice(od.total)}</span>
         </div>
-        <div className="text-gray-600">
+        <div className="text-gray-600 max-h-[100px] overflow-scroll">
           {od.details.map((dt) => (
             <div key={dt.order_detail_id} className="flex justify-between mb-2">
               <p>

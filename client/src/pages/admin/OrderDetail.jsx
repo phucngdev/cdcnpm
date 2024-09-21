@@ -9,6 +9,9 @@ import Pending from "../../components/user/animation/Pending";
 
 const steps = [
   {
+    title: "Chờ xử lý",
+  },
+  {
     title: "Xác nhận đơn hàng",
   },
   {
@@ -25,8 +28,12 @@ const OrderDetail = () => {
 
   const fetchData = async () => {
     setPending(true);
-    await dispatch(getOneOrder(id));
-    setPending(false);
+    const res = await dispatch(getOneOrder(id));
+    console.log(res);
+
+    if (res) {
+      setPending(false);
+    }
   };
 
   useEffect(() => {
@@ -59,6 +66,10 @@ const OrderDetail = () => {
                 </span>
               ) : order.status === "1" ? (
                 <span className="text-blue-600 bg-blue-200 py-1 px-2 rounded">
+                  Đã xác nhận
+                </span>
+              ) : order.status === "1" ? (
+                <span className="text-yellow-600 bg-yellow-200 py-1 px-2 rounded">
                   Vận chuyển
                 </span>
               ) : (
@@ -100,7 +111,7 @@ const OrderDetail = () => {
                 </span>
               </h3>
             </div>
-            <div className="flex flex-col gap-2 max-h-[200px] overflow-scroll p-3 bg-[#f8f9fb]">
+            <div className="flex flex-col gap-2 p-3 bg-[#f8f9fb]">
               {order_items.map((od) => (
                 <div
                   key={od.order_detail_id}
@@ -122,20 +133,20 @@ const OrderDetail = () => {
           </div>
           <div className="flex justify-end mt-3">
             {order.status === "0" && (
-              <Button
-                type="button"
-                className="bg-blue-500 hover:bg-blue-400"
-                // onClick={() => ship()}
-              >
-                <span className="text-white">Vận chuyển</span>
+              <Button type="button" className="bg-blue-500 hover:bg-blue-400">
+                <span className="text-white">Xác nhận</span>
               </Button>
             )}
             {order.status === "1" && (
               <Button
                 type="button"
-                className="bg-green-500 hover:bg-green-400"
-                // onClick={() => handleDone()}
+                className="bg-yellow-500 hover:bg-yellow-400"
               >
+                <span className="text-white">Vận chuyển</span>
+              </Button>
+            )}
+            {order.status === "2" && (
+              <Button type="button" className="bg-green-500 hover:bg-green-400">
                 <span className="text-white">Hoàn thành</span>
               </Button>
             )}

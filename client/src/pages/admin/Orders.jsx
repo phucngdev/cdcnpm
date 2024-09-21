@@ -20,7 +20,7 @@ const Orders = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {orders?.orders?.map((od) => (
-              <OrderItem od={od} />
+              <OrderItem od={od} key={od.order_id} />
             ))}
           </div>
           <div className="flex w-full justify-center mt-7">
