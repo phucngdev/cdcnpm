@@ -28,6 +28,9 @@ import { useSelector } from "react-redux";
 import Message from "./pages/user/Message";
 import CategoryManagement from "./pages/admin/CategoryManagement";
 import OrderHistory from "./pages/user/OrderHistory";
+import Chat from "./pages/admin/Chat";
+import ChatBox from "./pages/admin/ChatBox";
+import IndexBoxChat from "./components/admin/chat/IndexBoxChat";
 
 function App() {
   const location = useLocation();
@@ -78,6 +81,10 @@ function App() {
           <Route path="chinh-sua-san-pham/:id" element={<EditProduct />} />
           <Route path="quan-ly-danh-muc" element={<CategoryManagement />} />
           <Route path="tai-khoan" element={<User />} />
+          <Route path="cham-soc-khach-hang" element={<Chat />}>
+            <Route index element={<IndexBoxChat />} />
+            <Route path=":id" element={<ChatBox />} />
+          </Route>
           <Route path="*" element={<NotFoundAdmin />} />
         </Route>
       </Routes>

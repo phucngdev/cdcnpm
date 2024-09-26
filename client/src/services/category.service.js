@@ -2,17 +2,20 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import BaseUrl from "../apis/axios";
 import { message } from "antd";
 
-export const getAllCategory = createAsyncThunk("get-all/category", async () => {
-  try {
-    const response = await BaseUrl.get(`category`);
-    return response.data;
-  } catch (error) {
-    message.error("Không thể tải danh sách danh mục");
+export const getAllCategory = createAsyncThunk(
+  "user/get-all/category",
+  async () => {
+    try {
+      const response = await BaseUrl.get(`category`);
+      return response.data;
+    } catch (error) {
+      message.error("Không thể tải danh sách danh mục");
+    }
   }
-});
+);
 
 export const createCategory = createAsyncThunk(
-  "create/category",
+  "admin/create/category",
   async (data) => {
     try {
       const response = await BaseUrl.post(`category/create`, data);
@@ -24,7 +27,7 @@ export const createCategory = createAsyncThunk(
 );
 
 export const updateCategoryById = createAsyncThunk(
-  "update/category",
+  "admin/update/category",
   async ({ id, data }) => {
     try {
       const response = await BaseUrl.put(`category/update/${id}`, data);

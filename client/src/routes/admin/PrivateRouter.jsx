@@ -55,7 +55,7 @@ const PrivateRouter = () => {
             id="main-content"
             className="h-full w-full bg-gray-50 relative overflow-y-auto lg:ml-64"
           >
-            <div className="pt-6 px-4">
+            <div className="p-2 lg:pt-6 lg:px-4">
               <Outlet context={user} />
             </div>
             <Footer />

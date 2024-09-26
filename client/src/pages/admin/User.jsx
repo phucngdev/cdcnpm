@@ -18,8 +18,6 @@ export default function User() {
 
   const handleChangeStatusUser = async (id, status) => {
     try {
-      console.log(status);
-
       const response = await dispatch(
         updateStatusUser({ id: id, status: status == 1 ? 0 : 1 })
       );
@@ -61,6 +59,12 @@ export default function User() {
       key: "email",
     },
     {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      render: (text, record) => record.role,
+    },
+    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -81,6 +85,7 @@ export default function User() {
             color="#f50"
           >
             <Button
+              danger={record.status != 1}
               onClick={() =>
                 handleChangeStatusUser(record.user_id, record.status)
               }

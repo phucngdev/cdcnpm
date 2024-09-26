@@ -10,49 +10,8 @@ const formatter = (value) => (
 );
 
 const StatisticChart = () => {
-  const currentMonth = useMemo(() => new Date().getMonth(), []);
-  const lastMonth = useMemo(
-    () => (currentMonth === 0 ? 11 : currentMonth - 1),
-    [currentMonth]
-  );
-
-  const result = useSelector((state) => state.statistics?.data[currentMonth]);
-  const resultLastMonth = useSelector(
-    (state) => state.statistics.data[lastMonth]
-  );
-
-  const [percenChange, setPercenChange] = useState(() => {
-    if (resultLastMonth) {
-      return resultLastMonth.totalRevenue > 0
-        ? (
-            ((result.totalRevenue - resultLastMonth.totalRevenue) /
-              resultLastMonth.totalRevenue) *
-            100
-          ).toFixed(2)
-        : 100;
-    }
-    return 0;
-  });
-
-  const handleCalPercenChange = () => {
-    if (resultLastMonth) {
-      setPercenChange(
-        resultLastMonth.totalRevenue > 0
-          ? (
-              ((result.totalRevenue - resultLastMonth.totalRevenue) /
-                resultLastMonth.totalRevenue) *
-              100
-            ).toFixed(2)
-          : 100
-      );
-    } else {
-      setPercenChange(100);
-    }
-  };
-
-  useEffect(() => {
-    handleCalPercenChange();
-  }, [result, resultLastMonth]);
+  const dashboard_data = useSelector((state) => state.statistics.data);
+  console.log(dashboard_data);
 
   return (
     <>
@@ -61,7 +20,7 @@ const StatisticChart = () => {
           <div className="flex-shrink-0">
             <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
               <Statistic
-                value={result?.totalRevenue}
+                value={dashboard_data?.revenue?.total_revenue}
                 precision={2}
                 formatter={formatter}
               />
@@ -71,7 +30,7 @@ const StatisticChart = () => {
             </h3>
           </div>
           <div className="flex items-center justify-end flex-1 text-green-500 text-base font-bold">
-            {percenChange}%
+            {dashboard_data?.revenue?.revenue_change_percentage}%
             <svg
               className="w-5 h-5"
               fill="currentColor"

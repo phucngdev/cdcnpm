@@ -1,5 +1,6 @@
 import React from "react";
 import { arrowdown, arrowup } from "../dashboard/StatisticsOverview";
+import { CheckSquareOutlined, ProductOutlined } from "@ant-design/icons";
 
 const Overview = ({ totalProduct, totalActive }) => {
   return (
@@ -20,7 +21,7 @@ const Overview = ({ totalProduct, totalActive }) => {
                 300 > 0 ? " text-green-500 " : " text-red-500 "
               } text-base font-bold`}
             >
-              {300}%{300 > 0 ? arrowup : arrowdown}
+              <ProductOutlined className="text-3xl" />
             </div>
           </div>
         </div>
@@ -39,7 +40,7 @@ const Overview = ({ totalProduct, totalActive }) => {
                 300 > 0 ? " text-green-500 " : " text-red-500 "
               } text-base font-bold`}
             >
-              {300}%{300 > 0 ? arrowup : arrowdown}
+              <CheckSquareOutlined className="text-3xl" />
             </div>
           </div>
         </div>

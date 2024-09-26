@@ -32,114 +32,87 @@ export const arrowdown = (
 );
 
 const StatisticsOverview = () => {
-  const currentMonth = useMemo(() => new Date().getMonth(), []);
-  const lastMonth = useMemo(
-    () => (currentMonth === 0 ? 11 : currentMonth - 1),
-    [currentMonth]
-  );
-
-  const result = useSelector((state) => state.statistics.data[currentMonth]);
-  const resultLastMonth = useSelector(
-    (state) => state.statistics.data[lastMonth]
-  );
-
-  const [order, setOrder] = useState({
-    totalOrders: result?.totalOrders || 0,
-    percenChange: 0,
-  });
-  const [product, setProduct] = useState({
-    totalProductsSold: result?.totalProductsSold || 0,
-    percenChange: 0,
-  });
-
-  const calculatePercentageChange = (currentValue, previousValue) => {
-    return previousValue
-      ? (((currentValue - previousValue) / previousValue) * 100).toFixed(2)
-      : 100;
-  };
-
-  useLayoutEffect(() => {
-    const orderChange = calculatePercentageChange(
-      result?.totalOrders || 0,
-      resultLastMonth?.totalOrders || 0
-    );
-
-    const productChange = calculatePercentageChange(
-      result?.totalProductsSold || 0,
-      resultLastMonth?.totalProductsSold || 0
-    );
-
-    setOrder({
-      totalOrders: result?.totalOrders,
-      percenChange: orderChange,
-    });
-    setProduct({
-      totalProductsSold: result?.totalProductsSold,
-      percenChange: productChange,
-    });
-  }, [result]);
+  const dashboard_data = useSelector((state) => state.statistics.data);
 
   return (
-    <>
-      <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {product.totalProductsSold}
-              </span>
-              <h3 className="text-base font-normal text-gray-500">
-                Sản phẩm đã bán
-              </h3>
+    dashboard_data && (
+      <>
+        <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                  {dashboard_data.order?.total_orders}
+                </span>
+                <h3 className="text-base font-normal text-gray-500">
+                  Sản phẩm đã bán
+                </h3>
+              </div>
+              <div
+                className={`ml-5 w-0 flex items-center justify-end flex-1 ${
+                  dashboard_data.order?.orders_change_percentage > 0
+                    ? " text-green-500 "
+                    : " text-red-500 "
+                } text-base font-bold`}
+              >
+                {dashboard_data.order?.orders_change_percentage}%
+                {dashboard_data.order?.orders_change_percentage > 0
+                  ? arrowup
+                  : arrowdown}
+              </div>
             </div>
-            <div
-              className={`ml-5 w-0 flex items-center justify-end flex-1 ${
-                product.percenChange > 0 ? " text-green-500 " : " text-red-500 "
-              } text-base font-bold`}
-            >
-              {product.percenChange}%
-              {product.percenChange > 0 ? arrowup : arrowdown}
+          </div>
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                  {dashboard_data.order?.total_orders}
+                </span>
+                <h3 className="text-base font-normal text-gray-500">
+                  Số lượng đơn hàng
+                </h3>
+              </div>
+              <div
+                className={`ml-5 w-0 flex items-center justify-end flex-1 ${
+                  dashboard_data.order?.orders_change_percentage > 0
+                    ? " text-green-500 "
+                    : " text-red-500 "
+                } text-base font-bold`}
+              >
+                {dashboard_data.order?.orders_change_percentage}%
+                {dashboard_data.order?.orders_change_percentage > 0
+                  ? arrowup
+                  : arrowdown}
+              </div>
+            </div>
+          </div>
+          <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                  {dashboard_data.user?.total_users}
+                </span>
+                <h3 className="text-base font-normal text-gray-500">
+                  Người dúng mới (tháng)
+                </h3>
+              </div>
+              <div
+                className={`ml-5 w-0 flex items-center justify-end flex-1 ${
+                  dashboard_data.order?.orders_change_percentage > 0
+                    ? " text-green-500 "
+                    : " text-red-500 "
+                } text-base font-bold`}
+              >
+                {dashboard_data.user?.users_change_percentage}%
+                {dashboard_data.user?.users_change_percentage > 0
+                  ? arrowup
+                  : arrowdown}
+              </div>
             </div>
           </div>
         </div>
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {order.totalOrders}
-              </span>
-              <h3 className="text-base font-normal text-gray-500">
-                Số lượng đơn hàng
-              </h3>
-            </div>
-            <div
-              className={`ml-5 w-0 flex items-center justify-end flex-1 ${
-                order.percenChange > 0 ? " text-green-500 " : " text-red-500 "
-              } text-base font-bold`}
-            >
-              {order.percenChange}%
-              {order.percenChange > 0 ? arrowup : arrowdown}
-            </div>
-          </div>
-        </div>
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                385
-              </span>
-              <h3 className="text-base font-normal text-gray-500">
-                User signups this week
-              </h3>
-            </div>
-            <div className="ml-5 w-0 flex items-center justify-end flex-1 text-red-500 text-base font-bold">
-              -2.7%
-              {arrowdown}
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+      </>
+    )
   );
 };
 

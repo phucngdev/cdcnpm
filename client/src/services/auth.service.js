@@ -3,7 +3,7 @@ import BaseUrl from "../apis/axios";
 import { message } from "antd";
 import Cookies from "js-cookie";
 
-export const login = createAsyncThunk("login", async (data) => {
+export const login = createAsyncThunk("auth/login", async (data) => {
   try {
     const response = await BaseUrl.post(`auth/login`, data);
     return response;
@@ -22,7 +22,7 @@ export const loginGoogle = createAsyncThunk("loginGoogle", async (data) => {
   }
 });
 
-export const register = createAsyncThunk("register", async (data) => {
+export const register = createAsyncThunk("auth/register", async (data) => {
   try {
     const response = await BaseUrl.post(`auth/register`, data);
     return response;
@@ -43,18 +43,19 @@ export const registerGoogle = createAsyncThunk(
   }
 );
 
-export const checkRoleAdmin = createAsyncThunk("checkRoleAdmin", async () => {
-  try {
-    const response = await BaseUrl.post(`auth/check-role`);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-
-    return error;
+export const checkRoleAdmin = createAsyncThunk(
+  "auth/checkRoleAdmin",
+  async () => {
+    try {
+      const response = await BaseUrl.post(`auth/check-role`);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
   }
-});
+);
 
-export const logout = createAsyncThunk("logout", async () => {
+export const logout = createAsyncThunk("auth/logout", async () => {
   try {
     const response = await BaseUrl.post(`auth/logout`);
     return response.data;

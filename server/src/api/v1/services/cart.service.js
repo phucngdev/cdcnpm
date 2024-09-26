@@ -16,7 +16,20 @@ module.exports.addToCartService = async (id, body) => {
       [body.product_id, body.color_size_id]
     );
 
+    // kiểm tra số lượng trong giỏ hàng có vượt quá số lượng sẵn có kko
+    const [[{ quantity }]] = await pool.query(
+      `
+      SELECT 
+       quantity
+      FROM sizes
+      WHERE size_id = (SELECT size_id FROM color_size WHERE color_size_id = ?)`,
+      [body.color_size_id]
+    );
+
     if (item) {
+      if (item.quantity >= quantity) {
+        return { status: 400, message: "Quantity exceeds available stock" };
+      }
       const updatedQuantity = item.quantity + body.quantity;
       await pool.execute(
         "UPDATE cart_item SET quantity = ? WHERE cart_item_id = ?",
@@ -39,7 +52,6 @@ module.exports.addToCartService = async (id, body) => {
         body.quantity,
       ]
     );
-    console.log("chưaq có");
 
     return {
       status: 201,

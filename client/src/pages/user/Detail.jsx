@@ -47,7 +47,7 @@ const Detail = () => {
 
   useEffect(() => {
     if (!product) return;
-    const uniqueColors = product.colorSize.reduce((acc, item) => {
+    const uniqueColors = product.colorSize?.reduce((acc, item) => {
       if (!acc.some((color) => color.color_id === item.color_id)) {
         acc.push({
           color_id: item.color_id,
@@ -83,10 +83,13 @@ const Detail = () => {
       message.error("Vui lòng đăng nhập");
       return;
     }
+    console.log(quantity);
+
     if (quantity === 0) {
       message.error("Sản phẩm hết hàng");
       return;
     }
+
     const color_size = product.colorSize.find(
       (cs) =>
         cs.color_id === colorSize.color_id && cs.size_id === colorSize.size_id
@@ -102,7 +105,8 @@ const Detail = () => {
     if (response.payload.status === 201) {
       message.success("Thêm thành công");
       await dispatch(getCart({ id: user.user_id }));
-      console.log("call cart");
+    } else if (response.payload.status === 400) {
+      message.error("Số lượng sản phẩm đã đạt giới hạn");
     }
   };
 

@@ -20,7 +20,7 @@ const Nav = ({ user }) => {
               >
                 <BarsOutlined className="size-6 text-2xl" />
               </button>
-              <Link to="/admin" className="px-2">
+              <Link to="/admin/dashboard" className="px-2">
                 <img src={logo} alt="" />
               </Link>
               <form

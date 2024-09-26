@@ -30,13 +30,19 @@ const OrderItem = ({ od }) => {
           </button>
         </div>
         <div className="border-t border-gray-200 my-4">note: {od.note}</div>
+
         <div className="flex items-center text-gray-500 mb-4">
           <FieldTimeOutlined />
           <p className="ml-2">
             {moment(od.created_at).format("hh:mm A, DD MMM, YYYY")}
           </p>
         </div>
-        <div className="border-t border-gray-200 my-4"></div>
+        <div className="border-b border-gray-200">
+          {od.transaction == "normal"
+            ? "Thanh toán khi nhận hàng"
+            : "Thanh toán zalopay"}
+        </div>
+        <div className=" my-4"></div>
         <div className="flex items-center justify-between text-gray-600 mb-4">
           <p className="font-semibold">
             {od.details.reduce((total, detail) => {

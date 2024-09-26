@@ -58,7 +58,9 @@ const OrderDetail = () => {
       {status === 200 && (
         <>
           <div className="flex items-center gap-3">
-            <h3 className="text-2xl font-bold">Order Details #{order.id}</h3>
+            <h3 className="text-2xl font-bold">
+              Order Details #{order.order_id}
+            </h3>
             <div>
               {order.status === "0" ? (
                 <span className="text-red-600 bg-red-200 py-1 px-2 rounded">

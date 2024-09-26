@@ -71,6 +71,10 @@ module.exports.loginService = async (body) => {
       return { status: 401, message: "Invalid email" };
     }
 
+    if (result.status === 0) {
+      return { status: 403, message: "User is not active" };
+    }
+
     const match = await bcrypt.compare(body.password.trim(), result.password);
 
     if (!match) {
@@ -81,12 +85,11 @@ module.exports.loginService = async (body) => {
 
     const accessToken = generateAccessToken(result.user_id);
     const refreshToken = generateRefreshToken(result.user_id);
-    console.log(refreshToken);
 
-    await pool.execute(
-      "INSERT INTO refresh_token (refresh_token_id, token) VALUES (?, ?)",
-      [uuidv4(), refreshToken]
-    );
+    // await pool.execute(
+    //   "INSERT INTO refresh_token (refresh_token_id, token) VALUES (?, ?)",
+    //   [uuidv4(), refreshToken]
+    // );
 
     return {
       status: 200,

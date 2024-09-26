@@ -251,7 +251,7 @@ const Editor = ({ setDescription, description }) => {
         editorInstance.destroy();
       }
     };
-  }, [description]);
+  }, []);
 
   return (
     <>

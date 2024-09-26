@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import StatisticChart from "../../components/admin/dashboard/chart/StatisticChart";
 import OperatingCost from "../../components/admin/dashboard/OperatingCost";
 import StatisticsOverview from "../../components/admin/dashboard/StatisticsOverview";
@@ -7,16 +7,23 @@ import LastCustomer from "../../components/admin/dashboard/LastCustomer";
 import { Helmet } from "react-helmet";
 import { useDispatch } from "react-redux";
 import { dashboard } from "../../services/statistics.service";
+import Pending from "../../components/user/animation/Pending";
 
 const Dashboard = () => {
-  const dípatch = useDispatch();
+  const dispatch = useDispatch();
+  const [pending, setPending] = useState(false);
 
   const fetchData = async () => {
-    // dípatch(dashboard());
+    setPending(true);
+    dispatch(dashboard());
+    setPending(false);
   };
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (pending) return <Pending />;
+
   return (
     <>
       <Helmet>

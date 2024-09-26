@@ -6,6 +6,7 @@ import statisticSlice from "../useSlice/statisticSlice";
 import authSlice from "../useSlice/authSlice";
 import categorySlice from "../useSlice/categorySlice";
 import userSlice from "../useSlice/userSlice";
+import messageSlice from "../useSlice/messageSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     statistics: statisticSlice,
     category: categorySlice,
     user: userSlice,
+    message: messageSlice,
   },
 });
 

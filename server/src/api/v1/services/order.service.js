@@ -43,13 +43,14 @@ module.exports.createOrderService = async (body) => {
       [orderItems]
     );
 
-    // sau khi tạo đơn hàng thì update lại số lượng sản phẩm
-    // body.order_items.map(async (item) => {
-    //   await pool.execute(
-    //     "UPDATE products SET quantity = quantity - ? WHERE product_id = ? AND color_size_id = ?",
-    //     [item.quantity, item.product_id, item.color_size_id]
-    //   );
-    // });
+    for (const item of body.order_items) {
+      await pool.query(
+        `UPDATE sizes 
+         SET quantity = quantity - ? 
+         WHERE size_id = (SELECT size_id FROM color_size WHERE color_size_id = ?)`,
+        [item.quantity, item.color_size_id]
+      );
+    }
 
     emailService.sendMailNewOrder(orderId);
 
@@ -105,7 +106,7 @@ module.exports.createOrderWithZalopayService = async (body) => {
       description: `Teelab - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://4ff1-42-115-185-235.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
+        "https://d550-42-114-170-105.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
     };
 
     const data =

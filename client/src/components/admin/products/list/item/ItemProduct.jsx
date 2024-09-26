@@ -1,4 +1,4 @@
-import { Button, message, Popconfirm } from "antd";
+import { Button, message, Popconfirm, Tooltip } from "antd";
 import React, { useMemo, useState } from "react";
 import {
   EditOutlined,
@@ -48,7 +48,7 @@ const ItemProduct = ({ product }) => {
 
   return (
     <>
-      <div className="flex flex-col max-h-[100dvh] overflow-scroll">
+      <div className="flex flex-col max-h-[100dvh] overflow-scroll hover:shadow-lg">
         <div className="flex items-center justify-between gap-x-2 text-center p-2 rounded-lg shadow hover:shadow-lg cursor-pointer">
           <img
             src={product?.thumbnail}
@@ -67,29 +67,33 @@ const ItemProduct = ({ product }) => {
             {moment(product?.created_at).format("DD-MM-YYYY")}
           </div>
           <div className="flex-1 flex justify-center items-center gap-3">
-            <Button
-              onClick={() =>
-                navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
-              }
-              className="flex items-center justify-center"
-            >
-              <EditOutlined />
-            </Button>
-            <Popconfirm
-              title="Xoá sản phẩm"
-              description="Bạn chắc chắn muốn xoá sản phẩm?"
-              placement="left"
-              onConfirm={() => handleDelete(product.product_id)}
-              okType="danger"
-              icon={<QuestionCircleOutlined className="text-red-600" />}
-            >
+            <Tooltip title="Chỉnh sửa" color="blue">
               <Button
-                danger
-                className=" text-white flex items-center justify-center"
+                onClick={() =>
+                  navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
+                }
+                className="flex items-center justify-center"
               >
-                <StopOutlined />
+                <EditOutlined />
               </Button>
-            </Popconfirm>
+            </Tooltip>
+            <Tooltip title="Ngưng bán" color="red">
+              <Popconfirm
+                title="Ngưng bán sản phẩm"
+                description="Bạn chắc chắn muốn ngưng bán sản phẩm?"
+                placement="left"
+                onConfirm={() => handleDelete(product.product_id)}
+                okType="danger"
+                icon={<QuestionCircleOutlined className="text-red-600" />}
+              >
+                <Button
+                  danger
+                  className=" text-white flex items-center justify-center"
+                >
+                  <StopOutlined />
+                </Button>
+              </Popconfirm>
+            </Tooltip>
           </div>
         </div>
       </div>

@@ -100,8 +100,8 @@ const CategoryManagement = () => {
                       <EditOutlined />
                     </Button>
                     <Popconfirm
-                      title="Title"
-                      description="Open Popconfirm with async logic"
+                      title="Xoá danh mục"
+                      description="Bạn chắc chắn muốn xoá danh mục"
                       open={openPopconfirmId === item.category_id}
                       onConfirm={() => handleOk(item.category_id)}
                       okButtonProps={{

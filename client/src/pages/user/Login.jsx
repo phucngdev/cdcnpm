@@ -54,6 +54,10 @@ const Login = () => {
         navigate("/");
       } else if (response.payload.response.status === 401) {
         message.error("Tài khoản hoặc mật khẩu không đúng");
+      } else if (response.payload.response.status === 403) {
+        message.error(
+          "Tài khoản của bạn đã bị khoá, vui lòng liên hệ với chúng tôi qua email để được hỗ trợ"
+        );
       }
       setPending(false);
       // resetForm();

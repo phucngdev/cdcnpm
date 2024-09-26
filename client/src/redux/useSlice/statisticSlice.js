@@ -4,7 +4,7 @@ import { dashboard } from "../../services/statistics.service";
 const statisticSlice = createSlice({
   name: "statistics",
   initialState: {
-    data: [],
+    data: {},
     status: "idle",
     error: null,
   },
