@@ -30,5 +30,10 @@ productRoutes.put(
   productController.updateProduct
 );
 productRoutes.get("/search", productController.searchProduct);
+productRoutes.put(
+  "/update-status/:id",
+  verifyToken.verifyTokenHandleAdmin,
+  productController.updateStatusProduct
+);
 
 module.exports = { productRoutes };

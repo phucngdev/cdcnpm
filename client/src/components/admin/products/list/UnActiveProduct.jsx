@@ -67,7 +67,11 @@ const UnActiveProduct = ({ products, categories }) => {
       </div>
       {listProduct?.length > 0 ? (
         listProduct.map((product, index) => (
-          <ItemProduct key={index} product={product} />
+          <ItemProduct
+            key={index}
+            product={product}
+            setListProduct={setListProduct}
+          />
         ))
       ) : (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />

@@ -76,3 +76,15 @@ export const createProduct = createAsyncThunk(
     }
   }
 );
+
+export const updateActiveProduct = createAsyncThunk(
+  "create/product",
+  async ({ id, data }) => {
+    try {
+      const response = await BaseUrl.put(`product/update-status/${id}`, data);
+      return response;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);

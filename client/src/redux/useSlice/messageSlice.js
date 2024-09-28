@@ -8,7 +8,12 @@ const messageSlice = createSlice({
   name: "message",
   initialState: {
     data: [],
-    dataEdit: null,
+    dataEdit: {
+      status: null,
+      user: null,
+      message: [],
+      isScroll: false,
+    },
     status: "idle",
     error: null,
   },
@@ -30,7 +35,15 @@ const messageSlice = createSlice({
       })
       .addCase(getMessageUserChat.fulfilled, (state, action) => {
         state.status = "Successfully!";
-        state.dataEdit = action.payload;
+        if (action.payload.isScroll) {
+          state.dataEdit.message = [
+            ...action.payload.message,
+            ...state.dataEdit.message,
+          ];
+          state.dataEdit.user = action.payload.user;
+        } else {
+          state.dataEdit = action.payload;
+        }
       })
       .addCase(getMessageUserChat.rejected, (state, action) => {
         state.status = "Failed!";

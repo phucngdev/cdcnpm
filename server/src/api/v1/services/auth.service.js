@@ -102,6 +102,7 @@ module.exports.loginService = async (body) => {
         username: result.username,
         email: result.email,
         avatar: result.avatar,
+        room_id: result.room_id,
       },
     };
   } catch (error) {

@@ -1,8 +1,11 @@
 const pool = require("../../../config/database");
 
-module.exports.getAllUserService = async () => {
+module.exports.getAllUserService = async (admin_id) => {
   try {
-    const [users] = await pool.execute("SELECT * FROM users");
+    const [users] = await pool.execute(
+      "SELECT * FROM users WHERE user_id != ?",
+      [admin_id]
+    );
     return users;
   } catch (error) {
     return { status: 500, message: error.message };

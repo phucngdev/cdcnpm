@@ -78,3 +78,15 @@ module.exports.searchProduct = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+module.exports.updateStatusProduct = async (req, res) => {
+  try {
+    const result = await productService.updateStatusProductService(
+      req.params.id,
+      req.body.status
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};

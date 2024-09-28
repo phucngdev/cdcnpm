@@ -16,9 +16,23 @@ export const getAllUserChat = createAsyncThunk(
 
 export const getMessageUserChat = createAsyncThunk(
   "admin/get-message-:id/user-chat",
-  async (id) => {
+  async ({ id, created_at }) => {
     try {
-      const response = await BaseUrl.get(`message/${id}`);
+      const response = await BaseUrl.get(`message/${id}/${created_at}`);
+      return response.data;
+    } catch (error) {
+      message.error("Không thể tải tin nhắn thành viên chat");
+    }
+  }
+);
+
+export const sendMessage = createAsyncThunk(
+  "send-message-:rooom_id",
+  async ({ id, data }) => {
+    try {
+      console.log(data);
+
+      const response = await BaseUrl.post(`message/${id}`, data);
       return response.data;
     } catch (error) {
       message.error("Không thể tải tin nhắn thành viên chat");

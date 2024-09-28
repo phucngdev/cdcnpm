@@ -7,12 +7,7 @@ import {
 import { Input, Tooltip } from "antd";
 import React from "react";
 
-const BottomInput = ({ content, setContent }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setContent("");
-  };
-
+const BottomInput = ({ content, setContent, handleSubmit, handleTyping }) => {
   return (
     <>
       <form
@@ -23,7 +18,10 @@ const BottomInput = ({ content, setContent }) => {
           className=" text-gray-500 py-2 rounded-full "
           placeholder="Message..."
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => {
+            setContent(e.target.value);
+            handleTyping();
+          }}
           prefix={<SmileOutlined className="text-gray-500 text-xl" />}
           suffix={
             content == "" ? (

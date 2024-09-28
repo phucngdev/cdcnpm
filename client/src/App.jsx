@@ -31,6 +31,7 @@ import OrderHistory from "./pages/user/OrderHistory";
 import Chat from "./pages/admin/Chat";
 import ChatBox from "./pages/admin/ChatBox";
 import IndexBoxChat from "./components/admin/chat/IndexBoxChat";
+import ImportProduct from "./pages/admin/ImportProduct";
 
 function App() {
   const location = useLocation();
@@ -78,6 +79,7 @@ function App() {
           <Route path="san-pham" element={<Products />} />
           <Route path="san-pham/:id" element={<Products />} />
           <Route path="tao-moi-san-pham" element={<CreateProduct />} />
+          <Route path="nhap-hang/:id" element={<ImportProduct />} />
           <Route path="chinh-sua-san-pham/:id" element={<EditProduct />} />
           <Route path="quan-ly-danh-muc" element={<CategoryManagement />} />
           <Route path="tai-khoan" element={<User />} />

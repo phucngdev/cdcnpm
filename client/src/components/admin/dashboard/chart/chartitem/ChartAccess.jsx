@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
 const labels = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
-const datapoints = [120, 125, 105, 60, 60, 120, 100, 180, 120, 125, 105, 110];
+const datapoints = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10];
 const data = {
   labels: labels,
   datasets: [

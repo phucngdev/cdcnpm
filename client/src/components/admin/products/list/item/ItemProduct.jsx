@@ -2,8 +2,10 @@ import { Button, message, Popconfirm, Tooltip } from "antd";
 import React, { useMemo, useState } from "react";
 import {
   EditOutlined,
+  ImportOutlined,
   QuestionCircleOutlined,
   StopOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import formatPrice from "../../../../../utils/formatPrice";
 import moment from "moment";
@@ -12,10 +14,11 @@ import { useDispatch } from "react-redux";
 import {
   deleteProduct,
   getAllProduct,
+  updateActiveProduct,
 } from "../../../../../services/product.service";
 import Pending from "../../../../user/animation/Pending";
 
-const ItemProduct = ({ product }) => {
+const ItemProduct = ({ product, setListProduct }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pending, setPending] = useState(false);
@@ -34,6 +37,29 @@ const ItemProduct = ({ product }) => {
       const response = await dispatch(deleteProduct(id));
       if (response.payload.status === 200) {
         message.success("Xoá thành công");
+        setListProduct((list) => list.filter((p) => p.product_id !== id));
+        await dispatch(getAllProduct());
+      }
+      setPending(false);
+    } catch (error) {
+      setPending(false);
+      console.error(error);
+      message.error(error.message);
+    }
+  };
+
+  const handleUpdateActive = async (id) => {
+    try {
+      setPending(true);
+      const response = await dispatch(
+        updateActiveProduct({
+          id: id,
+          data: { status: product.status === 0 ? 1 : 0 },
+        })
+      );
+      if (response.payload.status === 200) {
+        message.success("Update thành công");
+        setListProduct((list) => list.filter((p) => p.product_id !== id));
         await dispatch(getAllProduct());
       }
       setPending(false);
@@ -66,34 +92,87 @@ const ItemProduct = ({ product }) => {
           <div className="w-[10%]">
             {moment(product?.created_at).format("DD-MM-YYYY")}
           </div>
-          <div className="flex-1 flex justify-center items-center gap-3">
-            <Tooltip title="Chỉnh sửa" color="blue">
-              <Button
-                onClick={() =>
-                  navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
-                }
-                className="flex items-center justify-center"
-              >
-                <EditOutlined />
-              </Button>
-            </Tooltip>
-            <Tooltip title="Ngưng bán" color="red">
-              <Popconfirm
-                title="Ngưng bán sản phẩm"
-                description="Bạn chắc chắn muốn ngưng bán sản phẩm?"
-                placement="left"
-                onConfirm={() => handleDelete(product.product_id)}
-                okType="danger"
-                icon={<QuestionCircleOutlined className="text-red-600" />}
-              >
+          <div className="flex-1">
+            <div className="flex justify-center items-center gap-3">
+              <Tooltip title="Nhập hàng" color="green">
                 <Button
-                  danger
-                  className=" text-white flex items-center justify-center"
+                  onClick={() =>
+                    navigate(`/admin/nhap-hang/${product.product_id}`)
+                  }
+                  className="flex items-center justify-center"
                 >
-                  <StopOutlined />
+                  <ImportOutlined />
                 </Button>
-              </Popconfirm>
-            </Tooltip>
+              </Tooltip>
+              <Tooltip title="Chỉnh sửa thông tin" color="blue">
+                <Button
+                  onClick={() =>
+                    navigate(`/admin/chinh-sua-san-pham/${product.product_id}`)
+                  }
+                  className="flex items-center justify-center"
+                >
+                  <EditOutlined />
+                </Button>
+              </Tooltip>
+            </div>
+            <div className="flex justify-center items-center gap-3 mt-3">
+              {product.status === 1 ? (
+                <Tooltip title="Ngưng bán" color="red">
+                  <Popconfirm
+                    title="Ngưng bán sản phẩm"
+                    description="Bạn chắc chắn muốn ngưng bán sản phẩm?"
+                    placement="left"
+                    onConfirm={() => handleUpdateActive(product.product_id)}
+                    okType="danger"
+                    icon={<QuestionCircleOutlined className="text-red-600" />}
+                  >
+                    <Button
+                      danger
+                      className=" text-white flex items-center justify-center"
+                    >
+                      <StopOutlined />
+                    </Button>
+                  </Popconfirm>
+                </Tooltip>
+              ) : (
+                <>
+                  <Tooltip title="Mở bán" color="red">
+                    <Popconfirm
+                      title="Mở bán sản phẩm"
+                      description="Bạn chắc chắn muốn mở bán sản phẩm?"
+                      placement="left"
+                      onConfirm={() => handleUpdateActive(product.product_id)}
+                      okType="danger"
+                      icon={<QuestionCircleOutlined className="text-red-600" />}
+                    >
+                      <Button
+                        danger
+                        className=" text-white flex items-center justify-center"
+                      >
+                        <UploadOutlined />
+                      </Button>
+                    </Popconfirm>
+                  </Tooltip>
+                  <Tooltip title="Xoá" color="red">
+                    <Popconfirm
+                      title="Xoá sản phẩm"
+                      description="Bạn chắc chắn muốn xoá sản phẩm?"
+                      placement="left"
+                      onConfirm={() => handleDelete(product.product_id)}
+                      okType="danger"
+                      icon={<QuestionCircleOutlined className="text-red-600" />}
+                    >
+                      <Button
+                        danger
+                        className=" text-white flex items-center justify-center"
+                      >
+                        <StopOutlined />
+                      </Button>
+                    </Popconfirm>
+                  </Tooltip>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

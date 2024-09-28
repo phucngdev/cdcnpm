@@ -24,7 +24,6 @@ const SideBar = () => {
   }, []);
 
   const list_user = useSelector((state) => state.message.data);
-  console.log(list_user);
 
   return (
     <>
@@ -50,7 +49,7 @@ const SideBar = () => {
                 key={u.user_id}
                 className="flex items-center p-2 rounded-lg cursor-pointer hover:bg-gray-100"
                 onClick={() =>
-                  navigate(`/admin/cham-soc-khach-hang/${u.user_id}`)
+                  navigate(`/admin/cham-soc-khach-hang/${u.room_id}`)
                 }
               >
                 {user?.avatar ? (

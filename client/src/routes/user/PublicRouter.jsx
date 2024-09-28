@@ -48,7 +48,7 @@ const PublicRouter = () => {
     <>
       <Header user={user} setUser={setUser} />
       <Outlet context={user} />
-      <MessageButton user={user} />
+      {user && <MessageButton user={user} />}
       <Footer />
     </>
   );

@@ -441,3 +441,15 @@ module.exports.searchProductService = async (q) => {
     return { status: 500, message: "Error searching products" };
   }
 };
+
+module.exports.updateStatusProductService = async (id, status) => {
+  try {
+    await pool.execute("UPDATE products SET status = ? WHERE product_id = ?", [
+      status,
+      id,
+    ]);
+    return { status: 200, message: "Product status updated successfully" };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};

@@ -1,18 +1,17 @@
 const http = require("http");
 const app = require("./app");
 const server = http.createServer(app);
-const socket = require("./config/socket");
-const { Server } = require("socket.io");
+const socketService = require("./api/v1/services/socket.service");
 
 require("dotenv").config();
-const io = new Server(server, {
+const socketIo = require("socket.io")(server, {
   cors: {
     origin: "*",
   },
 });
-// global._io = socketIo;
+global._io = socketIo;
 
-io.on("connection", socket.socketConnect());
+global._io.on("connection", socketService.socketConnect());
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
