@@ -90,3 +90,38 @@ module.exports.updateStatusProduct = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+module.exports.getOneProductImport = async (req, res) => {
+  try {
+    const result = await productService.getOneProductImportService(
+      req.params.id
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports.importQuantityProduct = async (req, res) => {
+  try {
+    const result = await productService.importQuantityProductService(
+      req.params.id,
+      req.body
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports.addNewSize = async (req, res) => {
+  try {
+    const result = await productService.addNewSizeService(
+      req.params.id,
+      req.body
+    );
+    return res.status(201).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};

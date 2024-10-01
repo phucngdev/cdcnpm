@@ -453,3 +453,117 @@ module.exports.updateStatusProductService = async (id, status) => {
     return { status: 500, message: error.message };
   }
 };
+
+module.exports.getOneProductImportService = async (id) => {
+  try {
+    const [[product]] = await pool.execute(
+      `SELECT 
+        p.product_id, 
+        p.product_name,
+        p.status
+      FROM products p
+      WHERE p.product_id = ?`,
+      [id]
+    );
+
+    if (!product) {
+      return { status: 404, message: "Product not found" };
+    }
+
+    const [colorSizes] = await pool.execute(
+      `
+      SELECT 
+        cs.color_size_id, 
+        cl.color_name, 
+        cl.image, 
+        cl.color_id,
+        s.size_name, 
+        s.size_id,
+        s.quantity
+        FROM color_size cs
+        JOIN colors cl ON cs.color_id = cl.color_id
+        JOIN sizes s ON cs.size_id = s.size_id
+        WHERE cs.product_id = ?
+        `,
+      [id]
+    );
+
+    const options = Object.values(
+      colorSizes.reduce((acc, cs) => {
+        if (!acc[cs.color_name]) {
+          acc[cs.color_name] = {
+            color_size_id: cs.color_size_id,
+            color_name: cs.color_name,
+            color_id: cs.color_id,
+            image: cs.image,
+            sizes: [],
+          };
+        }
+
+        acc[cs.color_name].sizes.push({
+          size_id: cs.size_id,
+          size_name: cs.size_name,
+          quantity: cs.quantity,
+        });
+        return acc;
+      }, {})
+    );
+
+    const result = {
+      product_id: product.product_id,
+      product_name: product.product_name,
+      status: product.status,
+      options: options,
+    };
+    return result;
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};
+
+module.exports.importQuantityProductService = async (id, body) => {
+  try {
+    for (const size of body) {
+      if (size.quantity_change && size.insert_quantity) {
+        await pool.execute(`UPDATE sizes SET quantity = ? WHERE size_id = ?`, [
+          size.quantity_change + size.insert_quantity,
+          size.size_id,
+        ]);
+      } else if (size.quantity_change && !size.insert_quantity) {
+        await pool.execute(`UPDATE sizes SET quantity = ? WHERE size_id = ?`, [
+          size.quantity_change,
+          size.size_id,
+        ]);
+      } else if (size.insert_quantity && !size.quantity_change) {
+        await pool.execute(
+          `UPDATE sizes SET quantity = quantity + ? WHERE size_id = ?`,
+          [size.insert_quantity, size.size_id]
+        );
+      }
+    }
+
+    return { status: 200, message: "Quantity imported successfully" };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};
+
+module.exports.addNewSizeService = async (id, body) => {
+  try {
+    const sizeId = uuidv4();
+    await Promise.allSettled([
+      pool.execute(
+        `INSERT INTO sizes (size_id, size_name, quantity) VALUES (?, ?, ?)`,
+        [sizeId, body.size_name, body.quantity]
+      ),
+      pool.execute(
+        `INSERT INTO color_size (color_size_id, product_id, color_id, size_id) VALUES (?, ?, ?, ?)`,
+        [uuidv4(), id, body.color_id, sizeId]
+      ),
+    ]);
+
+    return { status: 201, message: "New size added successfully" };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};

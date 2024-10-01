@@ -3,6 +3,7 @@ import {
   getAllProduct,
   getOneProduct,
   getOneProductForUpdate,
+  getOneProductImport,
   searchProduct,
 } from "../../services/product.service";
 
@@ -58,6 +59,17 @@ const productSlice = createSlice({
         state.dataSearch = action.payload;
       })
       .addCase(searchProduct.rejected, (state, action) => {
+        state.status = "Failed!";
+        state.error = action.error.message;
+      })
+      .addCase(getOneProductImport.pending, (state) => {
+        state.status = "Pending!";
+      })
+      .addCase(getOneProductImport.fulfilled, (state, action) => {
+        state.status = "Successfully!";
+        state.dataEdit = action.payload;
+      })
+      .addCase(getOneProductImport.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       });

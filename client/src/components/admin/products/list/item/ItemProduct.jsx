@@ -1,6 +1,7 @@
 import { Button, message, Popconfirm, Tooltip } from "antd";
 import React, { useMemo, useState } from "react";
 import {
+  DeleteOutlined,
   EditOutlined,
   ImportOutlined,
   QuestionCircleOutlined,
@@ -37,8 +38,7 @@ const ItemProduct = ({ product, setListProduct }) => {
       const response = await dispatch(deleteProduct(id));
       if (response.payload.status === 200) {
         message.success("Xoá thành công");
-        setListProduct((list) => list.filter((p) => p.product_id !== id));
-        await dispatch(getAllProduct());
+        await dispatch(getAllProduct({ page: 0, limit: 0 }));
       }
       setPending(false);
     } catch (error) {
@@ -59,13 +59,11 @@ const ItemProduct = ({ product, setListProduct }) => {
       );
       if (response.payload.status === 200) {
         message.success("Update thành công");
-        setListProduct((list) => list.filter((p) => p.product_id !== id));
-        await dispatch(getAllProduct());
+        await dispatch(getAllProduct({ page: 0, limit: 0 }));
       }
       setPending(false);
     } catch (error) {
       setPending(false);
-      console.error(error);
       message.error(error.message);
     }
   };
@@ -166,7 +164,7 @@ const ItemProduct = ({ product, setListProduct }) => {
                         danger
                         className=" text-white flex items-center justify-center"
                       >
-                        <StopOutlined />
+                        <DeleteOutlined />
                       </Button>
                     </Popconfirm>
                   </Tooltip>

@@ -2,14 +2,17 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import BaseUrl from "../apis/axios";
 import { message } from "antd";
 
-export const getOneProduct = createAsyncThunk("getOne/product", async (id) => {
-  try {
-    const response = await BaseUrl.get(`product/detail/${id}`);
-    return response.data;
-  } catch (error) {
-    message.error("Lỗi server");
+export const getOneProduct = createAsyncThunk(
+  "getOne/product/:id",
+  async (id) => {
+    try {
+      const response = await BaseUrl.get(`product/detail/${id}`);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
   }
-});
+);
 
 export const getOneProductForUpdate = createAsyncThunk(
   "getOne/product/update",
@@ -47,23 +50,29 @@ export const updateProduct = createAsyncThunk(
   }
 );
 
-export const searchProduct = createAsyncThunk("search", async (q) => {
-  try {
-    const response = await BaseUrl.get(`product/search?q=${q}`);
-    return response.data;
-  } catch (error) {
-    message.error("Lỗi server");
+export const searchProduct = createAsyncThunk(
+  "search/product/query",
+  async (q) => {
+    try {
+      const response = await BaseUrl.get(`product/search?q=${q}`);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
   }
-});
+);
 
-export const deleteProduct = createAsyncThunk("delete/product", async (id) => {
-  try {
-    const response = await BaseUrl.delete(`product/delete/${id}`);
-    return response;
-  } catch (error) {
-    message.error("Lỗi server");
+export const deleteProduct = createAsyncThunk(
+  "delete/product/:id",
+  async (id) => {
+    try {
+      const response = await BaseUrl.delete(`product/delete/${id}`);
+      return response;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
   }
-});
+);
 
 export const createProduct = createAsyncThunk(
   "create/product",
@@ -78,11 +87,47 @@ export const createProduct = createAsyncThunk(
 );
 
 export const updateActiveProduct = createAsyncThunk(
-  "create/product",
+  "update/status/product/:id",
   async ({ id, data }) => {
     try {
       const response = await BaseUrl.put(`product/update-status/${id}`, data);
       return response;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);
+
+export const getOneProductImport = createAsyncThunk(
+  "getOne/product/import/:id",
+  async (id) => {
+    try {
+      const response = await BaseUrl.get(`product/product-import/${id}`);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);
+
+export const importQuantityProduct = createAsyncThunk(
+  "post/product/import/:id",
+  async ({ id, data }) => {
+    try {
+      const response = await BaseUrl.post(`product/product-import/${id}`, data);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);
+
+export const addNewSize = createAsyncThunk(
+  "post/product/new-size/:id",
+  async ({ id, data }) => {
+    try {
+      const response = await BaseUrl.post(`product/new-size/${id}`, data);
+      return response.data;
     } catch (error) {
       message.error("Lỗi server");
     }

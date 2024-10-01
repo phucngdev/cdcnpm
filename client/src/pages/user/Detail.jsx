@@ -83,7 +83,11 @@ const Detail = () => {
       message.error("Vui lòng đăng nhập");
       return;
     }
-    console.log(quantity);
+
+    if (product.status === 0) {
+      message.error("Sản phẩm đã SOLD OUT");
+      return;
+    }
 
     if (quantity === 0) {
       message.error("Sản phẩm hết hàng");
@@ -191,6 +195,7 @@ const Detail = () => {
                   key={s.size_id}
                   onClick={() => {
                     setColorSize({ ...colorSize, size_id: s.size_id });
+                    setQuantity(s.quantity > 1 ? 1 : 0);
                   }}
                   className={`flex justify-center items-center w-8 h-8 border ${
                     s.size_id === colorSize.size_id

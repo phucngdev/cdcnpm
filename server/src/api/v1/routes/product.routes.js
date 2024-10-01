@@ -35,5 +35,16 @@ productRoutes.put(
   verifyToken.verifyTokenHandleAdmin,
   productController.updateStatusProduct
 );
+productRoutes.get("/product-import/:id", productController.getOneProductImport);
+productRoutes.post(
+  "/product-import/:id",
+  verifyToken.verifyTokenHandleAdmin,
+  productController.importQuantityProduct
+);
+productRoutes.post(
+  "/new-size/:id",
+  verifyToken.verifyTokenHandleAdmin,
+  productController.addNewSize
+);
 
 module.exports = { productRoutes };

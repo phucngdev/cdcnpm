@@ -7,14 +7,13 @@ module.exports.addToCartService = async (id, body) => {
       "SELECT * FROM users WHERE user_id = ?",
       [id]
     );
-    if (!user) {
-      return { status: 404, message: "User not found" };
-    }
+    console.log(body);
 
     const [[item]] = await pool.execute(
       "SELECT * FROM cart_item WHERE product_id = ? AND color_size_id = ?",
       [body.product_id, body.color_size_id]
     );
+    console.log("item ", item);
 
     // kiểm tra số lượng trong giỏ hàng có vượt quá số lượng sẵn có kko
     const [[{ quantity }]] = await pool.query(
@@ -25,6 +24,7 @@ module.exports.addToCartService = async (id, body) => {
       WHERE size_id = (SELECT size_id FROM color_size WHERE color_size_id = ?)`,
       [body.color_size_id]
     );
+    console.log("quantity ", quantity);
 
     if (item) {
       if (item.quantity >= quantity) {
@@ -69,27 +69,25 @@ module.exports.getCartByIdService = async (id) => {
       [id]
     );
 
-    if (!user) {
-      return { status: 404, message: "User not found" };
-    }
-
     const [cartRows] = await pool.execute(
       `SELECT 
-            c.cart_id, c.created_at AS cart_created_at, c.update_at AS cart_updated_at,
-            ci.cart_item_id, ci.quantity, ci.created_at AS item_created_at, ci.update_at AS item_updated_at,
+            c.cart_id,
+            ci.cart_item_id, ci.quantity,
             p.product_id, p.product_name, p.thumbnail, p.price,
             cs.color_size_id,
-            clr.color_name, 
-            sz.size_name, sz.quantity AS quantity_size
+            cl.color_name, 
+            s.size_name, s.quantity AS quantity_size
         FROM carts c
         JOIN cart_item ci ON c.cart_id = ci.cart_id
         JOIN products p ON ci.product_id = p.product_id
         JOIN color_size cs ON ci.color_size_id = cs.color_size_id
-        JOIN colors clr ON cs.color_id = clr.color_id
-        JOIN sizes sz ON cs.size_id = sz.size_id
+        JOIN colors cl ON cs.color_id = cl.color_id
+        JOIN sizes s ON cs.size_id = s.size_id
         WHERE c.cart_id = ?`,
       [user.cart_id]
     );
+
+    console.log(cartRows);
 
     if (cartRows.length === 0) {
       return {
@@ -99,8 +97,6 @@ module.exports.getCartByIdService = async (id) => {
 
     const cart = {
       cart_id: cartRows[0].cart_id,
-      created_at: cartRows[0].cart_created_at,
-      updated_at: cartRows[0].cart_updated_at,
       items: cartRows.map((row) => ({
         cart_item_id: row.cart_item_id,
         quantity: row.quantity,
@@ -116,8 +112,6 @@ module.exports.getCartByIdService = async (id) => {
           size_name: row.size_name,
           quantity: row.quantity_size,
         },
-        created_at: row.item_created_at,
-        updated_at: row.item_updated_at,
       })),
     };
 
