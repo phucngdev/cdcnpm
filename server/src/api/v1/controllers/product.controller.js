@@ -125,3 +125,12 @@ module.exports.addNewSize = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+module.exports.deleteSize = async (req, res) => {
+  try {
+    const result = await productService.deleteSizeService(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};

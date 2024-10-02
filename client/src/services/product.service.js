@@ -66,7 +66,7 @@ export const deleteProduct = createAsyncThunk(
   "delete/product/:id",
   async (id) => {
     try {
-      const response = await BaseUrl.delete(`product/delete/${id}`);
+      const response = await BaseUrl.delete(`product/delete/product/${id}`);
       return response;
     } catch (error) {
       message.error("Lỗi server");

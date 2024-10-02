@@ -567,3 +567,21 @@ module.exports.addNewSizeService = async (id, body) => {
     return { status: 500, message: error.message };
   }
 };
+
+module.exports.deleteSizeService = async (id) => {
+  try {
+    const [size] = await pool.execute(
+      `SELECT size_id FROM sizes WHERE size_id = ?`,
+      [id]
+    );
+
+    if (!size) {
+      return { status: 404, message: "Size not found" };
+    }
+
+    await pool.execute(`DELETE FROM sizes WHERE size_id = ?`, [id]);
+    return { status: 200, message: "Size deleted successfully" };
+  } catch (error) {
+    return { status: 500, message: error.message };
+  }
+};

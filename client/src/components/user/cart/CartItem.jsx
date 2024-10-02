@@ -1,7 +1,7 @@
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import React from "react";
 import formatPrice from "../../../utils/formatPrice";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useDispatch } from "react-redux";
 import { getCart, updateCart } from "../../../services/cart.service";
 import { useCookie } from "../../../hooks/useCookie";
@@ -10,6 +10,10 @@ const CartItem = ({ item, showModal, cart_id }) => {
   const dispatch = useDispatch();
   const user = useCookie("user_info", false);
   const handleChange = async (status) => {
+    if (status === 1 && item.quantity === item.color_size.quantity) {
+      message.error("Sản phẩm đã hết hàng");
+      return;
+    }
     const data = {
       quantity: status === 1 ? item.quantity + 1 : item.quantity - 1,
       cart_item_id: item.cart_item_id,

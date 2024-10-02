@@ -4,14 +4,13 @@ const pool = require("../../../config/database");
 module.exports.verifyEmailWithGoogle = async (req, res, next) => {
   try {
     const { email } = req.body;
-    const apiKey = process.env.API_KEY_HUNTER;
 
     const response = await axios.get(
       `https://api.hunter.io/v2/email-verifier`,
       {
         params: {
           email: email,
-          api_key: apiKey,
+          api_key: process.env.API_KEY_HUNTER,
         },
       }
     );
