@@ -14,19 +14,17 @@ const { messageRoutes } = require("./api/v1/routes/message.routes");
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://e677-42-114-170-105.ngrok-free.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(morgan("common"));
 app.use(express.json());
 app.use(cookieParser());
