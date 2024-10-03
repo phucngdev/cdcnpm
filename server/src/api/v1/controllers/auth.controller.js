@@ -14,13 +14,13 @@ module.exports.login = async (req, res) => {
     const result = await authService.loginService(req.body);
     if (result.status === 200) {
       res
-        .cookie("accessToken", JSON.stringify(result.accessToken), {
+        .cookie("accessToken", result.accessToken, {
           httpOnly: true,
           expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
           secure: false,
           sameSite: "none",
         })
-        .cookie("refreshToken", JSON.stringify(result.refreshToken), {
+        .cookie("refreshToken", result.refreshToken, {
           httpOnly: true,
           expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
           secure: false,
