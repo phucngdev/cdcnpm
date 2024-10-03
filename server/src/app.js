@@ -14,7 +14,11 @@ const { messageRoutes } = require("./api/v1/routes/message.routes");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(
