@@ -15,21 +15,21 @@ module.exports.login = async (req, res) => {
     if (result.status === 200) {
       res
         .cookie("accessToken", result.accessToken, {
-          httpOnly: true,
+          httpOnly: true, // client ko lây ra đc
           expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
-          secure: true,
+          secure: true, // true nêu https
           sameSite: "none",
         })
         .cookie("refreshToken", result.refreshToken, {
           httpOnly: true,
           expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
-          secure: false,
+          secure: true,
           sameSite: "none",
         })
         .cookie("user_info", JSON.stringify(result.user_info), {
           httpOnly: false,
           expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
-          secure: false,
+          secure: true,
           sameSite: "none",
         });
     }
