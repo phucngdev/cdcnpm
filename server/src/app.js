@@ -14,6 +14,7 @@ const { messageRoutes } = require("./api/v1/routes/message.routes");
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(
@@ -22,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     credentials: true,
 //   })
 // );
-app.use(cors());
 app.use(morgan("common"));
 app.use(express.json());
 app.use(cookieParser());
