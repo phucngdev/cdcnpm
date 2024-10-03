@@ -36,6 +36,8 @@ npm i
 
 tạo 1 csdl mới trên phpmyadmin để tên trùng với DB_DATABASE trong .env
 
+xem port của xampp chạy cổng nào: 3306 hoặc 3307 xong chỉnh trong .env DB_PORT
+
 # chạy dự án
 
 bật terminal của folder client:
@@ -50,4 +52,14 @@ npm start
 
 link test api: http://localhost:3000/api/v1/category
 
-test ra mảng rỗng là ok
+test ra [] là ok
+
+# cách lấy code mới
+
+bật terminal của folder tổng
+
+git pull
+
+# trường hợp pull lỗi do có thay đổi ở local
+
+chọn source control => click chuột phải vào Changes => click Discard all changes => sau đó git pull lại

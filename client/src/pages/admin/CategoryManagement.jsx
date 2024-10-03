@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, ShopOutlined } from "@ant-design/icons";
-import { Button, message, Popconfirm, Space, Table } from "antd";
+import { Button, message, Popconfirm, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UpdateCategory from "../../components/admin/category/UpdateCategory";
@@ -91,14 +91,16 @@ const CategoryManagement = () => {
                 <td>{item.product_count}</td>
                 <td>
                   <Space size="middle">
-                    <Button
-                      onClick={() => {
-                        setIsModalOpenUpdateCategory(true);
-                        setCategory(item);
-                      }}
-                    >
-                      <EditOutlined />
-                    </Button>
+                    <Tooltip title="Chỉnh sửa">
+                      <Button
+                        onClick={() => {
+                          setIsModalOpenUpdateCategory(true);
+                          setCategory(item);
+                        }}
+                      >
+                        <EditOutlined />
+                      </Button>
+                    </Tooltip>
                     <Popconfirm
                       title="Xoá danh mục"
                       description="Bạn chắc chắn muốn xoá danh mục"
@@ -109,12 +111,14 @@ const CategoryManagement = () => {
                       }}
                       onCancel={handleCancel}
                     >
-                      <Button
-                        danger
-                        onClick={() => showPopconfirm(item.category_id)}
-                      >
-                        <DeleteOutlined />
-                      </Button>
+                      <Tooltip title="Xoá" color="red">
+                        <Button
+                          danger
+                          onClick={() => showPopconfirm(item.category_id)}
+                        >
+                          <DeleteOutlined />
+                        </Button>
+                      </Tooltip>
                     </Popconfirm>
                   </Space>
                 </td>
