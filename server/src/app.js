@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     // origin: "http://localhost:5173",
-    origin: "https://teelab-v1.vercel.app/",
+    origin: "*",
     credentials: true,
   })
 );
