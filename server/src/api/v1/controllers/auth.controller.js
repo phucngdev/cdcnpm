@@ -18,16 +18,19 @@ module.exports.login = async (req, res) => {
           httpOnly: true,
           expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
           secure: false,
+          sameSite: "none",
         })
         .cookie("refreshToken", JSON.stringify(result.refreshToken), {
           httpOnly: true,
           expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
           secure: false,
+          sameSite: "none",
         })
         .cookie("user_info", JSON.stringify(result.user_info), {
           httpOnly: false,
           expires: new Date(Date.now() + 6 * 60 * 60 * 1000),
           secure: false,
+          sameSite: "none",
         });
     }
     return res.status(result.status).json(result);
