@@ -18,11 +18,15 @@ git: version 2.33.0
 
 # clone dự án về máy
 
+tạo 1 folder để chứa src
+
+mở vscode với folder đã tạo
+
+bật terminal của folder
+
 git clone https://github.com/phucngdev/cdcnpm.git
 
 # tải các package
-
-mở vscode
 
 bật terminal của folder client:
 
