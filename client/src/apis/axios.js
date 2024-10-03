@@ -4,7 +4,8 @@ import Cookies from "js-cookie";
 axios.defaults.withCredentials = true;
 
 const BaseUrl = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  // baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://e677-42-114-170-105.ngrok-free.app/api/v1/",
   headers: {
     "Content-Type": "application/json",
   },
