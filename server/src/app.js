@@ -18,10 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://e677-42-114-170-105.ngrok-free.app",
-    ],
+    origin: ["http://localhost:5173", "https://teelab-v1.vercel.app/"],
     credentials: true,
   })
 );
