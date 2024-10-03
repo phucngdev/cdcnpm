@@ -3,7 +3,7 @@ import { Breadcrumb, Button } from "antd";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const Header = ({ product_name, setModalOpen }) => {
+const Header = ({ product_name, setModalSaveOpen, setModalNewOpen }) => {
   const navigate = useNavigate();
 
   return (
@@ -31,9 +31,14 @@ const Header = ({ product_name, setModalOpen }) => {
             />
           </h3>
         </div>
-        <Button type="primary" onClick={() => setModalOpen(true)}>
-          Lưu thay đổi
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button type="default" onClick={() => setModalNewOpen(true)}>
+            Thêm màu mới
+          </Button>
+          <Button type="primary" onClick={() => setModalSaveOpen(true)}>
+            Lưu thay đổi
+          </Button>
+        </div>
       </header>
     </>
   );

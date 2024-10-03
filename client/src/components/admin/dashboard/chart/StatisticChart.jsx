@@ -12,7 +12,6 @@ const formatter = (value) => (
 
 const StatisticChart = () => {
   const dashboard_data = useSelector((state) => state.statistics.data);
-  console.log(dashboard_data);
 
   return (
     <>

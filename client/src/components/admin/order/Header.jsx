@@ -23,17 +23,19 @@ const Header = ({ page }) => {
 
   return (
     <>
-      <div className="flex justify-between items-center mb-5">
-        <h3 className="text-2xl font-bold">
-          <ShopOutlined /> Danh sách đơn hàng
-        </h3>
-        <Input className="w-1/5" placeholder="Tìm kiếm" />
-      </div>
-      <div className="flex gap-5 items-center mb-5">
-        <Button onClick={() => fetchData(-1)}>Tất cả đơn hàng</Button>
-        <Button onClick={() => fetchData(0)}>Đơn hàng mới</Button>
-        <Button onClick={() => fetchData(1)}>Đơn hàng đang vận chuyển</Button>
-        <Button onClick={() => fetchData(2)}>Đơn hàng hoàn thành</Button>
+      <div className="bg-white rounded-lg p-6 mb-4">
+        <div className="flex justify-between items-center mb-5">
+          <h3 className="text-2xl font-bold">
+            <ShopOutlined /> Danh sách đơn hàng
+          </h3>
+          <Input className="w-1/5" placeholder="Tìm kiếm" />
+        </div>
+        <div className="flex gap-5 items-center">
+          <Button onClick={() => fetchData(-1)}>Tất cả đơn hàng</Button>
+          <Button onClick={() => fetchData(0)}>Đơn hàng mới</Button>
+          <Button onClick={() => fetchData(1)}>Đơn hàng đang vận chuyển</Button>
+          <Button onClick={() => fetchData(2)}>Đơn hàng hoàn thành</Button>
+        </div>
       </div>
     </>
   );

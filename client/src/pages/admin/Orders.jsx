@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Header from "../../components/admin/order/Header";
 import OrderItem from "../../components/admin/order/OrderItem";
+import Overview from "../../components/admin/order/Overview";
 
 const Orders = () => {
   const [page, setPage] = useState({
@@ -15,6 +16,10 @@ const Orders = () => {
 
   return (
     <>
+      <Overview
+        totalNewOrder={orders?.totalNewOrder}
+        totalShiping={orders?.totalShiping}
+      />
       <Header page={page} />
       {orders.status === 200 && (
         <>

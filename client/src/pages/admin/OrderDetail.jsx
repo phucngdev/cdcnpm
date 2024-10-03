@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Steps, message } from "antd";
-import { useParams } from "react-router-dom";
+import { Breadcrumb, Button, Steps, message } from "antd";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getOneOrder, updateStatus } from "../../services/order.service";
 import formatPrice from "../../utils/formatPrice";
 import { formatTime } from "../../utils/formatTime";
 import Pending from "../../components/user/animation/Pending";
+import { ShopOutlined } from "@ant-design/icons";
 
 const steps = [
   {
@@ -28,12 +29,11 @@ const OrderDetail = () => {
 
   const fetchData = async () => {
     setPending(true);
-    const res = await dispatch(getOneOrder(id));
-    console.log(res);
-
-    if (res) {
-      setPending(false);
+    const response = await dispatch(getOneOrder(id));
+    if (response.payload.status !== 200) {
+      message.error("Không tải được đơn hàng, vui lòng thử lại");
     }
+    setPending(false);
   };
 
   useEffect(() => {
@@ -57,9 +57,22 @@ const OrderDetail = () => {
     <>
       {status === 200 && (
         <>
-          <div className="flex items-center gap-3">
-            <h3 className="text-2xl font-bold">
-              Order Details #{order.order_id}
+          <div className="flex items-center gap-3 mb-4">
+            <h3 className="text-2xl font-bold flex items-center gap-2">
+              <ShopOutlined />{" "}
+              <Breadcrumb
+                items={[
+                  {
+                    title: <Link to="/admin/don-hang">Đơn hàng</Link>,
+                  },
+                  {
+                    title: <Link to="">Chi tiết</Link>,
+                  },
+                  {
+                    title: <Link to="">{order?.order_id}</Link>,
+                  },
+                ]}
+              />
             </h3>
             <div>
               {order.status === "0" ? (

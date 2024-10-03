@@ -133,3 +133,15 @@ export const addNewSize = createAsyncThunk(
     }
   }
 );
+
+export const deleteSize = createAsyncThunk(
+  "delete/product/size/:id",
+  async (id) => {
+    try {
+      const response = await BaseUrl.delete(`product/delete/size/${id}`);
+      return response.data;
+    } catch (error) {
+      message.error("Lỗi server");
+    }
+  }
+);

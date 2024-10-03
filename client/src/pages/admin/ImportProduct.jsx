@@ -8,7 +8,8 @@ import Option from "../../components/admin/edit_product/import/Option";
 const ImportProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalSaveOpen, setModalSaveOpen] = useState(false);
+  const [modalNewOpen, setModalNewOpen] = useState(false);
 
   const fetchData = async () => {
     await dispatch(getOneProductImport(id));
@@ -19,20 +20,22 @@ const ImportProduct = () => {
   }, [id]);
 
   const product = useSelector((state) => state.product.dataEdit);
-  console.log(product);
 
   return (
     <>
       <Header
         product_name={product?.product_name}
-        setModalOpen={setModalOpen}
+        setModalSaveOpen={setModalSaveOpen}
+        setModalNewOpen={setModalNewOpen}
       />
       <Option
         product_id={product?.product_id}
         status={product?.status}
         options={product?.options}
-        modalOpen={modalOpen}
-        setModalOpen={setModalOpen}
+        modalSaveOpen={modalSaveOpen}
+        setModalSaveOpen={setModalSaveOpen}
+        setModalNewOpen={setModalNewOpen}
+        modalNewOpen={modalNewOpen}
       />
     </>
   );

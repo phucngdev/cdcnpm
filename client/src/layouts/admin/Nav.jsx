@@ -1,7 +1,11 @@
 import React from "react";
 import logo from "../../../public/logo.png";
 import { Link } from "react-router-dom";
-import { BarsOutlined } from "@ant-design/icons";
+import {
+  AuditOutlined,
+  BarsOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { Avatar } from "antd";
 import { useSelector } from "react-redux";
 
@@ -76,8 +80,16 @@ const Nav = ({ user }) => {
                   />
                 </svg>
               </button>
-              <div className="hidden lg:flex items-center">
-                <span className="text-base font-normal text-gray-500 mr-5">
+              <div className="hidden lg:flex items-center gap-3 text-gray-500">
+                <div className="flex items-center gap-2 cursor-pointer hover:text-gray-800">
+                  <AuditOutlined />
+                  <p>Góp ý</p>
+                </div>
+                <div className="flex items-center gap-2 px-3 border-x cursor-pointer hover:text-gray-800">
+                  <QuestionCircleOutlined />
+                  <p>Trợ giúp & hỗ trợ</p>
+                </div>
+                <span className="text-base font-normal">
                   {user?.username} - TeelabStudio
                 </span>
                 <div className="w-10 h-10">

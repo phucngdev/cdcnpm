@@ -1,15 +1,38 @@
-import { Button, Checkbox, Image, message, Modal } from "antd";
+import {
+  Button,
+  Checkbox,
+  Image,
+  Input,
+  message,
+  Modal,
+  Popconfirm,
+  Upload,
+} from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
   addNewSize,
+  deleteSize,
   getOneProductImport,
   importQuantityProduct,
   updateActiveProduct,
 } from "../../../../services/product.service";
+import {
+  CaretRightOutlined,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
-const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
+const Option = ({
+  product_id,
+  status,
+  options,
+  setModalSaveOpen,
+  modalSaveOpen,
+  modalNewOpen,
+  setModalNewOpen,
+}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [sizeChanges, setSizeChanges] = useState([]);
@@ -76,7 +99,7 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
   const handleSave = async () => {
     if (sizeChanges.length === 0) {
       message.warning("Vui lòng cung cấp thông tin");
-      setModalOpen(false);
+      setModalSaveOpen(false);
       return;
     }
     setPending(true);
@@ -99,11 +122,23 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
       message.error("Lưu thất bại");
     }
     setPending(false);
-    setModalOpen(false);
+    setModalSaveOpen(false);
   };
 
   const onChangeCheckBox = (e) => {
     setOpenSale(e.target.checked);
+  };
+
+  const handleDeleteSize = async (size_id) => {
+    setPending(true);
+    const response = await dispatch(deleteSize(size_id));
+    if (response.payload.status === 200) {
+      message.success("Xóa size thành công");
+      await dispatch(getOneProductImport(product_id));
+    } else {
+      message.error("Xóa size thất bại");
+    }
+    setPending(false);
   };
 
   return (
@@ -113,9 +148,9 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
         style={{
           top: 20,
         }}
-        open={modalOpen}
+        open={modalSaveOpen}
         onOk={() => handleSave()}
-        onCancel={() => setModalOpen(false)}
+        onCancel={() => setModalSaveOpen(false)}
       >
         <p className="py-2">Xác nhận lưu thông tin thay đổi</p>
         {status === 0 && (
@@ -159,6 +194,65 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
           </div>
         </div>
       </Modal>
+      <Modal
+        title="Thêm màu mới"
+        open={modalNewOpen}
+        onOk={() => setModalNewOpen(false)}
+        onCancel={() => setModalNewOpen(false)}
+      >
+        <div className="flex py-4">
+          <div className="w-1/2 flex flex-col gap-3 border-e pe-5">
+            <div className="">
+              <p>Tên màu</p>
+              <Input placeholder="ví dụ: Đỏ" className="mt-2" />
+            </div>
+            <div className="">
+              <p>Ảnh</p>
+              <Upload
+                name="thumbnail"
+                listType="picture-card"
+                showUploadList={false}
+                className="mt-2"
+                // {...getUploadProps("thumbnail", null)}
+              >
+                <button className="border-0" type="button">
+                  {false ? <LoadingOutlined /> : <PlusOutlined />}
+                  <div className="mt-2">Upload</div>
+                </button>
+              </Upload>
+            </div>
+          </div>
+          <div className="flex flex-1 ps-5 flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="text-center w-16">Tên size</div>
+              <div className="text-center w-16">Số lượng</div>
+            </div>
+            {["S", "M", "L", "XL", "2XL"].map((size, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <button
+                  type="button"
+                  className={`size-16 border flex items-center justify-center rounded-md shadow-lg ${
+                    true ? "bg-blue-200" : "bg-[#f4f5f6]"
+                  } hover:bg-blue-200 active:bg-blue-400`}
+                >
+                  {size}
+                </button>
+                {true && (
+                  <>
+                    <CaretRightOutlined />
+                    <div className="">
+                      <input
+                        type="number"
+                        className="size-16 text-center flex items-center justify-center bg-[#f4f5f6] rounded-md shadow-lg border border-blue-300"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </Modal>
       <div className="flex flex-col gap-2 bg-white rounded-lg shadow-md p-4">
         {options?.map((op) => (
           <div key={op.color_size_id} className="flex pb-10 border-b">
@@ -179,7 +273,7 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
                 <div className="w-16">Tồn kho</div>
                 <div className="w-16">Điều chỉnh</div>
                 <div className="w-16">Nhập thêm</div>
-                <Button className="border-0 ">Huỷ size</Button>
+                <Button className="border-0 ">Ngừng bán</Button>
               </div>
               {op.sizes?.map((s) => (
                 <div
@@ -226,7 +320,15 @@ const Option = ({ product_id, status, options, setModalOpen, modalOpen }) => {
                         )
                       }
                     />
-                    <Button danger>Huỷ size</Button>
+                    <Popconfirm
+                      title="Ngừng bán"
+                      description="Bạn chắc chắn muốn ngừng bán size này?"
+                      // onConfirm={() => handleDeleteSize(s.size_id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button danger>Ngừng bán</Button>
+                    </Popconfirm>
                   </div>
                 </div>
               ))}
