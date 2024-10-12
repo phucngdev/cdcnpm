@@ -64,3 +64,15 @@ module.exports.zalopayCheckStatus = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+module.exports.updateStatusOrder = async (req, res) => {
+  try {
+    const result = await orderService.updateStatusOrderService(
+      req.body.status,
+      req.params.id
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};

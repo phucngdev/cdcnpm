@@ -32,9 +32,12 @@ const Header = ({ page }) => {
         </div>
         <div className="flex gap-5 items-center">
           <Button onClick={() => fetchData(-1)}>Tất cả đơn hàng</Button>
-          <Button onClick={() => fetchData(0)}>Đơn hàng mới</Button>
-          <Button onClick={() => fetchData(1)}>Đơn hàng đang vận chuyển</Button>
-          <Button onClick={() => fetchData(2)}>Đơn hàng hoàn thành</Button>
+          <Button onClick={() => fetchData("0")}>Đơn hàng mới</Button>
+          <Button onClick={() => fetchData("1")}>Đơn hàng đã xác nhận</Button>
+          <Button onClick={() => fetchData("2")}>
+            Đơn hàng đang vận chuyển
+          </Button>
+          <Button onClick={() => fetchData("3")}>Đơn hàng hoàn thành</Button>
         </div>
       </div>
     </>

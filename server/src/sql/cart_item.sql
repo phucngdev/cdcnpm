@@ -2,10 +2,10 @@ create table cart_item
 (
     cart_item_id  char(36)                            not null
         primary key,
-    cart_id       char(36)                            null,
-    product_id    char(36)                            null,
-    color_size_id char(36)                            null,
-    quantity      int       default 1                 null,
+    cart_id       char(36)                            not null,
+    product_id    char(36)                            not null,
+    color_size_id char(36)                            not null,
+    quantity      int       default 1                 not null,
     created_at    timestamp default CURRENT_TIMESTAMP not null,
     update_at     timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     constraint fk_cart_item

@@ -34,13 +34,12 @@ const StatisticChart = () => {
               dashboard_data?.revenue?.revenue_change_percentage > 0
                 ? "text-green-500"
                 : "text-red-500"
-            }  text-base font-bold`}
+            }  text-xl font-bold`}
           >
-            {dashboard_data?.revenue?.revenue_change_percentage}
+            {Math.ceil(dashboard_data?.revenue?.revenue_change_percentage)}%
             {dashboard_data?.revenue?.revenue_change_percentage > 0
               ? arrowup
               : arrowdown}
-            %
           </div>
         </div>
         <ChartSales />

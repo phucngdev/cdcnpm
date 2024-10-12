@@ -4,12 +4,10 @@ const pool = require("../../../config/database");
 module.exports.verifyTokenHandleAdmin = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
-
     if (!token) {
       return res.status(401).json({ message: "Token is required" });
     }
-    const tokenSlice = token.slice(1, -1);
-    const decoded = jwt.verify(tokenSlice, process.env.JWT_ACCESS_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
     if (!decoded) {
       return res.status(500).json({ message: "Access denied" });
     }
@@ -45,8 +43,7 @@ module.exports.verifyToken = async (req, res, next) => {
         .status(401)
         .json({ status: 401, message: "Token is required" });
     }
-    const tokenSlice = token.slice(1, -1);
-    const decoded = jwt.verify(tokenSlice, process.env.JWT_ACCESS_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_KEY);
     if (!decoded) {
       return res.status(500).json({ status: 500, message: "Access denied" });
     }

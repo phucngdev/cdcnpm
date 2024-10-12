@@ -1,7 +1,7 @@
-import { Input } from "antd";
+import { Input, Select } from "antd";
 import React from "react";
 
-const PriceAndDiscount = ({ formik }) => {
+const PriceAndDiscount = ({ formik, handleChangeStatus }) => {
   return (
     <>
       <div className="border border-gray-200 p-4 rounded-[20px] mt-4">
@@ -44,7 +44,23 @@ const PriceAndDiscount = ({ formik }) => {
               value={formik.values.price * (1 - formik.values.discount / 100)}
             />
           </div>
-          <div className="flex-1"></div>
+          <div className="flex-1">
+            <h5 className="text-base font-normal mb-2">Trạng thái</h5>
+            <Select
+              placeholder="Trạng thái sản phẩm"
+              className="w-full !text-black"
+              onChange={handleChangeStatus}
+              options={[
+                { value: "1", label: "Mở bán" },
+                { value: "0", label: "Chưa mở bán" },
+              ]}
+            />
+            {formik.touched.status && formik.errors.status ? (
+              <div className="text-red-500 text-sm mt-1">
+                {formik.errors.status}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </>

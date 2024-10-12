@@ -141,7 +141,7 @@ const BoxChat = () => {
       <Helmet>
         <title>Message - Chats</title>
       </Helmet>
-      <div className="lg:flex-1 lg:px-3 lg:pt-4 relative">
+      <div className="flex-1 lg:px-3 lg:pt-4 relative">
         {pending ? (
           <Skeleton active />
         ) : (

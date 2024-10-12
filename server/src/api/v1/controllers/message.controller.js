@@ -4,11 +4,9 @@ const jwt = require("jsonwebtoken");
 module.exports.getAllUser = async (req, res) => {
   try {
     const { user_id } = jwt.verify(
-      req.cookies.accessToken.slice(1, -1),
+      req.cookies.accessToken,
       process.env.JWT_ACCESS_KEY
     );
-    console.log(user_id);
-
     const result = await messageService.getAllUserService(user_id);
     return res.status(200).json(result);
   } catch (error) {

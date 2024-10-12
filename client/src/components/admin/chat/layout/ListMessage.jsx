@@ -54,11 +54,11 @@ const ListMessage = ({
             <LoadingOutlined />
           </div>
         )}
-        {listMessage.map((m) =>
+        {listMessage.map((m, index) =>
           m.sender_id === user.user_id ? (
-            <EmployeeMessage message={m.content} />
+            <EmployeeMessage key={index} message={m.content} />
           ) : (
-            <ClientMessage message={m.content} />
+            <ClientMessage key={index} message={m.content} />
           )
         )}
         {isTyping && <OnChangeInput />}

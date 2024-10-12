@@ -15,7 +15,7 @@ export const getAllUserChat = createAsyncThunk(
 );
 
 export const getMessageUserChat = createAsyncThunk(
-  "admin/get-message-:id/user-chat",
+  "admin/get-message/:id/user-chat",
   async ({ id, created_at }) => {
     try {
       const response = await BaseUrl.get(`message/${id}/${created_at}`);
@@ -27,11 +27,9 @@ export const getMessageUserChat = createAsyncThunk(
 );
 
 export const sendMessage = createAsyncThunk(
-  "send-message-:rooom_id",
+  "send-message/:rooom_id",
   async ({ id, data }) => {
     try {
-      console.log(data);
-
       const response = await BaseUrl.post(`message/${id}`, data);
       return response.data;
     } catch (error) {

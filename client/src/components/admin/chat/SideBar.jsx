@@ -27,7 +27,11 @@ const SideBar = () => {
 
   return (
     <>
-      <div className="w-full lg:w-[350px] border-e border-gray-200 overflow-scroll">
+      <div
+        className={`w-full lg:w-[350px] border-e border-gray-200 overflow-scroll ${
+          id ? "hidden lg:block" : ""
+        }`}
+      >
         <div className="p-2 text-gray-900 text-xl font-bold flex items-center justify-between">
           <h3>TEELAB STUDIO</h3>
           <Button>

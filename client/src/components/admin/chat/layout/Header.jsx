@@ -13,7 +13,7 @@ const Header = ({ user }) => {
 
   return (
     <>
-      <header className="flex items-center justify-between pb-3">
+      <header className="lg:mt-0 flex items-center justify-between pb-3">
         <div className="flex items-center cursor-pointer">
           <LeftOutlined
             onClick={() => navigate("/admin/cham-soc-khach-hang")}

@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 module.exports.getAllUser = async (req, res) => {
   try {
     const decoded = jwt.verify(
-      req.cookies.accessToken.slice(1, -1),
+      req.cookies.accessToken,
       process.env.JWT_ACCESS_KEY
     );
     const result = await userService.getAllUserService(decoded.user_id);

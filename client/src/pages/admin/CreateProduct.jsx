@@ -78,13 +78,14 @@ const CreateProduct = () => {
       images: [],
       description_image: "",
       category: "",
-      status: false,
+      status: null,
       option: [],
       author: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Tên sản phẩm không được để trống"),
       category: Yup.string().required("Danh mục sản phẩm không được để trống"),
+      status: Yup.string().required("Trạng thái sản phẩm không được để trống"),
       price: Yup.number().required("Giá sản phẩm không được để trống"),
       discount: Yup.number().required("Giảm giá sản phẩm không được để trống"),
       thumbnail_hover: Yup.string().required(
@@ -109,6 +110,7 @@ const CreateProduct = () => {
           thumbnail: values.thumbnail,
           thumbnail_hover: values.thumbnail_hover,
           discount: +values.discount,
+          status: values.status,
           images: imageUrls,
           description: description,
           description_image: values.description_image,
@@ -135,6 +137,11 @@ const CreateProduct = () => {
   //
   const handleChangeCategory = (value) => {
     formik.values.category = value;
+  };
+  //
+  const handleChangeStatus = (value) => {
+    formik.values.status = value;
+    console.log(formik.values);
   };
 
   // chọn color cho sp
@@ -364,7 +371,10 @@ const CreateProduct = () => {
                 loading={loading}
               />
             </div>
-            <PriceAndDiscount formik={formik} />
+            <PriceAndDiscount
+              formik={formik}
+              handleChangeStatus={handleChangeStatus}
+            />
             <Category
               formik={formik}
               handleChangeCategory={handleChangeCategory}

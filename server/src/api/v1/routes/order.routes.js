@@ -28,5 +28,11 @@ orderRoutes.get(
 orderRoutes.post("/create/zalopay", orderController.createOrderWithZalopay);
 // callback của zalopay
 orderRoutes.post("/zalopay/callback", orderController.zalopayCallBack);
+// update status order
+orderRoutes.put(
+  "/admin/status/:id",
+  verifyToken.verifyTokenHandleAdmin,
+  orderController.updateStatusOrder
+);
 
 module.exports = { orderRoutes };

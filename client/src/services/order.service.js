@@ -74,3 +74,15 @@ export const checkPaymentZalopay = createAsyncThunk(
     }
   }
 );
+
+export const updateStatusOrder = createAsyncThunk(
+  "put/order/status/:id",
+  async ({ id, data }) => {
+    try {
+      const response = await BaseUrl.put(`order/admin/status/${id}`, data);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);

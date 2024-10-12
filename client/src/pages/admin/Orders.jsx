@@ -17,8 +17,10 @@ const Orders = () => {
   return (
     <>
       <Overview
-        totalNewOrder={orders?.totalNewOrder}
-        totalShiping={orders?.totalShiping}
+        orders={orders}
+        totalNewOrder={orders?.orders?.filter((o) => o.status === "0")?.length}
+        totalShiping={orders?.orders?.filter((o) => o.status === "1")?.length}
+        totalActive={orders?.orders?.filter((o) => o.status === "2")?.length}
       />
       <Header page={page} />
       {orders.status === 200 && (

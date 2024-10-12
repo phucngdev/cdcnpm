@@ -427,3 +427,18 @@ module.exports.getOneOrderService = async (order_id) => {
     return { status: 500, message: "Error retrieving order" };
   }
 };
+
+module.exports.updateStatusOrderService = async (status, order_id) => {
+  try {
+    const [order] = await pool.execute(
+      "UPDATE orders SET status = ? WHERE order_id = ?",
+      [status, order_id]
+    );
+    if (order.affectedRows === 0) {
+      return { status: 404, message: "No orders found" };
+    }
+    return { status: 200, message: "Order status updated successfully" };
+  } catch {
+    return { status: 500, message: "Error updating order status" };
+  }
+};

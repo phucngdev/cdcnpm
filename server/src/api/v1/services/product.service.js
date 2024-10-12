@@ -360,7 +360,7 @@ module.exports.deleteAllService = async () => {
 
 module.exports.createProductService = async (body) => {
   try {
-    const productId = uuidv4(); // Tạo ID sản phẩm mới
+    const productId = uuidv4();
     await pool.execute(
       `INSERT INTO products (
         product_id, product_name, thumbnail, thumbnail_hover, images, discount, description_image, description, price, price_max, status, category_id
@@ -401,14 +401,16 @@ module.exports.createProductService = async (body) => {
       }
     }
 
-    // gửi email đến user
-    emailService.sendMailNewProduct({
-      product_id: productId,
-      product_name: body.product_name,
-      price: body.price,
-      description: body.description,
-      thumbnail: body.thumbnail,
-    });
+    if (body.status === "1") {
+      // gửi email đến user
+      emailService.sendMailNewProduct({
+        product_id: productId,
+        product_name: body.product_name,
+        price: body.price,
+        description: body.description,
+        thumbnail: body.thumbnail,
+      });
+    }
 
     return { status: 201, message: "Product created successfully" };
   } catch (error) {

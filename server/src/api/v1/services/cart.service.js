@@ -7,13 +7,11 @@ module.exports.addToCartService = async (id, body) => {
       "SELECT * FROM users WHERE user_id = ?",
       [id]
     );
-    console.log(body);
 
     const [[item]] = await pool.execute(
       "SELECT * FROM cart_item WHERE product_id = ? AND color_size_id = ?",
       [body.product_id, body.color_size_id]
     );
-    console.log("item ", item);
 
     // kiểm tra số lượng trong giỏ hàng có vượt quá số lượng sẵn có kko
     const [[{ quantity }]] = await pool.query(
@@ -24,7 +22,6 @@ module.exports.addToCartService = async (id, body) => {
       WHERE size_id = (SELECT size_id FROM color_size WHERE color_size_id = ?)`,
       [body.color_size_id]
     );
-    console.log("quantity ", quantity);
 
     if (item) {
       if (item.quantity >= quantity) {
@@ -86,8 +83,6 @@ module.exports.getCartByIdService = async (id) => {
         WHERE c.cart_id = ?`,
       [user.cart_id]
     );
-
-    console.log(cartRows);
 
     if (cartRows.length === 0) {
       return {

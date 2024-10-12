@@ -2,10 +2,10 @@ create table order_details
 (
     order_detail_id char(36)                            not null
         primary key,
-    order_id        char(36)                            null,
-    product_id      char(36)                            null,
-    color_size_id   char(36)                            null,
-    quantity        int       default 1                 null,
+    order_id        char(36)                            not null,
+    product_id      char(36)                            not null,
+    color_size_id   char(36)                            not null,
+    quantity        int       default 1                 not null,
     price           decimal(10, 2)                      not null,
     created_at      timestamp default CURRENT_TIMESTAMP not null,
     update_at       timestamp default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,

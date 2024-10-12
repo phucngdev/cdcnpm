@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Steps, message } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getOneOrder, updateStatus } from "../../services/order.service";
+import {
+  getOneOrder,
+  updateStatus,
+  updateStatusOrder,
+} from "../../services/order.service";
 import formatPrice from "../../utils/formatPrice";
 import { formatTime } from "../../utils/formatTime";
 import Pending from "../../components/user/animation/Pending";
@@ -49,7 +53,21 @@ const OrderDetail = () => {
     title: item.title,
   }));
 
-  const handleUpdateStatus = async (status) => {};
+  const handleUpdateStatus = async (status) => {
+    setPending(true);
+    const response = await dispatch(
+      updateStatusOrder({ id: id, data: { status: status } })
+    );
+    console.log(response);
+
+    if (response.payload.status === 200) {
+      message.success("Cập nhật trạng thái thành công");
+      fetchData();
+    } else {
+      message.error("Cập nhật trạng thái thất bại, vui lòng thử lại");
+    }
+    setPending(false);
+  };
 
   if (pending) return <Pending />;
 
@@ -83,7 +101,7 @@ const OrderDetail = () => {
                 <span className="text-blue-600 bg-blue-200 py-1 px-2 rounded">
                   Đã xác nhận
                 </span>
-              ) : order.status === "1" ? (
+              ) : order.status === "2" ? (
                 <span className="text-yellow-600 bg-yellow-200 py-1 px-2 rounded">
                   Vận chuyển
                 </span>
@@ -148,12 +166,17 @@ const OrderDetail = () => {
           </div>
           <div className="flex justify-end mt-3">
             {order.status === "0" && (
-              <Button type="button" className="bg-blue-500 hover:bg-blue-400">
+              <Button
+                onClick={() => handleUpdateStatus("1")}
+                type="button"
+                className="bg-blue-500 hover:bg-blue-400"
+              >
                 <span className="text-white">Xác nhận</span>
               </Button>
             )}
             {order.status === "1" && (
               <Button
+                onClick={() => handleUpdateStatus("2")}
                 type="button"
                 className="bg-yellow-500 hover:bg-yellow-400"
               >
@@ -161,7 +184,11 @@ const OrderDetail = () => {
               </Button>
             )}
             {order.status === "2" && (
-              <Button type="button" className="bg-green-500 hover:bg-green-400">
+              <Button
+                onClick={() => handleUpdateStatus("3")}
+                type="button"
+                className="bg-green-500 hover:bg-green-400"
+              >
                 <span className="text-white">Hoàn thành</span>
               </Button>
             )}
