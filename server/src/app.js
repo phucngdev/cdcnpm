@@ -15,17 +15,17 @@ const { searchRoutes } = require("./api/v1/routes/search.routes");
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // chuyển body thành dạng json
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: ["http://localhost:5173", "https://teelab-v1.vercel.app"],
     credentials: true,
   })
-);
-app.use(morgan("common"));
+); // cho phép truy cập
+app.use(morgan("common")); // in log
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); // middle cookie
 
 // route
 app.use("/api/v1/auth", authRoutes);

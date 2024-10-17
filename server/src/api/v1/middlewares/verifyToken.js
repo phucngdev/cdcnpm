@@ -85,6 +85,15 @@ module.exports.verifyToken = async (req, res, next) => {
       // không tồn tại user trả về 404
       return res.status(404).json({ status: 404, message: "User not found" });
     }
+    if (user.status === 0) {
+      // user đã bị khoá trả về 403
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+      res.clearCookie("user_info");
+      return res
+        .status(403)
+        .json({ status: 403, message: "User is not active" });
+    }
     // cho đi tiếp
     next();
   } catch (error) {

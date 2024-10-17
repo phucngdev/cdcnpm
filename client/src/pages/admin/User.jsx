@@ -93,11 +93,11 @@ export default function User() {
               {record.status == 1 ? <LockOutlined /> : <UnlockOutlined />}
             </Button>
           </Tooltip>
-          <Tooltip title="Xoá tài khoản" color="red">
+          {/* <Tooltip title="Xoá tài khoản" color="red">
             <Button danger onClick={() => handleDeleteUser(record.user_id)}>
               <DeleteOutlined />
             </Button>
-          </Tooltip>
+          </Tooltip> */}
         </div>
       ),
     },

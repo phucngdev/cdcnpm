@@ -9,6 +9,8 @@ export const addToCart = createAsyncThunk(
       const response = await BaseUrl.post(`/cart/add/${id}`, data);
       return response.data;
     } catch (error) {
+      console.log("🚀 ~ error:", error);
+
       message.error(error.message);
     }
   }
