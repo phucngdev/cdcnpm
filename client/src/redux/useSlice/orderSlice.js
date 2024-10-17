@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllOrder, getOneOrder } from "../../services/order.service";
+import {
+  getAllOrder,
+  getAllOrderByUser,
+  getOneOrder,
+} from "../../services/order.service";
 
 const orderSlice = createSlice({
   name: "order",
@@ -34,6 +38,17 @@ const orderSlice = createSlice({
         state.data = action.payload;
       })
       .addCase(getAllOrder.rejected, (state, action) => {
+        state.status = "Failed!";
+        state.error = action.error.message;
+      })
+      .addCase(getAllOrderByUser.pending, (state) => {
+        state.status = "Pending!";
+      })
+      .addCase(getAllOrderByUser.fulfilled, (state, action) => {
+        state.status = "Successfully!";
+        state.data = action.payload;
+      })
+      .addCase(getAllOrderByUser.rejected, (state, action) => {
         state.status = "Failed!";
         state.error = action.error.message;
       });

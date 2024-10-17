@@ -8,7 +8,9 @@ const emailService = require("./mail.service");
 
 module.exports.createOrderService = async (body) => {
   try {
+    // tạo order_id
     const orderId = uuidv4();
+    // tạo order
     await pool.execute(
       "INSERT INTO orders (order_id, user_id, transaction, total, payment_status, status, address, city, district, ward, phone, email, note, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
@@ -28,7 +30,7 @@ module.exports.createOrderService = async (body) => {
         body.username,
       ]
     );
-
+    // tạo mảng các value của order item
     const orderItems = body.order_items.map((item) => [
       uuidv4(),
       orderId,
@@ -37,12 +39,12 @@ module.exports.createOrderService = async (body) => {
       item.quantity,
       item.price,
     ]);
-
+    // tạo các order item
     await pool.query(
       "INSERT INTO order_details (order_detail_id, order_id, product_id, color_size_id, quantity, price) VALUES ?",
       [orderItems]
     );
-
+    // cập nhật lại số lượng sp
     for (const item of body.order_items) {
       await pool.query(
         `UPDATE sizes 
@@ -51,7 +53,7 @@ module.exports.createOrderService = async (body) => {
         [item.quantity, item.color_size_id]
       );
     }
-
+    // gửi mail về user
     emailService.sendMailNewOrder(orderId);
 
     return {

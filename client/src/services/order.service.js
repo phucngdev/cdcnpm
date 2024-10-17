@@ -37,6 +37,18 @@ export const getAllOrder = createAsyncThunk(
   }
 );
 
+export const getAllOrderByUser = createAsyncThunk(
+  "getAll/order/user/:id",
+  async (id) => {
+    try {
+      const response = await BaseUrl.get(`order/user/${id}`);
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
+);
+
 export const updateStatus = createAsyncThunk(
   "update/order",
   async ({ id, data }) => {
