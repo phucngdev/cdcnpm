@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrderByUser } from "../../services/order.service";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Pending from "../../components/user/animation/Pending";
 import { Helmet } from "react-helmet";
 import Icon_Incart from "../../../public/icon_incart.svg";
@@ -11,6 +11,7 @@ import formatPrice from "../../utils/formatPrice";
 const OrderHistory = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [pending, setPending] = useState(false);
 
   const fetchData = async () => {
@@ -24,7 +25,6 @@ const OrderHistory = () => {
   }, [id]);
 
   const data = useSelector((state) => state.order.data);
-  console.log("🚀 ~ HistoryOrder ~ data:", data);
 
   if (pending) return <Pending />;
 
@@ -40,7 +40,13 @@ const OrderHistory = () => {
             <>
               {data?.orders?.map((item) => (
                 <>
-                  <div className="hover:shadow-lg cursor-pointer p-4">
+                  <div
+                    key={item.order_id}
+                    className="hover:shadow-lg cursor-pointer p-4"
+                    onClick={() =>
+                      navigate(`/kiem-tra-don-hang/${item.order_id}`)
+                    }
+                  >
                     <div className="flex items-center justify-between pt-4 pb-2">
                       <h3 className="">
                         Ngày đặt: {formatTime(item.created_at)}
@@ -58,10 +64,7 @@ const OrderHistory = () => {
                           : "Trả hàng"}
                       </h2>
                     </div>
-                    <div
-                      key={item.order_id}
-                      className="flex items-center justify-between"
-                    >
+                    <div className="flex items-center justify-between">
                       <div className="flex flex-col gap-4">
                         {item.details.map((p) => (
                           <div className="flex items-center justify-between">
