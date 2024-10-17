@@ -15,7 +15,7 @@ orderRoutes.get(
 // lấy 1 order phía admin
 orderRoutes.get(
   "/admin/:id",
-  verifyToken.verifyTokenHandleAdmin,
+  // verifyToken.verifyTokenHandleAdmin,
   orderController.getOneOrder
 );
 // check status của order khi dùng zalopay
