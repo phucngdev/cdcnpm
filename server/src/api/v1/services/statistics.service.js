@@ -77,7 +77,7 @@ module.exports.dashboardService = async () => {
           months.month ASC;
       `),
     ]);
-
+    //
     const currentOrders = currentMonthOrdersData.total_orders || 0;
     const currentRevenue = currentMonthOrdersData.total_revenue || 0.0;
     const previousOrders = previousMonthOrdersData.total_orders || 0;
@@ -92,14 +92,14 @@ module.exports.dashboardService = async () => {
         : currentRevenue > 0
         ? 100
         : 0;
-
+    // so sánh đơn hàng với tháng trc
     const ordersChangePercentage =
       previousOrders > 0
         ? ((currentOrders - previousOrders) / previousOrders) * 100
         : currentOrders > 0
         ? 100
         : 0;
-
+    // so sánh user với tháng trc
     const usersChangePercentage =
       previousUsers > 0
         ? ((currentUsers - previousUsers) / previousUsers) * 100

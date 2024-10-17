@@ -106,7 +106,7 @@ module.exports.createOrderWithZalopayService = async (body) => {
       description: `Teelab - Payment for the order #${transID}`,
       bank_code: "",
       callback_url:
-        "https://d550-42-114-170-105.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
+        "https://704e-118-71-135-202.ngrok-free.app/api/v1/order/zalopay/callback", // sau khi thanh toán sẽ gọi đến api này // localhost 3000
     };
 
     const data =

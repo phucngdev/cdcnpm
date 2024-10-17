@@ -2,8 +2,10 @@ import { Input, Select } from "antd";
 import React, { useMemo } from "react";
 import Category from "../../create_product/Category";
 import { useSelector } from "react-redux";
+import formatPrice from "../../../../utils/formatPrice";
 
-const Price = () => {
+const Price = ({ product }) => {
+  console.log("🚀 ~ Price ~ product:", product);
   const categorys = useSelector((state) => state.category.data);
 
   const options = useMemo(() => {
@@ -23,6 +25,7 @@ const Price = () => {
             <Input
               placeholder="nhập giá sản phẩm"
               name="price"
+              defaultValue={formatPrice(product?.price_max)}
               // value={formik.values.price}
               // onChange={formik.handleChange}
             />
@@ -37,6 +40,7 @@ const Price = () => {
             <Input
               placeholder="nhập % giảm giá sản phẩm"
               name="discount"
+              defaultValue={product?.discount}
               // value={formik.values.discount}
               // onChange={formik.handleChange}
             />
@@ -51,6 +55,8 @@ const Price = () => {
               <h5 className="text-base font-normal mb-2">Giá bán thực tế</h5>
               <Input
                 placeholder="Giá bán ra"
+                defaultValue={formatPrice(product?.price)}
+                readOnly
                 // value={formik.values.price * (1 - formik.values.discount / 100)}
               />
             </div>
@@ -59,6 +65,7 @@ const Price = () => {
         <div className="border p-4 border-gray-200 rounded-[20px] mt-4">
           <h3 className="text-xl font-normal mb-2">Danh mục sản phẩm</h3>
           <Select
+            defaultValue={product?.category?.category_id}
             placeholder="Chọn danh mục sản phẩm"
             className="w-full !text-black"
             // onChange={handleChangeCategory}

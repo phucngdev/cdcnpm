@@ -259,6 +259,7 @@ module.exports.getOneForUpdateService = async (id) => {
         p.description_image, 
         p.description, 
         p.price, 
+        p.price_max,
         p.status, 
         c.category_name,
         c.category_id
@@ -322,7 +323,12 @@ module.exports.getOneForUpdateService = async (id) => {
       description_image: product.description_image,
       description: product.description,
       price: product.price,
+      price_max: product.price_max,
       status: product.status,
+      category: {
+        category_name: product.category_name,
+        category_id: product.category_id,
+      },
       option: options,
     };
 

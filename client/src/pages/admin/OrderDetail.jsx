@@ -17,7 +17,7 @@ const steps = [
     title: "Chờ xử lý",
   },
   {
-    title: "Xác nhận đơn hàng",
+    title: "Chuẩn bị đơn hàng",
   },
   {
     title: "Vận chuyển",
@@ -166,13 +166,22 @@ const OrderDetail = () => {
           </div>
           <div className="flex justify-end mt-3">
             {order.status === "0" && (
-              <Button
-                onClick={() => handleUpdateStatus("1")}
-                type="button"
-                className="bg-blue-500 hover:bg-blue-400"
-              >
-                <span className="text-white">Xác nhận</span>
-              </Button>
+              <>
+                <Button
+                  // onClick={() => handleUpdateStatus("1")}
+                  type="button"
+                  className="bg-red-500 hover:bg-red-400 me-4"
+                >
+                  <span className="text-white">Từ chối</span>
+                </Button>
+                <Button
+                  onClick={() => handleUpdateStatus("1")}
+                  type="button"
+                  className="bg-blue-500 hover:bg-blue-400"
+                >
+                  <span className="text-white">Xác nhận</span>
+                </Button>
+              </>
             )}
             {order.status === "1" && (
               <Button

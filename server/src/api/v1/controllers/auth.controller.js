@@ -64,7 +64,7 @@ module.exports.checkRoleAdmin = async (req, res) => {
 // đăng xuất
 module.exports.logout = async (req, res) => {
   try {
-    const result = await authService.logoutService(res.cookies.refreshToken);
+    const result = await authService.logoutService(req.cookies.refreshToken);
     if (result.status === 200) {
       // xoá các token và info lưu cookie phía client
       res.clearCookie("accessToken");
