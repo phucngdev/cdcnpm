@@ -34,7 +34,6 @@ const EditProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [pending, setPending] = useState(false);
-  const [description, setDescription] = useState("");
 
   const fetchData = async () => {
     try {
@@ -44,7 +43,7 @@ const EditProduct = () => {
         dispatch(getOneProductForUpdate(id)),
       ]);
     } catch (error) {
-      message.error("Error pending data");
+      message.error(error.message);
     } finally {
       setPending(false);
     }
@@ -53,18 +52,17 @@ const EditProduct = () => {
     fetchData();
   }, [id]);
 
-  const categorys = useSelector((state) => state.category.data);
   const product = useSelector((state) => state.product.dataEdit);
 
   if (pending) return <Pending />;
 
   return (
     <>
-      <Header />
+      <Header product_name={product?.product_name} />
       <div className="flex gap-4">
-        <Images />
-        <Center />
-        <Price />
+        <Images product={product} />
+        <Center product={product} />
+        <Price product={product} />
       </div>
     </>
   );

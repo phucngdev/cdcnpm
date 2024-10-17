@@ -1,10 +1,12 @@
 import { Table } from "antd";
 import React from "react";
 
-export default function TableItems({ column, dataSources }) {
+const TableItems = ({ column, dataSources }) => {
   return (
     <>
       <Table columns={column} dataSource={dataSources} />
     </>
   );
-}
+};
+
+export default TableItems;

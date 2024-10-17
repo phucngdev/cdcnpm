@@ -20,8 +20,7 @@ const PrivateRouter = () => {
   const checkRole = async () => {
     setPending(true);
     const response = await dispatch(checkRoleAdmin());
-
-    if (response.payload.status === 200) {
+    if (response.payload && response.payload.status === 200) {
       setRole(true);
       message.success(`Hello`);
       navigate("/admin/dashboard");
@@ -31,6 +30,9 @@ const PrivateRouter = () => {
     } else if (response.payload.response.status === 401) {
       message.error("Vui lòng đăng nhập");
       navigate("/dang-nhap");
+    } else {
+      message.error("Lỗi hệ thống");
+      navigate("/");
     }
     setPending(false);
   };

@@ -8,6 +8,7 @@ userRoutes.get(
   verifyToken.verifyTokenHandleAdmin,
   userController.getAllUser
 );
+
 // update status user khoá || mở tài khoản
 userRoutes.put(
   "/:id/status/:status",

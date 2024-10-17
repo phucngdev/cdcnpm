@@ -3,9 +3,13 @@ const productController = require("../controllers/product.controller");
 const verifyToken = require("../middlewares/verifyToken");
 
 // lấy tất cả product
-productRoutes.get("/", productController.getAll);
+productRoutes.get("/", verifyToken.verifyTokenPublic, productController.getAll);
 // lấy 1 product phía user
-productRoutes.get("/detail/:id", productController.getOne);
+productRoutes.get(
+  "/detail/:id",
+  verifyToken.verifyTokenPublic,
+  productController.getOne
+);
 // lấy 1 product phía ámin
 productRoutes.get(
   "/detail/admin/:id",
@@ -13,9 +17,17 @@ productRoutes.get(
   productController.getOneForUpdate
 );
 // search
-productRoutes.get("/search", productController.searchProduct);
+productRoutes.get(
+  "/search",
+  verifyToken.verifyTokenPublic,
+  productController.searchProduct
+);
 // lấy 1 product để import size
-productRoutes.get("/product-import/:id", productController.getOneProductImport);
+productRoutes.get(
+  "/product-import/:id",
+  verifyToken.verifyTokenHandleAdmin,
+  productController.getOneProductImport
+);
 
 // xoá 1 product
 productRoutes.delete(

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import "https://cdn.ckeditor.com/ckeditor5/41.2.0/super-build/ckeditor.js";
+import "https://cdn.ckeditor.com/ckeditor5/41.2.0/super-build/ckeditor.js";
 import "./index.css";
 const Editor = ({ setDescription, description }) => {
   const [editor, setEditor] = useState(null);

@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { Image, Upload } from "antd";
 import React from "react";
 
-const Images = () => {
+const Images = ({ product }) => {
   return (
     <>
       <div className="flex flex-col items-center gap-4 justify-between w-1/4">
@@ -19,10 +19,10 @@ const Images = () => {
             )}
           </div>
           <div className="flex items-center justify-center border border-gray-200 rounded-[20px] overflow-hidden">
-            {true ? (
+            {product?.thumbnail ? (
               <Image
                 className="w-full h-full object-cover"
-                src="https://firebasestorage.googleapis.com/v0/b/store-teelab.appspot.com/o/products%2Fthum-1.webp?alt=media&token=f1fc7df8-f9e8-471b-89ce-79d865a0ceff"
+                src={product?.thumbnail}
                 alt="thumbnail"
               />
             ) : (
@@ -61,10 +61,10 @@ const Images = () => {
             )}
           </div>
           <div className="flex items-center justify-center border border-gray-200 rounded-[20px] overflow-hidden">
-            {true ? (
+            {product?.thumbnail_hover ? (
               <Image
                 className="w-full h-full object-cover"
-                src="https://firebasestorage.googleapis.com/v0/b/store-teelab.appspot.com/o/products%2Fthum-1.webp?alt=media&token=f1fc7df8-f9e8-471b-89ce-79d865a0ceff"
+                src={product?.thumbnail_hover}
                 alt="hover"
               />
             ) : (
@@ -103,10 +103,10 @@ const Images = () => {
             )}
           </div>
           <div className="flex items-center justify-center border border-gray-200 rounded-[20px] overflow-hidden">
-            {true ? (
+            {product?.description_image ? (
               <Image
                 className="w-full h-full object-cover"
-                src="https://firebasestorage.googleapis.com/v0/b/store-teelab.appspot.com/o/products%2Fthum-1.webp?alt=media&token=f1fc7df8-f9e8-471b-89ce-79d865a0ceff"
+                src={product?.description_image}
                 alt="description"
               />
             ) : (

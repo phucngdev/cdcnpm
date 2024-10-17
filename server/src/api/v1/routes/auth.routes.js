@@ -23,6 +23,6 @@ authRoutes.post(
 // đăng xuất
 authRoutes.post("/logout", verifyToken.verifyToken, authController.logout);
 // refreshToken |||||||| chưa sửa
-authRoutes.post("/refreshToken", authController.refreshToken);
+authRoutes.post("/refresh-token", authController.refreshToken);
 
 module.exports = { authRoutes };

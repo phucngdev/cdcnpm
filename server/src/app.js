@@ -11,6 +11,7 @@ const { orderRoutes } = require("./api/v1/routes/order.routes");
 const { userRoutes } = require("./api/v1/routes/user.routes");
 const { statisticRoutes } = require("./api/v1/routes/statistic.routes");
 const { messageRoutes } = require("./api/v1/routes/message.routes");
+const { searchRoutes } = require("./api/v1/routes/search.routes");
 
 const app = express();
 
@@ -35,5 +36,6 @@ app.use("/api/v1/order", orderRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/admin", statisticRoutes);
 app.use("/api/v1/message", messageRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 module.exports = app;
