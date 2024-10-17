@@ -66,11 +66,11 @@ const CheckOrderDetail = () => {
           Đơn hàng của bạn -{" "}
           {order?.order?.status === "0"
             ? "Chưa xác nhân"
-            : order?.status === "1"
+            : order?.order?.status === "1"
             ? "Đã xác nhận"
-            : order?.status === "2"
+            : order?.order?.status === "2"
             ? "Vận chuyển"
-            : order?.status === "3"
+            : order?.order?.status === "3"
             ? "Hoàn thành"
             : "Trả hàng"}
         </h2>
