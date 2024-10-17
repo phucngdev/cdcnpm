@@ -29,7 +29,6 @@ const CheckOrderDetail = () => {
   }, [id]);
 
   const order = useSelector((state) => state.order.dataEdit);
-  console.log("🚀 ~ CheckOrderDetail ~ order:", order);
 
   const listItem = order?.order_items?.map((product, index) => (
     <div key={index} className="grid grid-cols-12 items-center py-[7px]">

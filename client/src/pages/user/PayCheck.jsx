@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { LoadingOutlined } from "@ant-design/icons";
 import { checkPaymentZalopay } from "../../services/order.service";
 import Pending from "../../components/user/animation/Pending";
+import { getCart } from "../../services/cart.service";
 
 const PayCheck = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const PayCheck = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState(false);
   const [pending, setPending] = useState(true);
+  const cart = useSelector((state) => state.cart.data);
   const appTransId = useMemo(() => {
     const searchParams = new URLSearchParams(location.search);
     const apptransid = searchParams.get("apptransid");
@@ -22,17 +24,17 @@ const PayCheck = () => {
     if (appTransId) {
       const response = await dispatch(checkPaymentZalopay(appTransId));
       setStatus(response.payload);
+      dispatch(getCart({ id: cart.cart_id }));
+      // window.location.reload();
     }
   };
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(status);
 
   useEffect(() => {
     if (status) {
       setPending(false);
-      // dispatch(clearCart());
     }
   }, [appTransId, status]);
 

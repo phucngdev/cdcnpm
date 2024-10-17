@@ -7,6 +7,7 @@ const qs = require("qs");
 const emailService = require("./mail.service");
 
 module.exports.createOrderService = async (body) => {
+  console.log("🚀 ~ module.exports.createOrderService= ~ body:", body);
   try {
     // tạo order_id
     const orderId = uuidv4();
@@ -53,6 +54,12 @@ module.exports.createOrderService = async (body) => {
         [item.quantity, item.color_size_id]
       );
     }
+
+    //clear giỏ hàng của user
+    await pool.execute("DELETE FROM cart_item WHERE cart_id = ?", [
+      body.cart_id,
+    ]);
+
     // gửi mail về user
     emailService.sendMailNewOrder(orderId);
 
@@ -94,6 +101,7 @@ module.exports.createOrderWithZalopayService = async (body) => {
       address: body.address,
       note: body.note,
       user_id: body.user_id,
+      cart_id: body.cart_id,
     };
 
     const transID = Math.floor(Math.random() * 1000000);
@@ -176,6 +184,7 @@ module.exports.zalopayCallBackService = async (body) => {
         note: embed_data.note,
         username: embed_data.username,
         order_items: option,
+        cart_id: embed_data.cart_id,
       };
       console.log("tạo data");
 
@@ -293,19 +302,23 @@ module.exports.getAllOrderByUserService = async (user_id) => {
 module.exports.getAllOrderService = async (page, limit, status) => {
   try {
     // Chuyển đổi page và limit thành số nguyên
-    const pageInt = parseInt(page, 10);
-    const limitInt = parseInt(limit, 10);
-    const offset = (pageInt - 1) * limitInt;
+    // const pageInt = parseInt(page, 10);
+    // const limitInt = parseInt(limit, 10);
+    // const offset = (pageInt - 1) * limitInt;
 
     // Lấy tổng số đơn hàng để tính toán số trang
-    const [totalOrders] =
-      status >= 0
-        ? await pool.execute(
-            "SELECT COUNT(*) as count FROM orders WHERE status = ?",
-            [status]
-          )
-        : await pool.execute("SELECT COUNT(*) as count FROM orders");
-    const total = totalOrders[0].count;
+    const [totalOrders, totalOrdersNew, totalOrdersEquip, totalOrdersShip] =
+      await Promise.all([
+        pool.execute("SELECT COUNT(*) as count FROM orders"),
+        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '0'"),
+        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '1'"),
+        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '2'"),
+      ]);
+
+    const total = totalOrders[0][0].count || 0;
+    const totalNew = totalOrdersNew[0][0].count || 0;
+    const totalEquip = totalOrdersEquip[0][0].count || 0;
+    const totalShip = totalOrdersShip[0][0].count || 0;
 
     if (total === 0) {
       return { status: 404, message: "No orders found" };
@@ -315,12 +328,10 @@ module.exports.getAllOrderService = async (page, limit, status) => {
     const [orders] =
       status >= 0
         ? await pool.query(
-            `SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offset}`,
+            `SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC`,
             [status]
           )
-        : await pool.query(
-            `SELECT * FROM orders ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offset}`
-          );
+        : await pool.query(`SELECT * FROM orders ORDER BY created_at DESC`);
 
     if (orders.length === 0) {
       return { status: 404, message: "No orders found on this page" };
@@ -382,8 +393,11 @@ module.exports.getAllOrderService = async (page, limit, status) => {
       status: 200,
       orders: ordersWithDetails,
       total,
-      currentPage: pageInt,
-      totalPages: Math.ceil(total / limitInt),
+      totalNew,
+      totalEquip,
+      totalShip,
+      // currentPage: pageInt,
+      // totalPages: Math.ceil(total / limitInt),
     };
   } catch (e) {
     console.log(e);

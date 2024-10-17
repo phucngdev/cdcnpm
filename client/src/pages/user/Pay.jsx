@@ -13,6 +13,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { Helmet } from "react-helmet";
 import { useCookie } from "../../hooks/useCookie";
 import Pending from "../../components/user/animation/Pending";
+import { getCart } from "../../services/cart.service";
 
 const { TextArea } = Input;
 
@@ -102,6 +103,7 @@ const Pay = () => {
         note: values.note,
         order_items: order_items,
         status: 0,
+        cart_id: cart.cart_id,
       };
       if (payments === "zalopay") {
         try {
@@ -117,7 +119,6 @@ const Pay = () => {
           const response = await dispatch(createOrder(data));
           if (response.payload.status === 201) {
             setStatusOrder(true);
-            // dispatch(clearCart());
           }
         } catch (error) {
           message.error(error.message);

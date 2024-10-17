@@ -121,7 +121,7 @@ const OrderDetail = () => {
               <h3 className="mt-3 text-lg font-semibold">
                 Thông tin khách hàng
               </h3>
-              <span>Họ và tên: {order.name}</span>
+              <span>Họ và tên: {order.username}</span>
               <span>Email: {order.email}</span>
               <span>Số điện thoại: {order.phone}</span>
               <span>Ghi chú: {order.note}</span>

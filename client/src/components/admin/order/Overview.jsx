@@ -21,7 +21,7 @@ const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {orders?.orders?.length || 0}
+                {orders?.total || 0}
               </span>
               <h3 className="text-base font-normal text-gray-500">
                 Tổng số đơn hàng

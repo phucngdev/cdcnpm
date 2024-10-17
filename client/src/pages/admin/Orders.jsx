@@ -13,14 +13,15 @@ const Orders = () => {
   });
 
   const orders = useSelector((state) => state.order.data);
+  console.log("🚀 ~ Orders ~ orders:", orders);
 
   return (
     <>
       <Overview
         orders={orders}
-        totalNewOrder={orders?.orders?.filter((o) => o.status === "0")?.length}
-        totalShiping={orders?.orders?.filter((o) => o.status === "1")?.length}
-        totalActive={orders?.orders?.filter((o) => o.status === "2")?.length}
+        totalNewOrder={orders?.total}
+        totalShiping={orders?.totalShip}
+        totalActive={orders?.totalEquip}
       />
       <Header page={page} />
       {orders.status === 200 && (
