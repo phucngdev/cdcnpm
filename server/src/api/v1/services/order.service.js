@@ -235,7 +235,7 @@ module.exports.zalopayCheckStatusService = async (app_trans_id) => {
 module.exports.getAllOrderByUserService = async (user_id) => {
   try {
     const [orders] = await pool.execute(
-      "SELECT * FROM orders WHERE user_id = ?",
+      "SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC",
       [user_id]
     );
 
