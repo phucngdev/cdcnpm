@@ -67,3 +67,9 @@ git pull
 # trường hợp pull lỗi do có thay đổi ở local
 
 chọn source control => click chuột phải vào Changes => click Discard all changes => sau đó git pull lại
+
+# hướng dẫn thanh toán zalopay trong src
+
+cần cài ngrok hoặc công cụ nào có thể chia sẻ link api trực tuyến
+
+thay link trực tuyến vào callback_url (lưu ý chỉ thay phần http://localhost:3000 hoặc https://ip.ngrok-free.app) trong hàm createOrderWithZalopayService trong folder service
