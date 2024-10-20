@@ -248,7 +248,7 @@ const Detail = () => {
             </div>
             <button
               type="button"
-              disabled={0 ? true : false}
+              // disabled={quantity === 0 ? true : false}
               onClick={() => handleAddToStore()}
               className="h-[47px] w-full cursor-pointer rounded-md bg-black mt-[15px] text-white uppercase hover:opacity-80"
             >

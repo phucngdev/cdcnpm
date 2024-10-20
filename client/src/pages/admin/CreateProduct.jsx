@@ -115,7 +115,6 @@ const CreateProduct = () => {
           description: description,
           description_image: values.description_image,
           price: +values.price,
-          status: 1,
           category: values.category,
           option: colorSize,
         };

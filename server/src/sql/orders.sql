@@ -6,7 +6,7 @@ create table orders
     total          decimal(10, 2)                                       not null,
     transaction    enum ('normal', 'zalopay') default 'normal'          not null,
     payment_status enum ('0', '1')            default '0'               not null,
-    status         enum ('0', '1', '2', '3')  default '0'               not null,
+    status         enum ('0', '1', '2', '3', '4')  default '0'          not null,
     created_at     timestamp                  default CURRENT_TIMESTAMP not null,
     update_at      timestamp                  default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP,
     address        varchar(255)                                         not null,
