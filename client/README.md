@@ -37,6 +37,14 @@
     - routes : xử lý kiểm tra truy cập và layout màn hình
     - services : các hàm xử lý với api
     - utils : các hàm dùng chung của dự án
+    - App.css : lưu css custom chung của dự án
     - App.jsx : config các route con của web
+    - index.css : lưu các css của Tailwindcss
     - main.jsx : cấu hình bọc <App /> và render dữ liệu vào index.html
   - .env : lưu thông tin bí mật của dự án
+  - index.html : file html của dự án
+  - vercel.json : cấu hình route khi deploy lên vercel
+  - tailwind.config.js : cấu hình, custom các file sử dụng và các thuộc tính css
+  - .gitigrore : liệt kê các file không được push lên github
+  - package-lock.json : lưu thông tin các thư viện
+  - package.json : lưu thông tin dự án

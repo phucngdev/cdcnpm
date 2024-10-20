@@ -74,3 +74,5 @@ cần cài ngrok hoặc công cụ nào có thể chia sẻ link api trực tuy�
 
 thay link trực tuyến vào callback_url (lưu ý chỉ thay phần http://localhost:3000 hoặc https://ip.ngrok-free.app) trong hàm createOrderWithZalopayService trong
 server/src/api/v1/service/order.service.js
+
+# cấu trúc thư mục và package đọc thêm trong README.md của từng phần
