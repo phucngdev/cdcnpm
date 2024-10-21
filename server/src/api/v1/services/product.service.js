@@ -4,171 +4,105 @@ const emailService = require("./mail.service");
 
 module.exports.getAllService = async (page, limit) => {
   try {
-    if (page != 0 && limit != 0) {
-      const offset = (page - 1) * limit;
-
-      const [totalRows] = await pool.execute(`
-      SELECT COUNT(*) AS total FROM products
-    `);
-      const totalItems = totalRows[0].total;
-      const totalPages = Math.ceil(totalItems / limit);
-
-      const [products] = await pool.execute(
+    // kiểm tra xem page và limit có phải số và > 0 hay không
+    // phân trang
+    // lấy offset (vị trí bắt đầu lấy)
+    const offset = parseInt((page - 1) * limit);
+    const limitValue = parseInt(limit, 10);
+    const pageValue = parseInt(page, 10);
+    const offsetValue = parseInt(offset, 10);
+    // lấy tổng số sản phẩm và danh sách sản phẩm
+    // const [[totalRows]] = await pool.execute(
+    //   `SELECT COUNT(*) AS total FROM products`
+    // );
+    const [[[totalRows]], [products]] = await Promise.all([
+      pool.execute(`SELECT COUNT(*) AS total FROM products`),
+      pool.execute(
         `
-      SELECT 
-        p.product_id, 
-        p.product_name, 
-        p.thumbnail, 
-        p.thumbnail_hover, 
-        p.images, 
-        p.discount, 
-        p.description_image, 
-        p.description, 
-        p.price, 
-        p.status, 
-        c.category_name AS category
-      FROM products p
-      JOIN categories c ON p.category_id = c.category_id
-      LIMIT ? OFFSET ?`,
-        [limit, offset]
+          SELECT 
+            p.product_id, 
+            p.product_name, 
+            p.thumbnail, 
+            p.thumbnail_hover, 
+            p.images, 
+            p.discount, 
+            p.description_image, 
+            p.description, 
+            p.price, 
+            p.price_max, 
+            p.status, 
+            c.category_name AS category
+          FROM products p
+          JOIN categories c ON p.category_id = c.category_id
+          ${
+            pageValue > 0 && limitValue > 0
+              ? `LIMIT ${limitValue} OFFSET ${offsetValue}`
+              : ``
+          } `
+      ),
+    ]);
+    // lấy tổng
+    const totalItems = totalRows.total;
+    // tính số trang
+    const totalPages = Math.ceil(totalItems / limit);
+    // lấy size, color
+    const productPromises = products.map(async (product) => {
+      const [colorSizes] = await pool.execute(
+        `SELECT 
+                cs.color_size_id, 
+                co.color_name, 
+                co.image AS color_image, 
+                s.size_name, 
+                s.quantity
+              FROM color_size cs
+              JOIN colors co ON cs.color_id = co.color_id
+              JOIN sizes s ON cs.size_id = s.size_id
+              WHERE cs.product_id = ?`,
+        [product.product_id]
       );
+      // tạo các option từ color và size []
+      const optionsMap = colorSizes.reduce((acc, cs) => {
+        if (!acc[cs.color_name]) {
+          acc[cs.color_name] = {
+            color_name: cs.color_name,
+            image: cs.color_image,
+            sizes: [],
+          };
+        }
+        acc[cs.color_name].sizes.push({
+          size_name: cs.size_name,
+          quantity: cs.quantity,
+        });
+        return acc;
+      }, {});
+      // chuyển mảng thành mảng object theo từng màu
+      const options = Object.values(optionsMap);
 
-      const productPromises = products.map(async (product) => {
-        const [colorSizes] = await pool.execute(
-          `
-        SELECT 
-          cs.color_size_id, 
-          co.color_name, 
-          co.image AS color_image, 
-          s.size_name, 
-          s.quantity
-        FROM color_size cs
-        JOIN colors co ON cs.color_id = co.color_id
-        JOIN sizes s ON cs.size_id = s.size_id
-        WHERE cs.product_id = ?`,
-          [product.product_id]
-        );
-
-        const optionsMap = colorSizes.reduce((acc, cs) => {
-          if (!acc[cs.color_name]) {
-            acc[cs.color_name] = {
-              color_name: cs.color_name,
-              image: cs.color_image,
-              sizes: [],
-            };
-          }
-          acc[cs.color_name].sizes.push({
-            size_name: cs.size_name,
-            quantity: cs.quantity,
-          });
-          return acc;
-        }, {});
-
-        const options = Object.values(optionsMap);
-
-        return {
-          product_id: product.product_id,
-          product_name: product.product_name,
-          category: product.category,
-          thumbnail: product.thumbnail,
-          thumbnail_hover: product.thumbnail_hover,
-          images: JSON.parse(product.images),
-          discount: product.discount,
-          description_image: product.description_image,
-          description: product.description,
-          price: product.price,
-          status: product.status,
-          option: options,
-        };
-      });
-
-      const result = await Promise.all(productPromises);
       return {
-        products: result,
-        totalItems,
-        totalPages,
-        page,
-        limit,
+        product_id: product.product_id,
+        product_name: product.product_name,
+        category: product.category,
+        thumbnail: product.thumbnail,
+        thumbnail_hover: product.thumbnail_hover,
+        images: JSON.parse(product.images),
+        discount: product.discount,
+        description_image: product.description_image,
+        description: product.description,
+        price: product.price,
+        price_max: product.price_max,
+        status: product.status,
+        option: options,
       };
-    } else {
-      const [products] = await pool.execute(`
-      SELECT 
-        p.product_id, 
-        p.product_name, 
-        p.thumbnail, 
-        p.thumbnail_hover, 
-        p.images, 
-        p.discount, 
-        p.description_image, 
-        p.description, 
-        p.price, 
-        p.price_max, 
-        p.status, 
-        c.category_name AS category
-      FROM products p
-      JOIN categories c ON p.category_id = c.category_id
-    `);
+    });
 
-      const productPromises = products.map(async (product) => {
-        const [colorSizes] = await pool.execute(
-          `
-        SELECT 
-          cs.color_size_id, 
-          co.color_name, 
-          co.image AS color_image, 
-          s.size_name, 
-          s.quantity
-        FROM color_size cs
-        JOIN colors co ON cs.color_id = co.color_id
-        JOIN sizes s ON cs.size_id = s.size_id
-        WHERE cs.product_id = ?
-      `,
-          [product.product_id]
-        );
-
-        const optionsMap = colorSizes.reduce((acc, cs) => {
-          if (!acc[cs.color_name]) {
-            acc[cs.color_name] = {
-              color_name: cs.color_name,
-              image: cs.color_image,
-              sizes: [],
-            };
-          }
-          acc[cs.color_name].sizes.push({
-            size_name: cs.size_name,
-            quantity: cs.quantity,
-          });
-          return acc;
-        }, {});
-
-        const options = Object.values(optionsMap);
-
-        return {
-          product_id: product.product_id,
-          product_name: product.product_name,
-          category: product.category,
-          thumbnail: product.thumbnail,
-          thumbnail_hover: product.thumbnail_hover,
-          images: JSON.parse(product.images),
-          discount: product.discount,
-          description_image: product.description_image,
-          description: product.description,
-          price: product.price,
-          price_max: product.price_max,
-          status: product.status,
-          option: options,
-        };
-      });
-
-      const result = await Promise.all(productPromises);
-      return {
-        products: result,
-        totalItems: result.length,
-        totalPages: 0,
-        page: 0,
-        limit: 0,
-      };
-    }
+    const result = await Promise.all(productPromises);
+    return {
+      products: result,
+      totalItems: result.length,
+      totalPages: totalPages || 0,
+      page: page,
+      limit: limit,
+    };
   } catch (error) {
     return { status: 500, message: error.message };
   }
@@ -408,7 +342,7 @@ module.exports.createProductService = async (body) => {
     }
 
     if (body.status === "1") {
-      // gửi email đến user
+      // gửi email đến user nếu mở bán
       emailService.sendMailNewProduct({
         product_id: productId,
         product_name: body.product_name,

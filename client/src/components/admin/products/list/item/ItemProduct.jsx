@@ -115,23 +115,28 @@ const ItemProduct = ({ product, setListProduct }) => {
             </div>
             <div className="flex justify-center items-center gap-3 mt-3">
               {product.status === 1 ? (
-                <Tooltip title="Ngưng bán" color="red">
-                  <Popconfirm
-                    title="Ngưng bán sản phẩm"
-                    description="Bạn chắc chắn muốn ngưng bán sản phẩm?"
-                    placement="left"
-                    onConfirm={() => handleUpdateActive(product.product_id)}
-                    okType="danger"
-                    icon={<QuestionCircleOutlined className="text-red-600" />}
-                  >
-                    <Button
-                      danger
-                      className=" text-white flex items-center justify-center"
+                <>
+                  <Tooltip title="Ngưng bán" color="red">
+                    <Popconfirm
+                      title="Ngưng bán sản phẩm"
+                      description="Bạn chắc chắn muốn ngưng bán sản phẩm?"
+                      placement="left"
+                      onConfirm={() => handleUpdateActive(product.product_id)}
+                      okType="danger"
+                      icon={<QuestionCircleOutlined className="text-red-600" />}
                     >
-                      <StopOutlined />
-                    </Button>
-                  </Popconfirm>
-                </Tooltip>
+                      <Button
+                        danger
+                        className=" text-white flex items-center justify-center"
+                      >
+                        <StopOutlined />
+                      </Button>
+                    </Popconfirm>
+                  </Tooltip>
+                  <Button className=" text-white flex items-center justify-center border-0">
+                    <StopOutlined className="text-white" />
+                  </Button>
+                </>
               ) : (
                 <>
                   <Tooltip title="Mở bán" color="red">

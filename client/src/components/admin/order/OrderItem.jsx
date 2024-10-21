@@ -15,8 +15,10 @@ const OrderItem = ({ od }) => {
         className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl cursor-pointer"
       >
         <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-lg font-semibold">{od.username}</h2>
+          <div className="max-w-[50%]">
+            <h2 className="text-lg font-semibold overflow-hidden text-ellipsis">
+              {od.username}
+            </h2>
             <p className="text-gray-500">{od.phone}</p>
           </div>
           <button className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-lg">

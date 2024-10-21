@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, ShopOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  QuestionCircleOutlined,
+  ShopOutlined,
+} from "@ant-design/icons";
 import { Button, message, Popconfirm, Space, Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -103,9 +108,10 @@ const CategoryManagement = () => {
                     </Tooltip>
                     <Popconfirm
                       title="Xoá danh mục"
-                      description="Bạn chắc chắn muốn xoá danh mục"
+                      description="Xoá danh mục sẽ xoá toàn bộ sản phẩm có danh mục này"
                       open={openPopconfirmId === item.category_id}
                       onConfirm={() => handleOk(item.category_id)}
+                      icon={<QuestionCircleOutlined className="text-red-600" />}
                       okButtonProps={{
                         loading: confirmLoading,
                       }}

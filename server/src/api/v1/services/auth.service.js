@@ -153,14 +153,9 @@ module.exports.logoutService = async (ref) => {
 
 // refresh accesstoken
 module.exports.refreshTokenService = async (refreshtoken) => {
-  console.log(
-    "🚀 ~ module.exports.refreshTokenService= ~ refreshtoken:",
-    refreshtoken
-  );
   try {
     // kiểm tra refresh token
     const decoded = jwt.verify(refreshtoken, process.env.JWT_REFRESH_KEY);
-    console.log("🚀 ~ module.exports.refreshTokenService= ~ decoded:", decoded);
     if (!decoded) {
       // sai refresh token trả về 401
       return { status: 401, message: "Invalid refresh token" };

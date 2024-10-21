@@ -9,7 +9,7 @@ orderRoutes.get("/user/:id", orderController.getAllOrderByUser);
 // lấy tất cả order
 orderRoutes.get(
   "/admin/",
-  verifyToken.verifyTokenHandleAdmin,
+  // verifyToken.verifyTokenHandleAdmin,
   orderController.getAllOrder
 );
 // lấy 1 order phía admin

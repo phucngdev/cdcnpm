@@ -4,23 +4,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getAllOrder } from "../../../services/order.service";
 
-const Header = ({ page }) => {
-  const dispatch = useDispatch();
-
-  const fetchData = async (status) => {
-    await dispatch(
-      getAllOrder({
-        page: page.page,
-        limit: page.limit,
-        status: status,
-      })
-    );
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [page]);
-
+const Header = ({ page, setPage }) => {
   return (
     <>
       <div className="bg-white rounded-lg p-6 mb-4">
@@ -31,13 +15,21 @@ const Header = ({ page }) => {
           <Input className="w-1/5" placeholder="Tìm kiếm" />
         </div>
         <div className="flex gap-5 items-center">
-          <Button onClick={() => fetchData(-1)}>Tất cả đơn hàng</Button>
-          <Button onClick={() => fetchData("0")}>Đơn hàng mới</Button>
-          <Button onClick={() => fetchData("1")}>Đơn hàng đã xác nhận</Button>
-          <Button onClick={() => fetchData("2")}>
+          <Button onClick={() => setPage({ ...page, page: 1, status: -1 })}>
+            Tất cả đơn hàng
+          </Button>
+          <Button onClick={() => setPage({ ...page, page: 1, status: "0" })}>
+            Đơn hàng mới
+          </Button>
+          <Button onClick={() => setPage({ ...page, page: 1, status: "1" })}>
+            Đơn hàng đã xác nhận
+          </Button>
+          <Button onClick={() => setPage({ ...page, page: 1, status: "2" })}>
             Đơn hàng đang vận chuyển
           </Button>
-          <Button onClick={() => fetchData("3")}>Đơn hàng hoàn thành</Button>
+          <Button onClick={() => setPage({ ...page, page: 1, status: "3" })}>
+            Đơn hàng hoàn thành
+          </Button>
         </div>
       </div>
     </>

@@ -301,41 +301,39 @@ module.exports.getAllOrderByUserService = async (user_id) => {
 
 module.exports.getAllOrderService = async (page, limit, status) => {
   try {
-    // Chuyển đổi page và limit thành số nguyên
-    // const pageInt = parseInt(page, 10);
-    // const limitInt = parseInt(limit, 10);
-    // const offset = (pageInt - 1) * limitInt;
+    // ép về số nguyên
+    const pageValue = parseInt(page, 10);
+    const limitValue = parseInt(limit, 10);
+    // tính offset
+    const offset = (pageValue - 1) * limitValue;
 
-    // Lấy tổng số đơn hàng để tính toán số trang
-    const [totalOrders, totalOrdersNew, totalOrdersEquip, totalOrdersShip] =
-      await Promise.all([
-        pool.execute("SELECT COUNT(*) as count FROM orders"),
-        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '0'"),
-        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '1'"),
-        pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '2'"),
-      ]);
+    // Lấy tổng số đơn hàng để tính toán số trang và số đơn hàng theo status
+    const [
+      [[totalOrders]],
+      [[totalOrdersNew]],
+      [[totalOrdersEquip]],
+      [[totalOrdersShip]],
+      [[totalOrdersSuccess]],
+    ] = await Promise.all([
+      pool.execute("SELECT COUNT(*) as count FROM orders"),
+      pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '0'"),
+      pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '1'"),
+      pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '2'"),
+      pool.execute("SELECT COUNT(*) as count FROM orders WHERE status = '3'"),
+    ]);
 
-    const total = totalOrders[0][0].count || 0;
-    const totalNew = totalOrdersNew[0][0].count || 0;
-    const totalEquip = totalOrdersEquip[0][0].count || 0;
-    const totalShip = totalOrdersShip[0][0].count || 0;
-
-    if (total === 0) {
-      return { status: 404, message: "No orders found" };
-    }
+    const total = totalOrders.count || 0;
+    const totalNew = totalOrdersNew.count || 0;
+    const totalEquip = totalOrdersEquip.count || 0;
+    const totalShip = totalOrdersShip.count || 0;
+    const totalSuccess = totalOrdersSuccess.count || 0;
 
     // Lấy danh sách đơn hàng theo page và limit
-    const [orders] =
-      status >= 0
-        ? await pool.query(
-            `SELECT * FROM orders WHERE status = ? ORDER BY created_at DESC`,
-            [status]
-          )
-        : await pool.query(`SELECT * FROM orders ORDER BY created_at DESC`);
-
-    if (orders.length === 0) {
-      return { status: 404, message: "No orders found on this page" };
-    }
+    const [orders] = await pool.query(
+      `SELECT * FROM orders ${
+        status >= 0 ? `WHERE status = '${status}'` : ""
+      } ORDER BY created_at DESC LIMIT ${limitValue} OFFSET ${offset}`
+    );
 
     // Lấy các order_id từ đơn hàng
     const orderIds = orders.map((order) => order.order_id);
@@ -392,15 +390,25 @@ module.exports.getAllOrderService = async (page, limit, status) => {
     return {
       status: 200,
       orders: ordersWithDetails,
-      total,
+      total:
+        status === "0"
+          ? totalNew
+          : status === "1"
+          ? totalEquip
+          : status === "2"
+          ? totalShip
+          : status === "3"
+          ? totalSuccess
+          : total,
+      totalOrder: total,
       totalNew,
       totalEquip,
       totalShip,
-      // currentPage: pageInt,
-      // totalPages: Math.ceil(total / limitInt),
+      totalSuccess,
+      currentPage: pageValue,
+      totalPages: Math.ceil(total / limitValue),
     };
   } catch (e) {
-    console.log(e);
     return { status: 500, message: "Error retrieving order items" };
   }
 };

@@ -12,8 +12,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { arrowdown, arrowup } from "../dashboard/StatisticsOverview";
 
-const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
-  console.log("🚀 ~ Overview ~ orders:", orders);
+const Overview = ({ total, totalNew, totalShip, totalEquip, totalSuccess }) => {
   return (
     <>
       <div className="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
@@ -21,7 +20,7 @@ const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {orders?.total || 0}
+                {total || 0}
               </span>
               <h3 className="text-base font-normal text-gray-500">
                 Tổng số đơn hàng
@@ -40,7 +39,7 @@ const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {totalNewOrder || 0}
+                {totalNew || 0}
               </span>
               <h3 className="text-base font-normal text-gray-500">
                 Đơn hàng mới
@@ -59,7 +58,7 @@ const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {totalActive || 0}
+                {totalEquip || 0}
               </span>
               <h3 className="text-base font-normal text-gray-500">
                 Đang chuẩn bị
@@ -78,7 +77,7 @@ const Overview = ({ orders, totalNewOrder, totalShiping, totalActive }) => {
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
-                {totalShiping || 0}
+                {totalShip || 0}
               </span>
               <h3 className="text-base font-normal text-gray-500">
                 Đơn hàng đang giao
