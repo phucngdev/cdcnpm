@@ -23,8 +23,7 @@ import PriceAndDiscount from "../../components/admin/create_product/PriceAndDisc
 import NewCategory from "../../components/admin/create_product/NewCategory";
 import SelectColor from "../../components/admin/create_product/SelectColor";
 import NewColor from "../../components/admin/create_product/NewColor";
-import Pending from "../../components/user/animation/Pending";
-import ColorSelected from "../../components/admin/create_product/ColorSelected";
+import Pending from "../../components/admin/animation/Pending";
 import Header from "../../components/admin/edit_product/update/Header";
 import Images from "../../components/admin/edit_product/update/Images";
 import Center from "../../components/admin/edit_product/update/Center";

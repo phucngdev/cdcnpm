@@ -7,7 +7,7 @@ import LastCustomer from "../../components/admin/dashboard/LastCustomer";
 import { Helmet } from "react-helmet";
 import { useDispatch } from "react-redux";
 import { dashboard } from "../../services/statistics.service";
-import Pending from "../../components/user/animation/Pending";
+import Pending from "../../components/admin/animation/Pending";
 
 const Dashboard = () => {
   const dispatch = useDispatch();

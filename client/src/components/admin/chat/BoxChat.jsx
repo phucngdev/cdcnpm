@@ -13,6 +13,7 @@ import {
   sendMessage,
 } from "../../../services/message.service";
 import Pending from "../../user/animation/Pending";
+import ChatPending from "../animation/ChatPending";
 
 const BoxChat = () => {
   const { id } = useParams();
@@ -135,6 +136,8 @@ const BoxChat = () => {
     }
     setContent("");
   };
+
+  if (pending) return <ChatPending />;
 
   return (
     <>

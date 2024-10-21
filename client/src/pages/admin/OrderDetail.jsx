@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Breadcrumb, Button, Steps, message } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getOneOrder,
-  updateStatus,
-  updateStatusOrder,
-} from "../../services/order.service";
+import { getOneOrder, updateStatusOrder } from "../../services/order.service";
 import formatPrice from "../../utils/formatPrice";
 import { formatTime } from "../../utils/formatTime";
-import Pending from "../../components/user/animation/Pending";
 import { ShopOutlined } from "@ant-design/icons";
+import Pending from "../../components/admin/animation/Pending";
 
 const steps = [
   {
@@ -29,6 +25,7 @@ const steps = [
 const OrderDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [pending, setPending] = useState(false);
 
   const fetchData = async () => {
@@ -58,7 +55,6 @@ const OrderDetail = () => {
     const response = await dispatch(
       updateStatusOrder({ id: id, data: { status: status } })
     );
-    console.log(response);
 
     if (response.payload.status === 200) {
       message.success("Cập nhật trạng thái thành công");
@@ -164,23 +160,34 @@ const OrderDetail = () => {
               ))}
             </div>
           </div>
-          <div className="flex justify-end mt-3">
+          <div className="flex justify-between mt-3">
+            <Button
+              onClick={() =>
+                navigate(`/admin/cham-soc-khach-hang/${order.user_id}`)
+              }
+              type="primary"
+              className=""
+            >
+              <span className="text-white">Liên hệ khách hàng</span>
+            </Button>
             {order.status === "0" && (
               <>
-                <Button
-                  // onClick={() => handleUpdateStatus("1")}
-                  type="button"
-                  className="bg-red-500 hover:bg-red-400 me-4"
-                >
-                  <span className="text-white">Từ chối</span>
-                </Button>
-                <Button
-                  onClick={() => handleUpdateStatus("1")}
-                  type="button"
-                  className="bg-blue-500 hover:bg-blue-400"
-                >
-                  <span className="text-white">Xác nhận</span>
-                </Button>
+                <div className="flex items-center gap-4">
+                  <Button
+                    // onClick={() => handleUpdateStatus("1")}
+                    type="button"
+                    className="bg-red-500 hover:bg-red-400"
+                  >
+                    <span className="text-white">Từ chối</span>
+                  </Button>
+                  <Button
+                    onClick={() => handleUpdateStatus("1")}
+                    type="button"
+                    className="bg-blue-500 hover:bg-blue-400"
+                  >
+                    <span className="text-white">Xác nhận</span>
+                  </Button>
+                </div>
               </>
             )}
             {order.status === "1" && (

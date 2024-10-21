@@ -12,12 +12,15 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getAllUsers, updateStatusUser } from "../../services/user.service";
 import Overview from "../../components/admin/account/Overview";
+import Pending from "../../components/admin/animation/Pending";
 
 export default function User() {
   const dispatch = useDispatch();
+  const [pending, setPending] = useState(false);
 
   const handleChangeStatusUser = async (id, status) => {
     try {
+      setPending(true);
       const response = await dispatch(
         updateStatusUser({ id: id, status: status == 1 ? 0 : 1 })
       );
@@ -27,6 +30,8 @@ export default function User() {
       }
     } catch (error) {
       message.error("Thay đổi trạng thái người dùng thất bại");
+    } finally {
+      setPending(false);
     }
   };
 
@@ -75,17 +80,17 @@ export default function User() {
       title: "Chức năng",
       render: (text, record) => (
         <div className="flex items-center gap-2">
-          <Tooltip title="Danh sách đơn hàng" color="#2db7f5">
+          <Tooltip title="Đánh giá khách hàng" color="#2db7f5">
             <Button>
               <EyeOutlined />
             </Button>
           </Tooltip>
           <Tooltip
-            title={record.status == 1 ? "Khoá tài khoản" : "Mở khoá"}
+            title={record.status === 1 ? "Khoá tài khoản" : "Mở khoá"}
             color="#f50"
           >
             <Button
-              danger={record.status != 1}
+              danger={record.status !== 1}
               onClick={() =>
                 handleChangeStatusUser(record.user_id, record.status)
               }
@@ -104,7 +109,9 @@ export default function User() {
   ];
 
   const fetchUsersData = () => {
+    setPending(true);
     dispatch(getAllUsers());
+    setPending(false);
   };
 
   useEffect(() => {
@@ -112,6 +119,8 @@ export default function User() {
   }, []);
 
   const users = useSelector((state) => state.user.data);
+
+  if (pending) return <Pending />;
 
   return (
     <>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BoxChat from "../../components/admin/chat/BoxChat";
 import { useParams } from "react-router-dom";
-import Pending from "../../components/user/animation/Pending";
+import Pending from "../../components/admin/animation/Pending";
 import { useDispatch } from "react-redux";
 
 const ChatBox = () => {
@@ -19,7 +19,8 @@ const ChatBox = () => {
     fetchMessage();
   }, []);
 
-  if (pending) return <Pending />;
+  // if (pending) return <Pending />;
+
   return (
     id && (
       <>

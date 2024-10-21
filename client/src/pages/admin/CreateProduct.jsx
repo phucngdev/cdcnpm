@@ -19,11 +19,13 @@ import ColorSelected from "../../components/admin/create_product/ColorSelected";
 import PriceAndDiscount from "../../components/admin/create_product/PriceAndDiscount";
 import Category from "../../components/admin/create_product/Category";
 import NewCategory from "../../components/admin/create_product/NewCategory";
+import Pending from "../../components/admin/animation/Pending";
 
 const CreateProduct = () => {
   const dispatch = useDispatch();
   const listImageRef = ref(storage, "products/");
   const [isModalOpenNewCategory, setIsModalOpenNewCategory] = useState(false);
+  const [pending, setPending] = useState(false);
   const [loading, setLoading] = useState({
     // loading up ảnh
     thumbnail: false,
@@ -118,7 +120,7 @@ const CreateProduct = () => {
           category: values.category,
           option: colorSize,
         };
-
+        setPending(true);
         const response = await dispatch(createProduct(newProduct));
         if (response.payload.status === 201) {
           message.success("Tạo sản phẩm thành công");
@@ -127,6 +129,7 @@ const CreateProduct = () => {
         setDescription("");
         setImageUrls([]);
         setColorSize([]);
+        setPending(false);
       } catch (error) {
         message.error("Lỗi");
       }
@@ -284,6 +287,8 @@ const CreateProduct = () => {
   const showModal = () => {
     setIsModalOpenNewCategory(true);
   };
+
+  if (pending) return <Pending />;
 
   return (
     <>

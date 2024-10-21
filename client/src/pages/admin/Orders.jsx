@@ -5,7 +5,7 @@ import Header from "../../components/admin/order/Header";
 import OrderItem from "../../components/admin/order/OrderItem";
 import Overview from "../../components/admin/order/Overview";
 import { getAllOrder } from "../../services/order.service";
-import Pending from "../../components/user/animation/Pending";
+import Pending from "../../components/admin/animation/Pending";
 
 const Orders = () => {
   const dispatch = useDispatch();

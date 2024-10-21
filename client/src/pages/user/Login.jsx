@@ -20,7 +20,7 @@ const Login = () => {
   const [pending, setPending] = useState(false);
 
   const checkLogin = useCookie("user_info", false);
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (checkLogin) {
       message.warning("Bạn đã đăng nhập");
       navigate("/");

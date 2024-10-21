@@ -4,15 +4,19 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { getOneProductImport } from "../../services/product.service";
 import Header from "../../components/admin/edit_product/import/Header";
 import Option from "../../components/admin/edit_product/import/Option";
+import Pending from "../../components/admin/animation/Pending";
 
 const ImportProduct = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [pending, setPending] = useState(false);
   const [modalSaveOpen, setModalSaveOpen] = useState(false);
   const [modalNewOpen, setModalNewOpen] = useState(false);
 
   const fetchData = async () => {
+    setPending(true);
     await dispatch(getOneProductImport(id));
+    setPending(false);
   };
 
   useEffect(() => {
@@ -20,6 +24,8 @@ const ImportProduct = () => {
   }, [id]);
 
   const product = useSelector((state) => state.product.dataEdit);
+
+  if (pending) return <Pending />;
 
   return (
     <>
