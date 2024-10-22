@@ -24,6 +24,8 @@ module.exports.socketConnect = () => {
       _io.emit("notification", { data });
     });
 
+    // Lắng nghe sự kiện "leaveRoom" từ client để thoát room cụ thể
+
     // disconnect
     socket.on("disconnect", () => {
       console.log("Client disconnected");
